@@ -26,7 +26,7 @@ char const g_types_corresp[] = {
 /*
 U (undefined),
 A (absolute),
-C  (common symbol),
+C (common symbol),
 I (indirect symbol)
 
 T (text section symbol),
@@ -41,7 +41,28 @@ u : A lower case u in a dynamic shared library indicates a undefined reference t
 //#define MH_MAGIC    0xfeedface -> cf fa ed fe
 //#define FAT_MAGIC   0xcafebabe -> ca fe ba be
 
+/*
+** (weak)
+** (private)
+** (\[referenced dynamically\])
+** (external|non-external)
+** (
+**    automatically hidden
+**    \[no dead strip\]
+**    \(was a private external\)
+** )
+*/
 
+
+/*
+** line: "0000000000000004 (common) (alignment 2^2) external _FcDebugVal"
+** file: ~/.brew/Cellar/fontconfig/2.11.1_1/lib/libfontconfig.a
+** **
+** line: "00002fc0 (__TEXT,__text) non-external +[SSAudioDeviceCenter initialize]"
+** file: /usr/bin/audiodevice
+** line: "0000000000000008 (common) (alignment 2^3) external _rb_cBigDecimal"
+** file: /usr/share/rbx/gems/gems/rubysl-bigdecimal-2.0.2/ext/rubysl/bigdecimal/bigdecimal.o
+*/
 
 /*
 easy:
