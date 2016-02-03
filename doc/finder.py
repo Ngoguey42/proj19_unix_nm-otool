@@ -9,15 +9,18 @@ value = "[0-9a-f\s]*"
 
 typeparent = "(\(.*\))"
 
-linkage = "(external|non\-external)"
-
 info1 = "(\[[^\]]*\]|\s*)"
 
-symbol = "([_0-9a-zA-Z\.\$]+)"
+linkage = "(external|non\-external|weak external|non-external \(was a private external\))"
+
+identchars = "[_0-9a-zA-Z\.\$]"
+normalsymbol = identchars + "+"
+objcsymbol = identchars + "*" + "[\+\-]\[.*\]" + identchars + "*"
+symbol = "(" + objcsymbol + "|" + normalsymbol + ")"
 
 where = "\s*(\([^)]*\)|\s*)"
 
-pattern = value+typeparent+"\s*"+info1+"\s*"+linkage+"\s*"+symbol + where + "$"
+pattern = value+typeparent+"\s*"+info1+"\s*"+linkage+"\s*"+symbol+where+"$"
 
 if __name__ == "__main__":
 
@@ -35,16 +38,23 @@ if __name__ == "__main__":
 			out, err = p.communicate()
 			if len(out) == 0 and len(err) == 0:
 				continue
-			assert(len(err) == 0)
+			print fpath, "------->"
+			if len(err) != 0:
+				print err
+				if re.match(".*Permission denied.*", err) != None:
+					continue
+				assert(len(err) == 0)
 			lines = out.splitlines()
 			# print pattern
-			print fpath, "------->"
 			for line in lines:
-				if len(line) == 0:
+				if len(line) == 0 or re.match("^(.*)\:$", line, re.M) != None:
 					continue
-				grps = re.match(pattern, out, re.M)
+				grps = re.match(pattern, line, re.M)
 				print "line: \"%s\"" %(line)
 				if grps == None:
+					# print re.match(value+typeparent+"\s*"+info1+"\s*"+linkage+"\s*"+symbol+where+"$", line, re.M)
+					print grps
+					print "failed in: ", fpath
 					assert(False)
 				# print "0:", grps.group(0)
 				# print "1:", grps.group(1)

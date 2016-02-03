@@ -4,6 +4,8 @@
 #include <sys/mman.h>
 #include <mach-o/loader.h>
 #include <mach-o/nlist.h>
+#include <mach-o/ranlib.h>
+#include <mach-o/fat.h>
 #include <fcntl.h>
 #include <assert.h>
 #include <sys/stat.h>
@@ -35,6 +37,11 @@ S (symbol in a section other than those above), or
 l : If the symbol is local  (non-external),  the symbol's  type  is  instead represented by the corresponding lowercase letter
 u : A lower case u in a dynamic shared library indicates a undefined reference to a private external in another  module  in the same library.
 */
+
+//#define MH_MAGIC    0xfeedface -> cf fa ed fe
+//#define FAT_MAGIC   0xcafebabe -> ca fe ba be
+
+
 
 /*
 easy:
@@ -110,13 +117,28 @@ void nm(char *ptr)
 {
 	uint32_t const magic_nbr = *(uint32_t*)ptr;
 
+	if (magic_nbr == FAT_MAGIC)
+		qprintf("FAT_MAGIC\n");
+	if (magic_nbr == FAT_CIGAM)
+		qprintf("FAT_CIGAM\n");
+	if (magic_nbr == MH_MAGIC_64)
+		qprintf("MH_MAGIC_64\n");
+	if (magic_nbr == MH_CIGAM_64)
+		qprintf("MH_CIGAM_64\n");
+	if (magic_nbr == MH_MAGIC)
+		qprintf("MH_MAGIC\n");
+	if (magic_nbr == MH_CIGAM)
+		qprintf("MH_CIGAM\n");
+
+
+
 	if (magic_nbr == MH_MAGIC_64)
 	{
-		printf("64b\n");
+		/* printf("64b\n"); */
 		handle_64(ptr);
 	}
-	else
-		qprintf("NOT 64b\n");
+	/* else */
+	/* 	qprintf("NOT 64b\n"); */
 
 
 	return ;
@@ -124,6 +146,7 @@ void nm(char *ptr)
 
 int							main(int ac, char *av[])
 {
+	qprintf("%u\n", sizeof(struct ranlib));
 	assert(ac == 2);
 
 	int const fd = open(av[1], O_RDONLY);
