@@ -1,0 +1,8 @@
+avm
+*.o
+*.cmo
+*.cmi
+*.exe
+*.cmx
+.#*
+.DS_Store
