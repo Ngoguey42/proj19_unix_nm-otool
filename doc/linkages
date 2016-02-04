@@ -1,14 +1,16 @@
-(alignment 2^2) external
-(alignment 2^3) external
-(alignment 2^4) external
-[referenced dynamically] external
-[referenced dynamically] external [no dead strip]
-external
-external [no dead strip]
-non-external
-non-external (was a private external)
-non-external [no dead strip]
-private external
-weak external
-weak external automatically hidden
-weak private external
+(alignment 2^2) external '/usr/share/rbx/gems/gems/rubysl-openssl-2.1.0/ext/rubysl/openssl/ossl.o'
+(alignment 2^3) external '/usr/share/rbx/gems/gems/rubysl-bigdecimal-2.0.2/ext/rubysl/bigdecimal/bigdecimal.o'
+(alignment 2^4) external '/nfs/zfs-student-4/users/ngoguey/.brew/Cellar/ocaml/4.02.3/lib/ocaml/libasmrun.a'
+[referenced dynamically] external '/sbin/autodiskmount'
+[referenced dynamically] external [no dead strip] '/usr/lib/crt1.o'
+external '/Applications/App Store.app/Contents/MacOS/App Store'
+external '/Applications/Mission Control.app/Contents/MacOS/Mission Control'
+external '/sbin/autodiskmount'
+external [no dead strip] '/nfs/zfs-student-4/users/ngoguey/.brew/Cellar/camlp4/4.02.3+6/lib/ocaml/camlp4/camlp4fulllib.a'
+non-external '/sbin/mount_acfs'
+non-external (was a private external) '/sbin/mount_smbfs'
+non-external [no dead strip] '/usr/lib/crt1.10.6.o'
+private external '/usr/lib/bundle1.o'
+weak external '/sbin/fsck_udf'
+weak external automatically hidden '/usr/lib/libQMIParser.a'
+weak private external '/usr/lib/lazydylib1.o'
