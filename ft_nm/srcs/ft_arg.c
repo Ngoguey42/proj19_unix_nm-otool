@@ -1,27 +1,13 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_nm.h                                            :+:      :+:    :+:   */
+/*   ft_arg.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/02/04 02:19:52 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/04 03:50:08 by ngoguey          ###   ########.fr       */
+/*   Created: 2016/02/04 03:54:04 by ngoguey           #+#    #+#             */
+/*   Updated: 2016/02/04 03:56:45 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_NM_H
-# define FT_NM_H
-
-# include "libft.h"
-
-typedef struct s_env			t_env;
-struct			s_env
-{
-	int const					ac;
-	char const *const *const	av;
-};
-
-t_env			nm_make_env(int ac, char const *const *av);
-
-#endif
+#include "ft_arg.h"
