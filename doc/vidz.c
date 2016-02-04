@@ -60,8 +60,12 @@ u : A lower case u in a dynamic shared library indicates a undefined reference t
 ** **
 ** line: "00002fc0 (__TEXT,__text) non-external +[SSAudioDeviceCenter initialize]"
 ** file: /usr/bin/audiodevice
+** **
 ** line: "0000000000000008 (common) (alignment 2^3) external _rb_cBigDecimal"
 ** file: /usr/share/rbx/gems/gems/rubysl-bigdecimal-2.0.2/ext/rubysl/bigdecimal/bigdecimal.o
+** **
+** line: "                 (undefined) non-external "
+** file: ~/Library/Application Support/Google/Chrome/WidevineCDM/1.4.8.866/_platform_specific/mac_x64/libwidevinecdm.dylib
 */
 
 /*

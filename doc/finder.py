@@ -6,13 +6,14 @@
 #    By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/02/03 23:07:20 by ngoguey           #+#    #+#              #
-#    Updated: 2016/02/04 00:46:52 by ngoguey          ###   ########.fr        #
+#    Updated: 2016/02/04 01:24:36 by ngoguey          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 import os
 import re
 import subprocess
+from sys import argv
 
 value = "[0-9a-f\s]*"
 
@@ -34,7 +35,7 @@ external \[no dead strip\]|\
 
 identchars = "[_0-9a-zA-Z\.\$\:]"
 identcharsparen = "[()_0-9a-zA-Z\.\$\:]"
-normalsymbol = identchars + "+"
+normalsymbol = identchars + "*"
 objcsymbol = identchars+"*" + "[\+\-\]\["+identcharsparen+"* "+identchars+"*\]" + identchars+"*"
 symbol = objcsymbol + "|" + normalsymbol
 
@@ -44,29 +45,18 @@ pattern = "^"+value+"("+typeparen+")\s*("+linkage+")\s*("+symbol+")\s*("+where+"
 
 if __name__ == "__main__":
 
-	# line = "00002fc0 (__TEXT,__text) non-external +[SSAudioDeviceCenter initialize]"
-	# grps = re.search(pattern, line)
-	# print grps
-
-	# print grps.group(1)
-	# print grps.group(2)
-	# print grps.group(3)
-	# print grps.group(4)
-
-	# print
-	# assert(False)
-
-
 	typeSet = set() # group(1)
 	linkageSet = set() # group(2)
-	# whereSet = set() # group(4)
 	comboDict = dict() # k=type+linkage+where v=filepath+line
-	typeFile = open("types", "wa")
-	linkageFile = open("linkages", "wa")
+	typeFile = open("types", "a")
+	linkageFile = open("linkages", "a")
 	# for root, dirs, files in os.walk("/usr/share"):
+	# for root, dirs, files in os.walk("/nfs/zfs-student-4/users/ngoguey/Library"):
+	for root, dirs, files in os.walk(argv[1]):
+	# for root, dirs, files in os.walk("/nfs/zfs-student-4/users/ngoguey"):
 	# for root, dirs, files in os.walk("/nfs/zfs-student-4/users/ngoguey"):
 	# for root, dirs, files in os.walk("/nfs/zfs-student-4/users/ngoguey/.brew"):
-	for root, dirs, files in os.walk("/usr"):
+	# for root, dirs, files in os.walk("/usr"):
 		path = root.split('/')
 		for file in files:
 			fpath = "%s/%s" %(root, file)
@@ -80,9 +70,11 @@ if __name__ == "__main__":
 				print err
 				if re.match(".*Permission denied.*", err) != None:
 					continue
-				elif re.match(".*no name list*", err) != None:
+				elif re.match(".*no name list.*", err) != None:
 					continue
-				elif re.match(".*No such file or directory*", err) != None:
+				elif re.match(".*No such file or directory.*", err) != None:
+					continue
+				elif re.match(".*Operation not supported on socket.*", err) != None:
 					continue
 				assert(len(err) == 0)
 			lines = out.splitlines()
