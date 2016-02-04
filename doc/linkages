@@ -2,30 +2,14 @@
 0000000000000008 (common) (alignment 2^3) external _dOSSL
 0000000000000008 C _dOSSL
 
-
 (alignment 2^3) external '/usr/share/rbx/gems/gems/rubysl-bigdecimal-2.0.2/ext/rubysl/bigdecimal/bigdecimal.o'
 0000000000000004 (common) (alignment 2^2) external _ossl_verify_cb_idx
 0000000000000004 C _ossl_verify_cb_idx
-
 
 (alignment 2^4) external '/nfs/zfs-student-4/users/ngoguey/.brew/Cellar/ocaml/4.02.3/lib/ocaml/libasmrun.a'
 0000000000000800 (common) (alignment 2^4) external _caml_atom_table
 0000000000000800 C _caml_atom_table
 
-
-[referenced dynamically] external '/sbin/autodiskmount'
-00001000 (__TEXT,__text) [referenced dynamically] external __mh_execute_header
-00001000 T __mh_execute_header
-
-
-[referenced dynamically] external [no dead strip] '/usr/lib/crt1.o'
-00000000000001c8 (__DATA,__common) [referenced dynamically] external [no dead strip] _NXArgc
-00000000000001c8 S _NXArgc
-
-
-external '/sbin/autodiskmount'
-         (undefined) external dyld_stub_binder (from libSystem)
-         U dyld_stub_binder
 
 
 external [no dead strip] '/nfs/zfs-student-4/users/ngoguey/.brew/Cellar/camlp4/4.02.3+6/lib/ocaml/camlp4/camlp4fulllib.a'
@@ -33,36 +17,51 @@ external [no dead strip] '/nfs/zfs-student-4/users/ngoguey/.brew/Cellar/camlp4/4
 00000000000057fc D _camlCamlp4Top__frametabl
 
 
-non-external '/sbin/mount_acfs'
-00000001000110ba (__TEXT,__text) non-external _write_label_section
-00000001000110ba t _write_label_section
-
-
-non-external (was a private external) '/sbin/mount_smbfs'
-0000000100001bb0 (__TEXT,__text) non-external (was a private external) ___clang_call_terminate
-0000000100001bb0 t ___clang_call_terminate
-
 
 non-external [no dead strip] '/usr/lib/crt1.10.6.o'
 0000000000000040 (__DATA,__program_vars) non-external [no dead strip] _pvars
 0000000000000040 s _pvars
 
 
+
+weak external automatically hidden '/usr/lib/libQMIParser.a'
+0000000000003560 (__DATA,__datacoal_nt) weak external automatically hidden __ZTVNSt3__119basic_ostringstreamIcNS_11char_traitsIcEENS_9allocatorIcEEEE
+0000000000003560 S __ZTVNSt3__119basic_ostringstreamIcNS_11char_traitsIcEENS_9allocatorIcEEEE
+
+weak private external '/usr/lib/lazydylib1.o'
+0000000000000411 (__TEXT,__textcoal_nt) weak private external _dyld_lazy_dylib_proxy
+0000000000000411 S _dyld_lazy_dylib_proxy
+
+[referenced dynamically] external [no dead strip] '/usr/lib/crt1.o'
+00000000000001c8 (__DATA,__common) [referenced dynamically] external [no dead strip] _NXArgc
+00000000000001c8 S _NXArgc
+
+
+
+non-external '/sbin/mount_acfs'
+00000001000110ba (__TEXT,__text) non-external _write_label_section
+00000001000110ba t _write_label_section
+
+non-external (was a private external) '/sbin/mount_smbfs'
+0000000100001bb0 (__TEXT,__text) non-external (was a private external) ___clang_call_terminate
+0000000100001bb0 t ___clang_call_terminate
+
+
+
 private external '/usr/lib/bundle1.o'
 0000000000000000 (__TEXT,__text) private external dyld_stub_binding_helper
 0000000000000000 T dyld_stub_binding_helper
+
+[referenced dynamically] external '/sbin/autodiskmount'
+00001000 (__TEXT,__text) [referenced dynamically] external __mh_execute_header
+00001000 T __mh_execute_header
+
 
 
 weak external '/sbin/fsck_udf'
                  (undefined) weak external __Znwm (from libc++)
                  U __Znwm
 
-
-weak external automatically hidden '/usr/lib/libQMIParser.a'
-0000000000003560 (__DATA,__datacoal_nt) weak external automatically hidden __ZTVNSt3__119basic_ostringstreamIcNS_11char_traitsIcEENS_9allocatorIcEEEE
-0000000000003560 S __ZTVNSt3__119basic_ostringstreamIcNS_11char_traitsIcEENS_9allocatorIcEEEE
-
-
-weak private external '/usr/lib/lazydylib1.o'
-0000000000000411 (__TEXT,__textcoal_nt) weak private external _dyld_lazy_dylib_proxy
-0000000000000411 S _dyld_lazy_dylib_proxy
+external '/sbin/autodiskmount'
+         (undefined) external dyld_stub_binder (from libSystem)
+         U dyld_stub_binder
