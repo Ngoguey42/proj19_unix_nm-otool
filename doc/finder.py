@@ -6,7 +6,7 @@
 #    By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/02/03 23:07:20 by ngoguey           #+#    #+#              #
-#    Updated: 2016/02/04 01:24:36 by ngoguey          ###   ########.fr        #
+#    Updated: 2016/02/04 11:04:56 by ngoguey          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,11 +33,12 @@ non\-external \(was a private external\)|\
 external \[no dead strip\]|\
 \[referenced dynamically\] external"""
 
-identchars = "[_0-9a-zA-Z\.\$\:]"
+identchars = "[_0-9a-zA\%-Z\.\$\:]"
 identcharsparen = "[()_0-9a-zA-Z\.\$\:]"
 normalsymbol = identchars + "*"
 objcsymbol = identchars+"*" + "[\+\-\]\["+identcharsparen+"* "+identchars+"*\]" + identchars+"*"
-symbol = objcsymbol + "|" + normalsymbol
+shsymbol = " stub helpers|_\% finalize|_% initialize|_% main"
+symbol = objcsymbol + "|" + normalsymbol + "|" + shsymbol
 
 where = "\([^()]+\)|\s*"
 
@@ -50,24 +51,19 @@ if __name__ == "__main__":
 	comboDict = dict() # k=type+linkage+where v=filepath+line
 	typeFile = open("types", "a")
 	linkageFile = open("linkages", "a")
-	# for root, dirs, files in os.walk("/usr/share"):
-	# for root, dirs, files in os.walk("/nfs/zfs-student-4/users/ngoguey/Library"):
-	for root, dirs, files in os.walk(argv[1]):
-	# for root, dirs, files in os.walk("/nfs/zfs-student-4/users/ngoguey"):
-	# for root, dirs, files in os.walk("/nfs/zfs-student-4/users/ngoguey"):
-	# for root, dirs, files in os.walk("/nfs/zfs-student-4/users/ngoguey/.brew"):
-	# for root, dirs, files in os.walk("/usr"):
-		path = root.split('/')
-		for file in files:
-			fpath = "%s/%s" %(root, file)
-			p = subprocess.Popen(['nm', '-m', fpath]
-								 , stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-			out, err = p.communicate()
-			if len(out) == 0 and len(err) == 0:
-				continue
-			print fpath, "------->"
-			if len(err) != 0:
-				print err
+	for filepath in argv[1:]:
+		for root, dirs, files in os.walk(filepath):
+			path = root.split('/')
+			for file in files:
+				fpath = "%s/%s" %(root, file)
+				p = subprocess.Popen(['nm', '-m', fpath]
+									 , stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+				out, err = p.communicate()
+				if len(out) == 0 and len(err) == 0:
+					continue
+				print fpath, "------->"
+				if len(err) != 0:
+					print err
 				if re.match(".*Permission denied.*", err) != None:
 					continue
 				elif re.match(".*no name list.*", err) != None:
@@ -77,28 +73,28 @@ if __name__ == "__main__":
 				elif re.match(".*Operation not supported on socket.*", err) != None:
 					continue
 				assert(len(err) == 0)
-			lines = out.splitlines()
-			for line in lines:
-				if len(line) == 0 or re.match("^(.*)\:$", line, re.M) != None:
-					continue
-				grps = re.search(pattern, line)
-				if grps == None:
-					print "line: \"%s\"" %(line)
-					print "failed in: ", fpath
-					assert(False)
-				if grps.group(1) not in typeSet:
-					# print "Adding (%s) to typeSet" %(grps.group(1))
-					typeFile.write(grps.group(1) + "\n")
-					typeFile.flush()
-					typeSet.add(grps.group(1))
-				if grps.group(2) not in linkageSet:
+				lines = out.splitlines()
+				for line in lines:
+					if len(line) == 0 or re.match("^(.*)\:$", line, re.M) != None:
+						continue
+					grps = re.search(pattern, line)
+					if grps == None:
+						print "line: \"%s\"" %(line)
+						print "failed in: ", fpath
+						assert(False)
+					if grps.group(1) not in typeSet:
+						# print "Adding (%s) to typeSet" %(grps.group(1))
+						typeFile.write("%s '%s'\n" %(grps.group(1), fpath))
+						typeFile.flush()
+						typeSet.add(grps.group(1))
+					if grps.group(2) not in linkageSet:
 					# print "Adding (%s) to linkageSet" %(grps.group(2))
-					linkageFile.write(grps.group(2) + "\n")
-					linkageFile.flush()
-					linkageSet.add(grps.group(2))
-				k = (grps.group(1), grps.group(2))
-				if k not in comboDict:
-					print "Adding (\n%s\n%s\n) to comboDict" %(fpath, line)
-					comboDict[k] = (fpath, line)
+						linkageFile.write("%s '%s'\n" %(grps.group(2), fpath))
+						linkageFile.flush()
+						linkageSet.add(grps.group(2))
+					k = (grps.group(1), grps.group(2))
+					if k not in comboDict:
+						print "Adding (\n%s\n%s\n) to comboDict" %(fpath, line)
+						comboDict[k] = (fpath, line)
 	typeFile.close()
 	linkageFile.close()
