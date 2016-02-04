@@ -3,17 +3,17 @@
 # Git submodule to init
 MODULES			:= libft
 # Makefiles to call
-LIBS			:= ft_nm
+DEPS			:= ft_nm  #  ft_otool
+DEPS_LINKS		:= $(addsuffix .dylink,$(DEPS))
 
 LIBFT_LINKS		:= ft_nm/libft
-
 
 # tmp
 MODULE_RULES	:= $(addsuffix /.git,$(MODULES))
 
 # Default rule
 all: $(LIBFT_LINKS) $(MODULE_RULES)
-	make $(LIBS)
+	make $(DEPS) $(DEPS_LINKS)
 
 $(LIBFT_LINKS):
 	ln -s $(abspath libft) $(abspath $@)
@@ -23,16 +23,22 @@ $(MODULE_RULES):
 	git submodule init $(@:.git=)
 	git submodule update $(@:.git=)
 
-$(LIBS):
+$(DEPS):
 	make -C $(abspath $@)/
+
+%.dylink:
+	ln -s $(abspath $*)/$* $(abspath $@)
 
 # Clean obj files
 clean:
+	$(foreach dep, $(DEPS), make -C $(abspath $(dep))/ clean;)
 
 # Clean everything
-fclean: clean
+fclean:
+	rm -rf $(DEPS_LINKS)
+	$(foreach dep, $(DEPS), make -C $(abspath $(dep))/ fclean;)
 
 # Clean and make
 re: fclean all
 
-.PHONY: all clean fclean re debug rebug _debug $(LIBS)
+.PHONY: all clean fclean re debug rebug _debug $(DEPS)
