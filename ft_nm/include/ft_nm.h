@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 02:19:52 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/04 03:50:08 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/04 05:02:29 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define FT_NM_H
 
 # include "libft.h"
+# include "ft_debug.h"
 
 typedef struct s_env			t_env;
 struct			s_env

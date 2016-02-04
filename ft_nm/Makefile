@@ -22,7 +22,7 @@ HEAD_FLAGS		= $(addprefix -I,$(INCLUDE_DIRS))
 C_FLAGS			= $(HEAD_FLAGS) $(BASE_FLAGS)
 CPP_FLAGS		= $(HEAD_FLAGS) $(BASE_FLAGS) -std=c++14
 
-LINK_FLAGS		= $(BASE_FLAGS)
+LINK_FLAGS		= $(BASE_FLAGS) -Llibft/ -lft
 
 ifeq ($(DEBUG_MODE),1)
 	# Extra flags used in debug mode

@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 03:53:42 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/04 04:33:46 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/04 05:07:59 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 /*
 ** 0      1  2    3   4     5  6
-** ./truc -l -lac -12 salut -n name
+** ./truc -l -lac -12 salut -n -name
 ** 012345 01 0123 012 01234 01 0123
 ** *
 ** stri	chari	call
@@ -28,7 +28,7 @@
 ** 2	3		(INT)->ret:FTARG_INT i:-12
 ** 3	2		(NONE)->ret:FTARG_STRING str:@salut
 ** 4	4		(NONE)->ret:FTARG_OPTION c:n
-** 5	1		(STRING)->ret:FTARG_STRING str:@name
+** 5	1		(STRING)->ret:FTARG_STRING str:@-name
 ** 6	3		(NONE)->ret:FTARG_NONE
 ** 		'expected' parameter is used to disambiguate strings beginning with
 ** a minus, and negative integers
@@ -42,7 +42,7 @@ struct			s_arg_parser
 	char						c;
 	int							i;
 
-	int const					priv_ac;
+	unsigned int const			priv_ac;
 	unsigned int				priv_stri;
 	unsigned int				priv_chari;
 	char const *const *const	priv_av;
@@ -50,13 +50,15 @@ struct			s_arg_parser
 
 enum			e_arg
 {
+	FTARG_NONE = 0,
 	FTARG_OPTION,
 	FTARG_STRING,
-	FTARG_INT,
-	FTARG_NONE
+	FTARG_INT
 };
 
 t_arg_parser	ft_arg_create(int ac, char const *const *av);
-enum e_arg		ft_arg_next(enum e_arg expected);
+enum e_arg		ft_arg_next(t_arg_parser *p, enum e_arg expected);
+char const		*ft_arg_name(enum e_arg arg);
+
 
 #endif
