@@ -46,9 +46,24 @@
 (__TEXT,__text) '/sbin/autodiskmount'
 (__TEXT,__textcoal_nt) '/usr/lib/lazydylib1.o'
 (__TEXT,__ustring) '/usr/lib/libiconv.2.4.0.dylib'
+
+
 (absolute) '/usr/bin/audiodevice'
+
+
 (common) '/usr/share/rbx/gems/gems/rubysl-bigdecimal-2.0.2/ext/rubysl/bigdecimal/bigdecimal.o'
+
+
 (indirect) '/usr/lib/libc++.1.dylib'
+                 (indirect) external ___gxx_personality_v0 (for ___gxx_personality_v0)
+                 I ___gxx_personality_v0 (indirect for ___gxx_personality_v0)
+
 (undefined [lazy bound]) '/usr/bin/audiodevice'
+         (undefined [lazy bound]) external _write
+         U _write
+
 (undefined [private]) '/usr/lib/libnetsnmp.5.2.1.dylib'
+         (undefined [private]) external __mh_dylib_heade
+         u __mh_dylib_header
+
 (undefined) '/sbin/autodiskmount'
