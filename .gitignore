@@ -1,4 +1,6 @@
-avm
+ft_nm
+ft_otool
+*.a
 *.o
 *.cmo
 *.cmi
