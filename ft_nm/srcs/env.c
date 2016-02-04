@@ -6,47 +6,68 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 02:23:10 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/04 05:14:18 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/04 09:25:30 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_nm.h"
 #include "ft_arg.h"
 
-t_env	nm_make_env(int ac, char const *const* av)
+/*
+** [-n -p -r] sorting flags
+** [-g -u -U -j] quantity of colums/lines to display
+** [-m] verbose SEG/SEC
+*/
+
+static int save_option(unsigned int opt[1], char c)
 {
-	enum e_arg a;
-	t_arg_parser p[1];
-	int was_c = 0;
-	int was_n = 0;
+	unsigned int	i;
 
-	*p = ft_arg_create(ac, av);
-	do
+	i = 0;
+	while (i < ARG_NUM_OPTIONS)
 	{
-		qprintf("\n");
-		if (was_c)
-			a = ft_arg_next(p, FTARG_INT);
-		else if (was_n)
-			a = ft_arg_next(p, FTARG_STRING);
-		else
-			a = ft_arg_next(p, FTARG_NONE);
-		was_c = 0;
-		was_n = 0;
-		qprintf("ARG=%s (%d)\n", ft_arg_name(a), a);
+		if (ARG_OPTIONS[i] == c)
+		{
+			*opt |= 1 << i;
+			return (0);
+		}
+		i++;
+	}
+	ft_putstr_fd("error: ./ft_nm: invalid argument -", 2);
+	ft_putchar_fd(c, 2);
+	ft_putchar_fd('\n', 2);
+	ft_putendl_fd(NM_USAGE, 2);
+	return (1);
+}
 
-		if (a == FTARG_STRING)
-			qprintf("\tstr=%s\n", p->s);
+
+int			nm_make_env(int ac, char const *const* av, t_env e[1])
+{
+	enum e_arg		a;
+	enum e_arg		expect;
+	t_arg_parser	p[1];
+	unsigned int	opt[1];
+	t_ftvector		files[1];
+
+	expect = FTARG_NONE;
+	*p = ft_arg_create(ac, av);
+	if (ftv_init_instance(files, sizeof(char const*)))
+		return (ERROR("No mem"));
+	while ((a = ft_arg_next(p, expect)) != FTARG_NONE)
+	{
 		if (a == FTARG_OPTION)
 		{
-			qprintf("\topt=%c\n", p->c);
-			if (p->c == 'c')
-				was_c = 1;
-			if (p->c == 'n')
-				was_n = 1;
+			if (save_option(opt, p->c))
+				return (1);
 		}
-		if (a == FTARG_INT)
-			qprintf("\tint=%d\n", p->i);
-	} while (a != FTARG_NONE);
-
-	return ((t_env){ac, av});
+		else if (a == FTARG_STRING)
+		{
+			if (ftv_push_back(files, &p->s))
+				return (ERROR("No mem"));
+			expect = FTARG_STRING;
+		}
+	}
+	ftv_print(files, "s"); //debug
+	*e = (t_env){ac, av, *opt, *files};
+	return (0);
 }

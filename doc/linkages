@@ -1,27 +1,14 @@
-non-external
-external
-[referenced dynamically] external
-non-external (was a private external)
-weak external
-weak external automatically hidden
-weak private external
-private external
-non-external [no dead strip]
-external [no dead strip]
 (alignment 2^2) external
 (alignment 2^3) external
 (alignment 2^4) external
-external
 [referenced dynamically] external
-non-external
-weak external
-non-external (was a private external)
-private external
-non-external [no dead strip]
 [referenced dynamically] external [no dead strip]
-weak private external
-weak external automatically hidden
-(alignment 2^3) external
-(alignment 2^2) external
 external
-[referenced dynamically] external
+external [no dead strip]
+non-external
+non-external (was a private external)
+non-external [no dead strip]
+private external
+weak external
+weak external automatically hidden
+weak private external

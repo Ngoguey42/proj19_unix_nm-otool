@@ -66,6 +66,9 @@ u : A lower case u in a dynamic shared library indicates a undefined reference t
 ** **
 ** line: "                 (undefined) non-external "
 ** file: ~/Library/Application Support/Google/Chrome/WidevineCDM/1.4.8.866/_platform_specific/mac_x64/libwidevinecdm.dylib
+** **
+** line: "00001f2a (__TEXT,__stub_helper) non-external (was a private external)  stub helpers"
+** file: /Applications/BetterTouchTool.app/Contents/Resources/relaunch
 */
 
 /*
@@ -86,7 +89,33 @@ jsaispas:
 
 */
 
-int print_output(int n_sym, int sym_tab_off, int str_tab_off, void *ptr)
+int print_output_32(int n_sym, int sym_tab_off, int str_tab_off, void *ptr)
+{
+	int i;
+	char *stringtable = ptr + str_tab_off;
+	struct nlist *array = ptr + sym_tab_off;
+	uint32_t val;
+	uint8_t type;
+	uint8_t sect;
+
+	for (i = 0; i < n_sym; i++)
+	{
+		val = array[i].n_value;
+		type = array[i].n_type;
+		sect = array[i].n_sect;
+
+		if (array[i].n_value != 0)
+			qprintf("%016x '%s'\n", array[i].n_value,  stringtable + array[i].n_un.n_strx);
+		else
+			qprintf("%16s %s\n", "", stringtable + array[i].n_un.n_strx);
+			/* qprintf("%16s '%c' %s\n", "", array[i].n_type, stringtable + array[i].n_un.n_strx); */
+
+	}
+	qprintf("COUNT: %d\n", n_sym);
+	return 0;
+}
+
+int print_output_64(int n_sym, int sym_tab_off, int str_tab_off, void *ptr)
 {
 	int i;
 	char *stringtable = ptr + str_tab_off;
@@ -128,7 +157,33 @@ void handle_64(void *ptr)
 		{
 			printf("LC_SYMTAB\n");
 			sym = (void*)lc;
-			print_output(sym->nsyms, sym->symoff, sym->stroff, ptr);
+			print_output_64(sym->nsyms, sym->symoff, sym->stroff, ptr);
+			break ;
+		}
+		/* else */
+			/* printf("ELSE\n"); */
+		lc = (void*)lc + lc->cmdsize;
+	}
+	return ;
+}
+
+void handle_32(void *ptr)
+{
+	struct mach_header *h = ptr;
+	int ncmds = h->ncmds;
+	struct load_command *lc = ptr + sizeof(*h);
+	int i;
+	struct symtab_command *sym;
+
+	qprintf("ncmds %d\n", ncmds);
+	qprintf("lc->cmdsize %d \n", lc->cmdsize);
+	for (i = 0; i < ncmds; i++)
+	{
+		if (lc->cmd == LC_SYMTAB)
+		{
+			printf("LC_SYMTAB\n");
+			sym = (void*)lc;
+			print_output_32(sym->nsyms, sym->symoff, sym->stroff, ptr);
 			break ;
 		}
 		/* else */
@@ -154,14 +209,13 @@ void nm(char *ptr)
 		qprintf("MH_MAGIC\n");
 	if (magic_nbr == MH_CIGAM)
 		qprintf("MH_CIGAM\n");
-
+	/* "!<ARCH>" */
 
 
 	if (magic_nbr == MH_MAGIC_64)
-	{
-		/* printf("64b\n"); */
 		handle_64(ptr);
-	}
+	if (magic_nbr == MH_MAGIC)
+		handle_32(ptr);
 	/* else */
 	/* 	qprintf("NOT 64b\n"); */
 
@@ -171,7 +225,7 @@ void nm(char *ptr)
 
 int							main(int ac, char *av[])
 {
-	qprintf("%u\n", sizeof(struct ranlib));
+	/* qprintf("%u\n", sizeof(struct ranlib)); */
 	assert(ac == 2);
 
 	int const fd = open(av[1], O_RDONLY);

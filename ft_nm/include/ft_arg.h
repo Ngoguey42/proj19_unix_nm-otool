@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 03:53:42 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/04 05:07:59 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/04 05:15:51 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@
 ** 4	4		(NONE)->ret:FTARG_OPTION c:n
 ** 5	1		(STRING)->ret:FTARG_STRING str:@-name
 ** 6	3		(NONE)->ret:FTARG_NONE
-** 		'expected' parameter is used to disambiguate strings beginning with
-** a minus, and negative integers
+** 		'expected' parameter is used to disambiguate FTARG_STRING beginning with
+** a minus, and negative FTARG_INT
 */
 
 typedef struct s_arg_parser	t_arg_parser;
