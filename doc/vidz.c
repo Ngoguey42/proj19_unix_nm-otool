@@ -24,18 +24,18 @@ char const g_types_corresp[] = {
 };
 
 /*
-U (undefined),
-A (absolute),
-C (common symbol),
-I (indirect symbol)
+  U (undefined),
+  A (absolute),
+  C (common symbol),
+  I (indirect symbol)
 
-T (text section symbol),
-D (data section symbol),
-B  (bss  section  symbol),
-- (for debugger symbol table entries; see -a below),
-S (symbol in a section other than those above), or
-l : If the symbol is local  (non-external),  the symbol's  type  is  instead represented by the corresponding lowercase letter
-u : A lower case u in a dynamic shared library indicates a undefined reference to a private external in another  module  in the same library.
+  T (text section symbol),
+  D (data section symbol),
+  B  (bss  section  symbol),
+  - (for debugger symbol table entries; see -a below),
+  S (symbol in a section other than those above), or
+  l : If the symbol is local  (non-external),  the symbol's  type  is  instead represented by the corresponding lowercase letter
+  u : A lower case u in a dynamic shared library indicates a undefined reference to a private external in another  module  in the same library.
 */
 
 //#define MH_MAGIC    0xfeedface -> cf fa ed fe
@@ -72,20 +72,20 @@ u : A lower case u in a dynamic shared library indicates a undefined reference t
 */
 
 /*
-easy:
--(o, A), m, P
+  easy:
+  -(o, A), m, P
 
-less work:
--g, u, U, j
+  less work:
+  -g, u, U, j
 
-sort:
--n -p -r
+  sort:
+  -n -p -r
 
-more work:
--a, x, (l, s), t
+  more work:
+  -a, x, (l, s), t
 
-jsaispas:
--f
+  jsaispas:
+  -f
 
 */
 
@@ -108,7 +108,7 @@ int print_output_32(int n_sym, int sym_tab_off, int str_tab_off, void *ptr)
 			qprintf("%016x '%s'\n", array[i].n_value,  stringtable + array[i].n_un.n_strx);
 		else
 			qprintf("%16s %s\n", "", stringtable + array[i].n_un.n_strx);
-			/* qprintf("%16s '%c' %s\n", "", array[i].n_type, stringtable + array[i].n_un.n_strx); */
+		/* qprintf("%16s '%c' %s\n", "", array[i].n_type, stringtable + array[i].n_un.n_strx); */
 
 	}
 	qprintf("COUNT: %d\n", n_sym);
@@ -134,7 +134,7 @@ int print_output_64(int n_sym, int sym_tab_off, int str_tab_off, void *ptr)
 			qprintf("%016llx %s\n", array[i].n_value,  stringtable + array[i].n_un.n_strx);
 		else
 			qprintf("%16s '%c' %s\n", "", array[i].n_sect, stringtable + array[i].n_un.n_strx);
-			/* qprintf("%16s '%c' %s\n", "", array[i].n_type, stringtable + array[i].n_un.n_strx); */
+		/* qprintf("%16s '%c' %s\n", "", array[i].n_type, stringtable + array[i].n_un.n_strx); */
 
 	}
 	qprintf("COUNT: %d\n", n_sym);
@@ -161,7 +161,7 @@ void handle_64(void *ptr)
 			break ;
 		}
 		/* else */
-			/* printf("ELSE\n"); */
+		/* printf("ELSE\n"); */
 		lc = (void*)lc + lc->cmdsize;
 	}
 	return ;
@@ -187,29 +187,41 @@ void handle_32(void *ptr)
 			break ;
 		}
 		/* else */
-			/* printf("ELSE\n"); */
+		/* printf("ELSE\n"); */
 		lc = (void*)lc + lc->cmdsize;
 	}
 	return ;
 }
 
-void nm(char *ptr)
+#include <string.h>
+
+#define MIN(A, B) (A > B ? A : B)
+
+void nm(char *ptr, size_t st_size)
 {
 	uint32_t const magic_nbr = *(uint32_t*)ptr;
 
-	if (magic_nbr == FAT_MAGIC)
-		qprintf("FAT_MAGIC\n");
+	/* if (magic_nbr == FAT_MAGIC) */
+	/* 	qprintf("FAT_MAGIC\n"); */
+	/* if (magic_nbr == MH_CIGAM_64) */
+	/* 	qprintf("MH_CIGAM_64\n"); */
+	/* if (magic_nbr == MH_CIGAM) */
+	/* 	qprintf("MH_CIGAM\n"); */
+
+
+	if (st_size > 7 && strncmp("!<arch>", ptr, 7) == 0)
+		qprintf("!<arch>\n");
 	if (magic_nbr == FAT_CIGAM)
 		qprintf("FAT_CIGAM\n");
 	if (magic_nbr == MH_MAGIC_64)
 		qprintf("MH_MAGIC_64\n");
-	if (magic_nbr == MH_CIGAM_64)
-		qprintf("MH_CIGAM_64\n");
 	if (magic_nbr == MH_MAGIC)
 		qprintf("MH_MAGIC\n");
-	if (magic_nbr == MH_CIGAM)
-		qprintf("MH_CIGAM\n");
-	/* "!<ARCH>" */
+
+
+
+
+
 
 
 	if (magic_nbr == MH_MAGIC_64)
@@ -241,7 +253,7 @@ int							main(int ac, char *av[])
 	ptr = mmap(0, buf->st_size, PROT_READ, MAP_PRIVATE, fd, 0);
 	assert(ptr != MAP_FAILED);
 
-	nm(ptr);
+	nm(ptr, buf->st_size);
 
 	err = munmap(ptr, buf->st_size);
 	assert(err == 0);
