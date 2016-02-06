@@ -1,5 +1,5 @@
-O_FILES :=	o/srcs/env.o o/srcs/filename.o o/srcs/ft_arg.o o/srcs/handle_file.o \
-			o/srcs/main.o
+O_FILES :=	o/srcs/build_sections_vector.o o/srcs/env.o o/srcs/filename.o \
+			o/srcs/ft_arg.o o/srcs/handle_file.o o/srcs/main.o
 
 LIBS_DEPEND := libft/libft.a
 
@@ -9,7 +9,12 @@ libs:
 
 
 
-MAX_SOURCE_LEN := 18
+MAX_SOURCE_LEN := 28
+o/srcs/build_sections_vector.o: srcs/build_sections_vector.c include/ft_nm.h \
+	libft/include/ft_ctype.h libft/include/ft_macroes.h \
+	libft/include/ft_stdio.h libft/include/ft_stdlib.h \
+	libft/include/ft_string.h libft/include/ft_typedefs.h \
+	libft/include/fterror.h libft/include/libft.h | o/srcs/
 o/srcs/env.o: srcs/env.c include/ft_nm.h libft/include/ft_ctype.h \
 	libft/include/ft_macroes.h libft/include/ft_stdio.h \
 	libft/include/ft_stdlib.h libft/include/ft_string.h \

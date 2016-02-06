@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 02:19:52 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/06 18:20:18 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/06 19:34:34 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,15 @@
 # define NM_BOTHU "error: ./ft_nm: can't specifiy both -U and -u"
 # define NM_INVARG "error: ./ft_nm: invalid argument -"
 
+# define ACCESS32B(s,f,p) ( ((struct s const*)(p))->f )
+# define ACCESS64B(s,f,p) ( ((struct s ## _64 const*)(p))->f )
+# define ACCESS(s,f,p,a) ((a) == arch_32b ? ACCESS32B(s,f,p) : ACCESS64B(s,f,p))
+
+# define ACCESS_MH(f,p,a) ACCESS(mach_header, f, p, a)
+# define ACCESS_SC(f,p,a) ACCESS(segment_command, f, p, a)
+# define ACCESS_SEC(f,p,a) ACCESS(section, f, p, a)
+# define SIZEOF_DYN(s,a) ((a)==arch_32b?sizeof(struct s):sizeof(struct s##_64))
+
 enum			e_nm_option
 {
 	opt_n_numsort = 0x01,
@@ -39,12 +48,19 @@ enum			e_nm_option
 
 enum			e_nm_endian
 {
-	endian_little,
+	endian_little = 0,
 	endian_big
+};
+
+enum			e_nm_arch
+{
+	arch_32b = 0,
+	arch_64b
 };
 
 typedef struct s_env			t_env;
 typedef struct s_filename		t_filename;
+typedef struct load_command		t_lc;
 
 struct			s_filename
 {
@@ -64,10 +80,17 @@ struct			s_env
 	unsigned int const			opt;
 	t_ftvector const			files;
 
-	int							cur_file_i;
-	enum e_nm_endian			cur_file_endian;
-	enum e_nm_endian			cur_obj_endian;
-	t_ftvector					cur_obj_sections;
+	enum e_nm_endian			file_endian;
+	enum e_nm_arch				file_arch;
+	void const					*file_ptr;
+	size_t						file_size;
+	unsigned int				file_i;
+
+	enum e_nm_endian			obj_endian;
+	enum e_nm_arch				obj_arch;
+	void const					*obj_ptr;
+	size_t						obj_size;
+	t_ftvector					obj_sections;
 
 };
 

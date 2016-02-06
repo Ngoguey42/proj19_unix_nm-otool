@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 02:19:24 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/06 17:41:00 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/06 18:58:37 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int		main(int ac, char *av[])
 				   , f->file_len, f->file, f->member_len, f->member); // debug
 		if (nm_handle_file(e, NULL))
 			return (1);
-		e->cur_file_id++;
+		e->file_i++;
 		f++;
 	}
 	return (0);
