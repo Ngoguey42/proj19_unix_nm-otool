@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 02:23:10 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/06 14:48:50 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/06 15:10:22 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,12 @@
 ** [-n -p -r] sorting flags
 ** [-g -u -U -j] quantity of colums/lines to display
 ** [-m] verbose SEG/SEC
+** **
+** -u enable -j (-u == -uj)
+** -m disable -j (-m == -mj) (-mu == -muj)
 */
+
+static char const *const g_default_file = "./a.out";
 
 static int	save_option(unsigned int opt[1], char c)
 {
@@ -67,8 +72,15 @@ int			nm_make_env(int ac, char const *const *av, t_env e[1])
 
 	if (ftv_init_instance(files, sizeof(char *)))
 		return (ERRORNO("ftv_init_instance"));
-	if (args((t_arg_parser[]){ft_arg_create(ac, av)}, opt, files))
+	if (args((t_arg_parser[1]){ft_arg_create(ac, av)}, opt, files))
 		return (1);
-	*e = (t_env){ac, av, *opt, *files, 0};
+	if (files->size == 0)
+		if (ftv_push_back(files, &g_default_file))
+			return (ERRORNO("ftv_push_back"));
+	if (*opt & opt_u_undefonly)
+		*opt |= opt_j_symonly;
+	if (*opt & opt_m_verbose)
+		*opt &= ~opt_j_symonly;
+	*e = (t_env){ac, av, *opt, *files, 0, 0, 0};
 	return (0);
 }
