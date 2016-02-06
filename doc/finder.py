@@ -6,7 +6,7 @@
 #    By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/02/03 23:07:20 by ngoguey           #+#    #+#              #
-#    Updated: 2016/02/04 11:04:56 by ngoguey          ###   ########.fr        #
+#    Updated: 2016/02/05 11:35:14 by ngoguey          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,7 +53,6 @@ if __name__ == "__main__":
 	linkageFile = open("linkages", "a")
 	for filepath in argv[1:]:
 		for root, dirs, files in os.walk(filepath):
-			path = root.split('/')
 			for file in files:
 				fpath = "%s/%s" %(root, file)
 				p = subprocess.Popen(['nm', '-m', fpath]

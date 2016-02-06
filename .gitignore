@@ -9,3 +9,4 @@ ft_otool
 *.cmx
 .#*
 .DS_Store
+ft_nm/libft

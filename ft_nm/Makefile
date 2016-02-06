@@ -5,7 +5,7 @@ NAME			:= ft_nm
 
 # Project directories
 DIRS			:= srcs
-INCLUDE_DIRS	:= include libft/includes
+INCLUDE_DIRS	:= include libft/include
 
 # Git submodule to init
 MODULES			:=
