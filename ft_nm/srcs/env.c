@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 02:23:10 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/06 17:39:43 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/06 17:42:23 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static int	save_option(unsigned int opt[1], char c)
 		}
 		i++;
 	}
-	ft_dprintf(2, "error: ./ft_nm: invalid argument -%c\n%s\n", c, NM_USAGE);
+	ft_dprintf(2, "%s%c\n%s\n", NM_INVARG, c, NM_USAGE);
 	return (1);
 }
 
@@ -58,7 +58,7 @@ static int	args(t_arg_parser p[1], unsigned int opt[1], t_ftvector files[1])
 		else if (a == FTARG_STRING)
 		{
 			if (nm_process_push_filename(files, p->s))
-				return (ERRORNO("ftv_push_back"));
+				 return (ERRORNO("ftv_push_back"));
 			expect = FTARG_STRING;
 		}
 	}

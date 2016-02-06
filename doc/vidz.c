@@ -9,6 +9,8 @@
 #include <fcntl.h>
 #include <assert.h>
 #include <sys/stat.h>
+#include "libft.h"
+#include "ft_debug.h"
 
 
 // 64bit + FAT binaries
@@ -16,7 +18,6 @@
 // hexdump -C -n 4 a.out
 
 // sal
-#define qprintf printf
 
 char const g_types_corresp[] = {
 	[N_UNDF] = 'U',
@@ -89,6 +90,17 @@ char const g_types_corresp[] = {
 
 */
 
+void print_sect_type_desc( uint8_t n_type,        /* type flag, see below */
+						   uint8_t n_sect,        /* section number or NO_SECT */
+						   uint16_t n_desc       /* see <mach-o/stab.h> */
+	)
+{
+	ft_printf("type(%M.8hhb) sect(%Nhhu) desc(%Ihu)"
+			  , n_type, n_sect, n_desc);
+
+	return ;
+}
+
 int print_output_32(int n_sym, int sym_tab_off, int str_tab_off, void *ptr)
 {
 	int i;
@@ -105,9 +117,11 @@ int print_output_32(int n_sym, int sym_tab_off, int str_tab_off, void *ptr)
 		sect = array[i].n_sect;
 
 		if (array[i].n_value != 0)
-			qprintf("%016x '%s'\n", array[i].n_value,  stringtable + array[i].n_un.n_strx);
+			qprintf("%016x ", array[i].n_value);
 		else
-			qprintf("%16s %s\n", "", stringtable + array[i].n_un.n_strx);
+			qprintf("%16s ", "");
+		print_sect_type_desc(array[i].n_type, array[i].n_sect, array[i].n_desc);
+		qprintf("'%s'\n", stringtable + array[i].n_un.n_strx);
 		/* qprintf("%16s '%c' %s\n", "", array[i].n_type, stringtable + array[i].n_un.n_strx); */
 
 	}
@@ -130,10 +144,12 @@ int print_output_64(int n_sym, int sym_tab_off, int str_tab_off, void *ptr)
 		type = array[i].n_type;
 		sect = array[i].n_sect;
 
-		if (array[i].n_value != 0)
-			qprintf("%016llx %s\n", array[i].n_value,  stringtable + array[i].n_un.n_strx);
+        if (array[i].n_value != 0)
+			qprintf("%016llx ", array[i].n_value);
 		else
-			qprintf("%16s '%c' %s\n", "", array[i].n_sect, stringtable + array[i].n_un.n_strx);
+			qprintf("%16s ", "");
+		print_sect_type_desc(array[i].n_type, array[i].n_sect, array[i].n_desc);
+		qprintf("'%s'\n", stringtable + array[i].n_un.n_strx);
 		/* qprintf("%16s '%c' %s\n", "", array[i].n_type, stringtable + array[i].n_un.n_strx); */
 
 	}
@@ -150,7 +166,7 @@ void handle_64(void *ptr)
 	struct symtab_command *sym;
 
 	qprintf("ncmds %d\n", ncmds);
-	qprintf("lc->cmdsize %d \n", lc->cmdsize);
+	/* qprintf("lc->cmdsize %d \n", lc->cmdsize); */
 	for (i = 0; i < ncmds; i++)
 	{
 		if (lc->cmd == LC_SYMTAB)
@@ -158,9 +174,13 @@ void handle_64(void *ptr)
 			printf("LC_SYMTAB\n");
 			sym = (void*)lc;
 			print_output_64(sym->nsyms, sym->symoff, sym->stroff, ptr);
-			break ;
+			/* break ; */
 		}
-		/* else */
+		else
+		{
+			printf("not LC_SYMTAB\n");
+
+		}
 		/* printf("ELSE\n"); */
 		lc = (void*)lc + lc->cmdsize;
 	}
@@ -176,7 +196,7 @@ void handle_32(void *ptr)
 	struct symtab_command *sym;
 
 	qprintf("ncmds %d\n", ncmds);
-	qprintf("lc->cmdsize %d \n", lc->cmdsize);
+	/* qprintf("lc->cmdsize %d \n", lc->cmdsize); */
 	for (i = 0; i < ncmds; i++)
 	{
 		if (lc->cmd == LC_SYMTAB)
@@ -184,10 +204,12 @@ void handle_32(void *ptr)
 			printf("LC_SYMTAB\n");
 			sym = (void*)lc;
 			print_output_32(sym->nsyms, sym->symoff, sym->stroff, ptr);
-			break ;
+			/* break ; */
 		}
-		/* else */
-		/* printf("ELSE\n"); */
+		else
+		{
+			printf("not LC_SYMTAB\n");
+		}
 		lc = (void*)lc + lc->cmdsize;
 	}
 	return ;
@@ -195,7 +217,6 @@ void handle_32(void *ptr)
 
 #include <string.h>
 
-#define MIN(A, B) (A > B ? A : B)
 
 void nm(char *ptr, size_t st_size)
 {

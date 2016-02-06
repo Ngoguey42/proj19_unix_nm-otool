@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 03:53:42 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/04 05:15:51 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/06 18:04:47 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,5 @@ enum			e_arg
 t_arg_parser	ft_arg_create(int ac, char const *const *av);
 enum e_arg		ft_arg_next(t_arg_parser *p, enum e_arg expected);
 char const		*ft_arg_name(enum e_arg arg);
-
 
 #endif
