@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 02:23:10 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/06 15:10:22 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/06 17:39:43 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static int	args(t_arg_parser p[1], unsigned int opt[1], t_ftvector files[1])
 		}
 		else if (a == FTARG_STRING)
 		{
-			if (ftv_push_back(files, &p->s))
+			if (nm_process_push_filename(files, p->s))
 				return (ERRORNO("ftv_push_back"));
 			expect = FTARG_STRING;
 		}
@@ -70,17 +70,23 @@ int			nm_make_env(int ac, char const *const *av, t_env e[1])
 	unsigned int	opt[1];
 	t_ftvector		files[1];
 
-	if (ftv_init_instance(files, sizeof(char *)))
+	*opt = 0;
+	if (ftv_init_instance(files, sizeof(t_filename)))
 		return (ERRORNO("ftv_init_instance"));
 	if (args((t_arg_parser[1]){ft_arg_create(ac, av)}, opt, files))
 		return (1);
 	if (files->size == 0)
-		if (ftv_push_back(files, &g_default_file))
+		if (nm_process_push_filename(files, g_default_file))
 			return (ERRORNO("ftv_push_back"));
+	if (*opt & opt_u_undefonly && *opt & opt_U_noundef)
+	{
+		ft_dprintf(2, "%s\n%s\n", NM_BOTHU, NM_USAGE);
+		return (1);
+	}
 	if (*opt & opt_u_undefonly)
 		*opt |= opt_j_symonly;
 	if (*opt & opt_m_verbose)
 		*opt &= ~opt_j_symonly;
-	*e = (t_env){ac, av, *opt, *files, 0, 0, 0};
+	*e = (t_env){ac, av, *opt & ARG_FIELD, *files, 0, 0, 0};
 	return (0);
 }

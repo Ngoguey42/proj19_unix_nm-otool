@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 02:19:52 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/06 15:08:42 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/06 17:40:00 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,10 @@
 
 # define ARG_OPTIONS "nprguUjm"
 # define ARG_NUM_OPTIONS (sizeof(ARG_OPTIONS) - 1)
+# define ARG_FIELD ((1 << ARG_NUM_OPTIONS) - 1)
 
 # define NM_USAGE ("Usage: ./ft_nm [-" ARG_OPTIONS "] [file ...]")
+# define NM_BOTHU "error: ./ft_nm: can't specifiy both -U and -u"
 
 enum			e_nm_option
 {
@@ -41,6 +43,17 @@ enum			e_nm_endian
 };
 
 typedef struct s_env			t_env;
+typedef struct s_filename		t_filename;
+
+struct			s_filename
+{
+	char const					*file;
+	char const					*member;
+	uint32_t					file_len;
+	uint32_t					member_len;
+};
+
+
 struct			s_env
 {
 	int const					ac;
@@ -55,6 +68,9 @@ struct			s_env
 
 int				nm_make_env(int ac, char const *const *av, t_env e[1]);
 int				nm_handle_file(t_env e[1], char const *filepath);
+
+t_filename		nm_process_filename(char const *file);
+int				nm_process_push_filename(t_ftvector v[1], char const *file);
 
 
 #endif
