@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 02:19:52 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/07 18:36:00 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/07 19:14:01 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,10 +140,9 @@ void			nm_file_release(t_fileinfo f[1]);
 
 void			nm_bin_readmagic(t_bininfo bi[1]);
 int				nm_bin_handle(t_env const e[1], t_bininfo bi[1]);
+bool			nm_bin_ckaddr(t_bininfo const bi[1], void const *ptr, size_t s);
 
 int				nm_obj_handle(t_env const e[1], t_bininfo bi[1]);
-
-/* int				nm_build_obj_sections(t_env const e[1], t_ftvector sects[1]); */
-/* int				nm_handle_file(t_env e[1], char const *filepath); */
+int				nm_obj_buildsections(t_bininfo const bi[1], t_ftvector vec[1]);
 
 #endif
