@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 02:19:24 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/07 18:48:04 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/07 19:36:30 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static int	scroll_paths(t_env const e[1])
 					   , f->bi->st_size , f->bi->type
 					   , f->bi->endian, f->bi->arch
 				); // debug
-			if (nm_bin_handle(e, f->bi))
+			if (nm_bin_handle(e, f->bi) == 0)
 			{
 
 			}

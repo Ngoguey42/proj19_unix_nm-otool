@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/07 18:00:39 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/07 19:13:36 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/07 19:36:09 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <mach-o/loader.h>
 
 static int	extract_sections(t_bininfo const bi[1], t_ftvector vec[1],
-							 t_lc const *lc)
+								t_lc const *lc)
 {
 	size_t const	sec_size = SIZEOF_DYN(section, bi->arch);
 	uint32_t		nsects;
@@ -50,8 +50,7 @@ int			nm_obj_buildsections(t_bininfo const bi[1], t_ftvector vec[1])
 	ncmds = ft_i32toh(ACCESS_MH(ncmds, bi->addr, bi->arch), bi->endian);
 	if (!nm_bin_ckaddr(bi, bi->addr, mh_size))
 		return (ERRORF("mmap overflow"));
-	if (ftv_init_instance(vec, sizeof(void const *)))
-		return (ERRORNO("ftv_init_instance"));
+	ftv_init_instance(vec, sizeof(void const *));
 	if (ftv_push_back(vec, (void*[]){NULL}))
 		return (ERRORNO("ftv_push_back"));
 	lc = bi->addr + mh_size;

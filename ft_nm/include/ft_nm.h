@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 02:19:52 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/07 19:14:01 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/07 19:49:17 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,6 @@
 # define ACCESS_SC(f,p,a) ACCESS(segment_command, f, p, a)
 # define ACCESS_SEC(f,p,a) ACCESS(section, f, p, a)
 # define SIZEOF_DYN(s,a) ((a)==arch_32b?sizeof(struct s):sizeof(struct s##_64))
-
-uint16_t    ft_i16toh(uint16_t i, bool big_endian); //LIBFT
-uint32_t    ft_i32toh(uint32_t i, bool big_endian); //LIBFT
-uint64_t    ft_i64toh(uint64_t i, bool big_endian); //LIBFT
 
 enum			e_nm_option
 {
@@ -112,24 +108,10 @@ struct			s_fileinfo
 	t_bininfo					bi[1];
 };
 
-/*
-** sections being indexed from 1, cur_file_sections[0] is a placeholder
-*/
 struct			s_env
 {
 	unsigned int				opt;
 	t_ftvector					paths;
-
-	/* t_fileinfo					*curf; */
-	/* t_objinfo const				*curo; */
-
-
-	/* enum e_nm_endian			obj_endian; */
-	/* enum e_nm_arch				obj_arch; */
-	/* void const					*obj_ptr; */
-	/* size_t						obj_size; */
-	/* t_ftvector					obj_sections; */
-
 };
 
 int				nm_env_make(int ac, char const *const *av, t_env e[1]);

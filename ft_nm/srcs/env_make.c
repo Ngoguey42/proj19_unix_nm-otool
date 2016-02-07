@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/07 14:53:13 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/07 14:53:13 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/07 19:35:33 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,7 @@ int			nm_env_make(int ac, char const *const *av, t_env e[1])
 	t_ftvector		paths[1];
 
 	*opt = 0;
-	if (ftv_init_instance(paths, sizeof(char *)))
-		return (ERRORNO("ftv_init_instance"));
+	ftv_init_instance(paths, sizeof(char *));
 	if (args((t_arg_parser[1]){ft_arg_create(ac, av)}, opt, paths))
 		return (1);
 	if (paths->size == 0)
