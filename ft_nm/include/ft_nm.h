@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 02:19:52 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/07 13:01:48 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/07 14:50:12 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,14 @@ enum			e_nm_arch
 	arch_64b
 };
 
+enum			e_nm_filetype
+{
+	unknown_file = 0,
+	obj_file,
+	fat_file,
+	archive_file,
+};
+
 typedef struct load_command		t_lc;
 
 typedef struct s_env			t_env;
@@ -81,6 +89,7 @@ struct			s_fileinfo
 	void const					*addr;
 	size_t						st_size;
 
+	enum e_nm_filetype			type;
 	enum e_nm_endian			endian;
 	enum e_nm_arch				arch;
 };
@@ -107,7 +116,7 @@ struct			s_env
 
 int				nm_env_make(int ac, char const *const *av, t_env e[1]);
 int				nm_file_make(t_env const e[1], char const *p, t_fileinfo f[1]);
-
+void			nm_file_release(t_fileinfo f[1]);
 
 t_filename		nm_file_make_processpath(char const *file);
 int				nm_file_make_mmapfilename(t_fileinfo f[1]);

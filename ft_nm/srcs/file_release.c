@@ -1,23 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   file.c                                             :+:      :+:    :+:   */
+/*   file_release.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/02/07 12:14:49 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/07 13:03:15 by ngoguey          ###   ########.fr       */
+/*   Created: 2016/02/07 14:44:20 by ngoguey           #+#    #+#             */
+/*   Updated: 2016/02/07 14:46:37 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_nm.h"
+#include <sys/mman.h>
 
-int			nm_file_make(t_env const e[1], char const *path, t_fileinfo f[1])
+void	nm_file_release(t_fileinfo f[1])
 {
-	ft_bzero(f, sizeof(*f));
-	f->path = nm_file_make_processpath(path);
-	if (nm_file_make_mmapfilename(f))
-		return (1); //TODO: determ retval
-	return (0);
-	(void)e;
+	int		err;
+
+	if (f->addr != MAP_FAILED)
+	{
+		err = munmap(f->addr, f->st_size);
+		FT_ASSERT(err == 0);
+	}
+	if (f->fd >= 0)
+	{
+		err = close(f->fd);
+		FT_ASSERT(err == 0);
+	}
+	return ;
 }
