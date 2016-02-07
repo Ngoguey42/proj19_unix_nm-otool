@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 02:19:52 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/07 18:11:43 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/07 18:36:00 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ struct			s_filename
 struct			s_bininfo
 {
 	void const					*addr;
+	void const					*addrend;
 	size_t						st_size;
 
 	enum e_nm_bintype			type:8;

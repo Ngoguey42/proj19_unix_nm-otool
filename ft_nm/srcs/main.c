@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 02:19:24 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/07 17:53:58 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/07 18:48:04 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,10 @@ static int	scroll_paths(t_env const e[1])
 					   , f->bi->st_size , f->bi->type
 					   , f->bi->endian, f->bi->arch
 				); // debug
+			if (nm_bin_handle(e, f->bi))
+			{
 
+			}
 		}
 		nm_file_release(f);
 		p++;
@@ -45,6 +48,7 @@ int			main(int ac, char *av[])
 	t_env				e[1];
 
 	PRINTSIZEOF(t_fileinfo);
+	PRINTSIZEOF(t_bininfo);
 	if (nm_env_make(ac, (char const *const *)av, e))
 		return (1);
 	ft_dprintf(2, "flags: %I#.*b\n", ARG_NUM_OPTIONS, e->opt);

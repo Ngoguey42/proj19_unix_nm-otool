@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/07 18:00:39 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/07 18:00:39 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/07 19:03:01 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,46 +14,62 @@
 
 #include <mach-o/loader.h>
 
-/*
-** TODO: Compiles but untested
-*/
+static int	extract_sections(t_bininfo const bi[1], t_ftvector sects[1],
+								t_lc const *lc)
+{
+	size_t const	sec_size = SIZEOF_DYN(section, bi->arch);
+	uint32_t		nsects;
+	unsigned int	i;
+	void const		*sect;
+	uint32_t		tmp32;
 
-/* static int	extract_sections(t_env const e[1], t_ftvector sects[1], */
-/* 								t_lc const *lc) */
-/* { */
-/* 	uint32_t const	nsects = ACCESS_SC(nsects, lc, e->obj_arch); */
-/* 	unsigned int	i; */
-/* 	void const		*sect; */
+	nsects = ft_i32toh(ACCESS_SC(nsects, lc, bi->arch), bi->endian);
+	sect = (void const*)lc + SIZEOF_DYN(segment_command, bi->arch);
+	i = 0;
+	while (i++ < nsects)
+	{
+		T;
+		if (!nm_bin_ckaddr(bi, sect, sec_size))
+			return (ERRORF("mmap overflow"));
+		ft_printf("(%s,%s)\n"
+				  , ACCESS_SEC(sectname, sect, bi->arch)
+				  , ACCESS_SEC(segname, sect, bi->arch));
+		if (ftv_push_back(sects, &sect))
+			return (ERRORNO("ftv_push_back"));
+		tmp32 = ft_i32toh(ACCESS_SEC(offset, sect, bi->arch), bi->endian);
+		qprintf("tmp32 = %u\n", tmp32);
+		sect = (void const *)sect + tmp32;
+	}
+	return (0);
+}
 
-/* 	sect = (void const*)lc + SIZEOF_DYN(segment_command, e->obj_arch); */
-/* 	i = 0; */
-/* 	while (i++ < nsects) */
-/* 	{ */
-/* 		if (ftv_push_back(sects, &sect)) */
-/* 			return (ERRORNO("ftv_push_back")); */
-/* 		sect = (void const *)sect + ACCESS_SEC(size, sect, e->obj_arch); */
-/* 	} */
-/* 	return (0); */
-/* } */
+int			nm_obj_buildsections(t_bininfo const bi[1], t_ftvector sects[1])
+{
+	size_t const	mh_size = SIZEOF_DYN(mach_header, bi->arch);
+	uint32_t		ncmds;
+	uint32_t		tmp32;
+	unsigned int	i;
+	t_lc const		*lc;
 
-/* int			nm_build_obj_sections(t_env const e[1], t_ftvector sects[1]) */
-/* { */
-/* 	uint32_t const	ncmds = ACCESS_MH(ncmds, e->obj_ptr, e->obj_arch); */
-/* 	unsigned int	i; */
-/* 	t_lc const		*lc; */
-
-/* 	if (ftv_init_instance(sects, sizeof(void const *))) */
-/* 		return (ERRORNO("ftv_init_instance")); */
-/* 	if (ftv_push_back(sects, (void*[]){NULL})) */
-/* 		return (ERRORNO("ftv_push_back")); */
-/* 	lc = e->obj_ptr + SIZEOF_DYN(mach_header, e->obj_arch); */
-/* 	i = 0; */
-/* 	while (i++ < ncmds) */
-/* 	{ */
-/* 		if (lc->cmd == LC_SEGMENT || lc->cmd == LC_SEGMENT_64) */
-/* 			if (extract_sections(e, sects, lc)) */
-/* 				return (1); */
-/* 		lc = (void const*)lc + lc->cmdsize; */
-/* 	} */
-/* 	return (0); */
-/* } */
+	ncmds = ft_i32toh(ACCESS_MH(ncmds, bi->addr, bi->arch), bi->endian);
+	if (!nm_bin_ckaddr(bi, bi->addr, mh_size))
+		return (ERRORF("mmap overflow"));
+	if (ftv_init_instance(sects, sizeof(void const *)))
+		return (ERRORNO("ftv_init_instance"));
+	if (ftv_push_back(sects, (void*[]){NULL}))
+		return (ERRORNO("ftv_push_back"));
+	lc = bi->addr + mh_size;
+	i = 0;
+	while (i++ < ncmds)
+	{
+		T;
+		if (!nm_bin_ckaddr(bi, lc, sizeof(*lc)))
+			return (ERRORF("mmap overflow"));
+		tmp32 = ft_i32toh(lc->cmd, bi->endian);
+		if (tmp32 == LC_SEGMENT || tmp32 == LC_SEGMENT_64)
+			if (extract_sections(bi, sects, lc))
+				return (1);
+		lc = (void const*)lc + lc->cmdsize;
+	}
+	return (0);
+}

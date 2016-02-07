@@ -6,8 +6,8 @@ import subprocess
 
 if __name__ == "__main__":
 	nlinesSet = set()
-	fatsStream = open("fats.sh", "w")
-	for root, dirs, files in os.walk('/'):
+	fatsStream = open("fats.sh", "a")
+	for root, dirs, files in os.walk('/usr'):
 		for file in files:
 			path = "%s/%s" %(root, file)
 			p1 = subprocess.Popen(['file', path]

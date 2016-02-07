@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   file.c                                             :+:      :+:    :+:   */
+/*   file_make.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/02/07 12:14:49 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/07 17:57:20 by ngoguey          ###   ########.fr       */
+/*   Created: 2016/02/07 18:24:54 by ngoguey           #+#    #+#             */
+/*   Updated: 2016/02/07 18:24:54 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ static int	map_f(t_fileinfo f[1])
 	f->bi->addr = mmap(NULL, stat->st_size, PROT_READ, MAP_PRIVATE, f->fd, 0);
 	if (f->bi->addr == MAP_FAILED)
 		return (err(&f->path, "map", errno));
+	f->bi->addrend = f->bi->addr + f->bi->st_size;
 	return (0);
 }
 
