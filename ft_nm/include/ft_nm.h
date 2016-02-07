@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 02:19:52 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/07 15:33:21 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/07 17:55:27 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ typedef struct load_command		t_lc;
 typedef struct s_env			t_env;
 typedef struct s_filename		t_filename;
 typedef struct s_fileinfo		t_fileinfo;
+typedef struct s_bininfo		t_bininfo;
 
 struct			s_filename
 {
@@ -84,18 +85,21 @@ struct			s_filename
 	uint32_t					member_len;
 };
 
-struct			s_fileinfo
+struct			s_bininfo
 {
-	t_filename					path;
-
-	int							fd;
-
 	void const					*addr;
 	size_t						st_size;
 
-	enum e_nm_filetype			type;
-	enum e_nm_endian			endian;
-	enum e_nm_arch				arch;
+	enum e_nm_filetype			type:8;
+	enum e_nm_endian			endian:8;
+	enum e_nm_arch				arch:8;
+};
+
+struct			s_fileinfo
+{
+	t_filename					path;
+	int							fd;
+	t_bininfo					bi[1];
 };
 
 /*
@@ -119,8 +123,12 @@ struct			s_env
 };
 
 int				nm_env_make(int ac, char const *const *av, t_env e[1]);
+
 int				nm_file_make(t_env const e[1], char const *p, t_fileinfo f[1]);
 void			nm_file_release(t_fileinfo f[1]);
+
+void			nm_bin_readmagic(t_bininfo bi[1]);
+
 
 t_filename		nm_file_make_processpath(char const *file);
 

@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/07 14:44:20 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/07 14:54:09 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/07 17:54:31 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ void	nm_file_release(t_fileinfo f[1])
 {
 	int		err;
 
-	if (f->addr != MAP_FAILED)
+	if (f->bi->addr != MAP_FAILED)
 	{
-		err = munmap((void*)f->addr, f->st_size);
+		err = munmap((void*)f->bi->addr, f->bi->st_size);
 		FT_ASSERT(err == 0);
 	}
 	if (f->fd >= 0)
