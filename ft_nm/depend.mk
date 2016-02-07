@@ -1,5 +1,6 @@
-O_FILES :=	o/srcs/build_sections_vector.o o/srcs/env.o o/srcs/filename.o \
-			o/srcs/ft_arg.o o/srcs/handle_file.o o/srcs/main.o
+O_FILES :=	o/srcs/build_sections_vector.o o/srcs/env.o o/srcs/file.o \
+			o/srcs/ft_arg.o o/srcs/handle_file.o o/srcs/main.o \
+			o/srcs/mmap_file.o o/srcs/processpath.o
 
 LIBS_DEPEND := libft/libft.a
 
@@ -20,7 +21,7 @@ o/srcs/env.o: srcs/env.c include/ft_nm.h libft/include/ft_ctype.h \
 	libft/include/ft_stdlib.h libft/include/ft_string.h \
 	libft/include/ft_typedefs.h libft/include/fterror.h libft/include/libft.h \
 	include/ft_arg.h | o/srcs/
-o/srcs/filename.o: srcs/filename.c include/ft_nm.h libft/include/ft_ctype.h \
+o/srcs/file.o: srcs/file.c include/ft_nm.h libft/include/ft_ctype.h \
 	libft/include/ft_macroes.h libft/include/ft_stdio.h \
 	libft/include/ft_stdlib.h libft/include/ft_string.h \
 	libft/include/ft_typedefs.h libft/include/fterror.h libft/include/libft.h \
@@ -39,3 +40,13 @@ o/srcs/main.o: srcs/main.c include/ft_nm.h libft/include/ft_ctype.h \
 	libft/include/ft_stdlib.h libft/include/ft_string.h \
 	libft/include/ft_typedefs.h libft/include/fterror.h libft/include/libft.h \
 	| o/srcs/
+o/srcs/mmap_file.o: srcs/mmap_file.c include/ft_nm.h libft/include/ft_ctype.h \
+	libft/include/ft_macroes.h libft/include/ft_stdio.h \
+	libft/include/ft_stdlib.h libft/include/ft_string.h \
+	libft/include/ft_typedefs.h libft/include/fterror.h libft/include/libft.h \
+	| o/srcs/
+o/srcs/processpath.o: srcs/processpath.c include/ft_nm.h \
+	libft/include/ft_ctype.h libft/include/ft_macroes.h \
+	libft/include/ft_stdio.h libft/include/ft_stdlib.h \
+	libft/include/ft_string.h libft/include/ft_typedefs.h \
+	libft/include/fterror.h libft/include/libft.h | o/srcs/

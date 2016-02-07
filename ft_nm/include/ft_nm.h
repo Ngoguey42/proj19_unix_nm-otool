@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 02:19:52 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/06 19:34:34 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/07 13:01:48 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,11 @@ enum			e_nm_arch
 	arch_64b
 };
 
+typedef struct load_command		t_lc;
+
 typedef struct s_env			t_env;
 typedef struct s_filename		t_filename;
-typedef struct load_command		t_lc;
+typedef struct s_fileinfo		t_fileinfo;
 
 struct			s_filename
 {
@@ -70,34 +72,47 @@ struct			s_filename
 	uint32_t					member_len;
 };
 
+struct			s_fileinfo
+{
+	t_filename					path;
+
+	int							fd;
+
+	void const					*addr;
+	size_t						st_size;
+
+	enum e_nm_endian			endian;
+	enum e_nm_arch				arch;
+};
+
 /*
 ** sections being indexed from 1, cur_file_sections[0] is a placeholder
 */
 struct			s_env
 {
-	int const					ac;
-	char const *const *const	av;
-	unsigned int const			opt;
-	t_ftvector const			files;
+	unsigned int				opt;
+	t_ftvector					paths;
 
-	enum e_nm_endian			file_endian;
-	enum e_nm_arch				file_arch;
-	void const					*file_ptr;
-	size_t						file_size;
-	unsigned int				file_i;
+	/* t_fileinfo					*curf; */
+	/* t_objinfo const				*curo; */
 
-	enum e_nm_endian			obj_endian;
-	enum e_nm_arch				obj_arch;
-	void const					*obj_ptr;
-	size_t						obj_size;
-	t_ftvector					obj_sections;
+
+	/* enum e_nm_endian			obj_endian; */
+	/* enum e_nm_arch				obj_arch; */
+	/* void const					*obj_ptr; */
+	/* size_t						obj_size; */
+	/* t_ftvector					obj_sections; */
 
 };
 
-int				nm_make_env(int ac, char const *const *av, t_env e[1]);
-int				nm_handle_file(t_env e[1], char const *filepath);
+int				nm_env_make(int ac, char const *const *av, t_env e[1]);
+int				nm_file_make(t_env const e[1], char const *p, t_fileinfo f[1]);
 
-t_filename		nm_process_filename(char const *file);
-int				nm_process_push_filename(t_ftvector v[1], char const *file);
+
+t_filename		nm_file_make_processpath(char const *file);
+int				nm_file_make_mmapfilename(t_fileinfo f[1]);
+
+/* int				nm_build_obj_sections(t_env const e[1], t_ftvector sects[1]); */
+/* int				nm_handle_file(t_env e[1], char const *filepath); */
 
 #endif

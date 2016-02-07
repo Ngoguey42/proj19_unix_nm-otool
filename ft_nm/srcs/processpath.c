@@ -1,25 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   filename.c                                         :+:      :+:    :+:   */
+/*   processpath.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/02/06 17:06:05 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/06 17:47:32 by ngoguey          ###   ########.fr       */
+/*   Created: 2016/02/07 12:59:12 by ngoguey           #+#    #+#             */
+/*   Updated: 2016/02/07 12:59:15 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_nm.h"
 
-int				nm_process_push_filename(t_ftvector v[1], char const *file)
-{
-	t_filename const f[1] = {nm_process_filename(file)};
-
-	return (ftv_push_back(v, f));
-}
-
-t_filename		nm_process_filename(char const *file)
+t_filename		nm_file_make_processpath(char const *file)
 {
 	char const *const	opparen = ft_strrchr(file, '(');
 	size_t const		strlen = ft_strlen(file);

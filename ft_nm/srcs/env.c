@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 02:23:10 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/06 17:42:23 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/07 12:55:07 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static int	save_option(unsigned int opt[1], char c)
 	return (1);
 }
 
-static int	args(t_arg_parser p[1], unsigned int opt[1], t_ftvector files[1])
+static int	args(t_arg_parser p[1], unsigned int opt[1], t_ftvector paths[1])
 {
 	enum e_arg		a;
 	enum e_arg		expect;
@@ -57,7 +57,7 @@ static int	args(t_arg_parser p[1], unsigned int opt[1], t_ftvector files[1])
 		}
 		else if (a == FTARG_STRING)
 		{
-			if (nm_process_push_filename(files, p->s))
+			if (ftv_push_back(paths, &p->s))
 				 return (ERRORNO("ftv_push_back"));
 			expect = FTARG_STRING;
 		}
@@ -65,18 +65,18 @@ static int	args(t_arg_parser p[1], unsigned int opt[1], t_ftvector files[1])
 	return (0);
 }
 
-int			nm_make_env(int ac, char const *const *av, t_env e[1])
+int			nm_env_make(int ac, char const *const *av, t_env e[1])
 {
 	unsigned int	opt[1];
-	t_ftvector		files[1];
+	t_ftvector		paths[1];
 
 	*opt = 0;
-	if (ftv_init_instance(files, sizeof(t_filename)))
+	if (ftv_init_instance(paths, sizeof(char *)))
 		return (ERRORNO("ftv_init_instance"));
-	if (args((t_arg_parser[1]){ft_arg_create(ac, av)}, opt, files))
+	if (args((t_arg_parser[1]){ft_arg_create(ac, av)}, opt, paths))
 		return (1);
-	if (files->size == 0)
-		if (nm_process_push_filename(files, g_default_file))
+	if (paths->size == 0)
+		if (ftv_push_back(paths, &g_default_file))
 			return (ERRORNO("ftv_push_back"));
 	if (*opt & opt_u_undefonly && *opt & opt_U_noundef)
 	{
@@ -87,6 +87,6 @@ int			nm_make_env(int ac, char const *const *av, t_env e[1])
 		*opt |= opt_j_symonly;
 	if (*opt & opt_m_verbose)
 		*opt &= ~opt_j_symonly;
-	*e = (t_env){ac, av, *opt & ARG_FIELD, *files, 0, 0, 0};
+	*e = (t_env){*opt & ARG_FIELD, *paths};
 	return (0);
 }
