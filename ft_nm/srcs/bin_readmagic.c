@@ -6,13 +6,14 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/07 17:51:25 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/07 17:52:26 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/07 17:57:23 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_nm.h"
 #include <mach-o/loader.h>
 #include <mach-o/fat.h>
+
+#include "ft_nm.h"
 
 void	nm_bin_readmagic(t_bininfo bi[1])
 {

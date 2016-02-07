@@ -1,7 +1,7 @@
-O_FILES :=	o/srcs/bin_readmagic.o o/srcs/build_sections_vector.o \
-			o/srcs/endianness.o o/srcs/env_make.o o/srcs/file_make.o \
-			o/srcs/file_processpath.o o/srcs/file_release.o o/srcs/ft_arg.o \
-			o/srcs/handle_file.o o/srcs/main.o
+O_FILES :=	o/srcs/bin_handle.o o/srcs/bin_readmagic.o o/srcs/endianness.o \
+			o/srcs/env_make.o o/srcs/file_make.o o/srcs/file_processpath.o \
+			o/srcs/file_release.o o/srcs/ft_arg.o o/srcs/main.o \
+			o/srcs/obj_buildsections.o o/srcs/obj_handle.o
 
 LIBS_DEPEND := libft/libft.a
 
@@ -11,13 +11,13 @@ libs:
 
 
 
-MAX_SOURCE_LEN := 28
-o/srcs/bin_readmagic.o: srcs/bin_readmagic.c include/ft_nm.h \
+MAX_SOURCE_LEN := 24
+o/srcs/bin_handle.o: srcs/bin_handle.c include/ft_nm.h \
 	libft/include/ft_ctype.h libft/include/ft_macroes.h \
 	libft/include/ft_stdio.h libft/include/ft_stdlib.h \
 	libft/include/ft_string.h libft/include/ft_typedefs.h \
 	libft/include/fterror.h libft/include/libft.h | o/srcs/
-o/srcs/build_sections_vector.o: srcs/build_sections_vector.c include/ft_nm.h \
+o/srcs/bin_readmagic.o: srcs/bin_readmagic.c include/ft_nm.h \
 	libft/include/ft_ctype.h libft/include/ft_macroes.h \
 	libft/include/ft_stdio.h libft/include/ft_stdlib.h \
 	libft/include/ft_string.h libft/include/ft_typedefs.h \
@@ -47,13 +47,18 @@ o/srcs/ft_arg.o: srcs/ft_arg.c include/ft_arg.h libft/include/ft_ctype.h \
 	libft/include/ft_macroes.h libft/include/ft_stdio.h \
 	libft/include/ft_stdlib.h libft/include/ft_string.h \
 	libft/include/ft_typedefs.h libft/include/libft.h | o/srcs/
-o/srcs/handle_file.o: srcs/handle_file.c include/ft_nm.h \
-	libft/include/ft_ctype.h libft/include/ft_macroes.h \
-	libft/include/ft_stdio.h libft/include/ft_stdlib.h \
-	libft/include/ft_string.h libft/include/ft_typedefs.h \
-	libft/include/fterror.h libft/include/libft.h | o/srcs/
 o/srcs/main.o: srcs/main.c include/ft_nm.h libft/include/ft_ctype.h \
 	libft/include/ft_macroes.h libft/include/ft_stdio.h \
 	libft/include/ft_stdlib.h libft/include/ft_string.h \
 	libft/include/ft_typedefs.h libft/include/fterror.h libft/include/libft.h \
 	| o/srcs/
+o/srcs/obj_buildsections.o: srcs/obj_buildsections.c include/ft_nm.h \
+	libft/include/ft_ctype.h libft/include/ft_macroes.h \
+	libft/include/ft_stdio.h libft/include/ft_stdlib.h \
+	libft/include/ft_string.h libft/include/ft_typedefs.h \
+	libft/include/fterror.h libft/include/libft.h | o/srcs/
+o/srcs/obj_handle.o: srcs/obj_handle.c include/ft_nm.h \
+	libft/include/ft_ctype.h libft/include/ft_macroes.h \
+	libft/include/ft_stdio.h libft/include/ft_stdlib.h \
+	libft/include/ft_string.h libft/include/ft_typedefs.h \
+	libft/include/fterror.h libft/include/libft.h | o/srcs/

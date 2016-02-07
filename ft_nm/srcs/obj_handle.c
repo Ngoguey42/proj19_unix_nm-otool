@@ -1,21 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handle_file.c                                      :+:      :+:    :+:   */
+/*   obj_handle.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/02/06 14:32:51 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/06 14:33:27 by ngoguey          ###   ########.fr       */
+/*   Created: 2016/02/07 18:12:02 by ngoguey           #+#    #+#             */
+/*   Updated: 2016/02/07 18:12:09 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_nm.h"
 
-int		nm_handle_file(t_env e[1], char const *filepath)
+int		nm_obj_handle(t_env const e[1], t_bininfo bi[1])
 {
-
-
 
 	return (0);
 }

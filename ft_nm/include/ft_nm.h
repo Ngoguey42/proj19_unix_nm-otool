@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 02:19:52 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/07 17:55:27 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/07 18:11:43 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ enum			e_nm_arch
 	arch_64b
 };
 
-enum			e_nm_filetype
+enum			e_nm_bintype
 {
 	unknown_file = 0,
 	obj_file,
@@ -77,6 +77,15 @@ typedef struct s_filename		t_filename;
 typedef struct s_fileinfo		t_fileinfo;
 typedef struct s_bininfo		t_bininfo;
 
+/*
+** t_filename					is itself a t_bininfo
+** t_bininfo					is one of e_nm_bintype
+** e_nm_bintype::unknown_file	is a terminal bin
+** e_nm_bintype::obj_file		is a terminal bin
+** e_nm_bintype::fat_file		may contain several bin
+** e_nm_bintype::archive_file	may contain several bin
+*/
+
 struct			s_filename
 {
 	char const					*file;
@@ -90,7 +99,7 @@ struct			s_bininfo
 	void const					*addr;
 	size_t						st_size;
 
-	enum e_nm_filetype			type:8;
+	enum e_nm_bintype			type:8;
 	enum e_nm_endian			endian:8;
 	enum e_nm_arch				arch:8;
 };
@@ -125,12 +134,13 @@ struct			s_env
 int				nm_env_make(int ac, char const *const *av, t_env e[1]);
 
 int				nm_file_make(t_env const e[1], char const *p, t_fileinfo f[1]);
+t_filename		nm_file_make_processpath(char const *file);
 void			nm_file_release(t_fileinfo f[1]);
 
 void			nm_bin_readmagic(t_bininfo bi[1]);
+int				nm_bin_handle(t_env const e[1], t_bininfo bi[1]);
 
-
-t_filename		nm_file_make_processpath(char const *file);
+int				nm_obj_handle(t_env const e[1], t_bininfo bi[1]);
 
 /* int				nm_build_obj_sections(t_env const e[1], t_ftvector sects[1]); */
 /* int				nm_handle_file(t_env e[1], char const *filepath); */

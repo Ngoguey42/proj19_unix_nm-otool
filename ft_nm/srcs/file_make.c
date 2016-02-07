@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/07 12:14:49 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/07 17:55:06 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/07 17:57:20 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/mman.h>
-/* #include <mach-o/loader.h> */
-/* #include <mach-o/fat.h> */
 
 #include "ft_nm.h"
 
