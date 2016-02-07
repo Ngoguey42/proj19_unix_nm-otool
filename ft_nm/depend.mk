@@ -1,6 +1,7 @@
-O_FILES :=	o/srcs/build_sections_vector.o o/srcs/env.o o/srcs/file_make.o \
-			o/srcs/file_release.o o/srcs/ft_arg.o o/srcs/handle_file.o \
-			o/srcs/main.o o/srcs/processpath.o
+O_FILES :=	o/srcs/build_sections_vector.o o/srcs/endianness.o \
+			o/srcs/env_make.o o/srcs/file_make.o o/srcs/file_release.o \
+			o/srcs/ft_arg.o o/srcs/handle_file.o o/srcs/main.o \
+			o/srcs/processpath.o
 
 LIBS_DEPEND := libft/libft.a
 
@@ -16,7 +17,8 @@ o/srcs/build_sections_vector.o: srcs/build_sections_vector.c include/ft_nm.h \
 	libft/include/ft_stdio.h libft/include/ft_stdlib.h \
 	libft/include/ft_string.h libft/include/ft_typedefs.h \
 	libft/include/fterror.h libft/include/libft.h | o/srcs/
-o/srcs/env.o: srcs/env.c include/ft_nm.h libft/include/ft_ctype.h \
+o/srcs/endianness.o: srcs/endianness.c | o/srcs/
+o/srcs/env_make.o: srcs/env_make.c include/ft_nm.h libft/include/ft_ctype.h \
 	libft/include/ft_macroes.h libft/include/ft_stdio.h \
 	libft/include/ft_stdlib.h libft/include/ft_string.h \
 	libft/include/ft_typedefs.h libft/include/fterror.h libft/include/libft.h \
