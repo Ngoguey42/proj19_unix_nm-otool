@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 02:19:24 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/07 19:36:30 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/09 16:26:36 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ static int	scroll_paths(t_env const e[1])
 		{
 			ft_dprintf(2, "%M45.*r with %J-15.*r"
 					   "size(%u) type(%hhu) end(%hhu) arch(%hhu)\n"
-					   , f->path.file_len, f->path.file
-					   , f->path.member_len, f->path.member
+					   , f->path.len, f->path.str
+					   , f->bi->member.len, f->bi->member.str
 					   , f->bi->st_size , f->bi->type
 					   , f->bi->endian, f->bi->arch
 				); // debug

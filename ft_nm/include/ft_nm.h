@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 02:19:52 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/07 19:49:17 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/09 19:15:08 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,14 @@
 # define ACCESS64B(s,f,p) ( ((struct s ## _64 const*)(p))->f )
 # define ACCESS(s,f,p,a) ((a) == arch_32b ? ACCESS32B(s,f,p) : ACCESS64B(s,f,p))
 
+# define _N_STRX32(p) ((struct nlist const*)(p))->n_un.n_strx
+# define _N_STRX64(p) ((struct nlist_64 const*)(p))->n_un.n_strx
+
 # define ACCESS_MH(f,p,a) ACCESS(mach_header, f, p, a)
 # define ACCESS_SC(f,p,a) ACCESS(segment_command, f, p, a)
 # define ACCESS_SEC(f,p,a) ACCESS(section, f, p, a)
+# define ACCESS_NL(f,p,a) ACCESS(nlist, f, p, a)
+# define ACCESS_NL_N_STRX(p,a) ((a) == arch_32b ? _N_STRX32(p) : _N_STRX64(p))
 # define SIZEOF_DYN(s,a) ((a)==arch_32b?sizeof(struct s):sizeof(struct s##_64))
 
 enum			e_nm_option
@@ -67,11 +72,14 @@ enum			e_nm_bintype
 };
 
 typedef struct load_command		t_lc;
+typedef struct symtab_command	t_sc;
 
 typedef struct s_env			t_env;
-typedef struct s_filename		t_filename;
+typedef struct s_substr			t_substr;
 typedef struct s_fileinfo		t_fileinfo;
 typedef struct s_bininfo		t_bininfo;
+typedef struct s_objinfo		t_objinfo;
+typedef struct s_syminfo		t_syminfo;
 
 /*
 ** t_filename					is itself a t_bininfo
@@ -82,16 +90,24 @@ typedef struct s_bininfo		t_bininfo;
 ** e_nm_bintype::archive_file	may contain several bin
 */
 
-struct			s_filename
+struct			s_substr
 {
-	char const					*file;
-	char const					*member;
-	uint32_t					file_len;
-	uint32_t					member_len;
+	char const					*str;
+	size_t						len;
 };
+
+/* struct			s_filename */
+/* { */
+/* 	char const					*file; */
+/* 	char const					*member; */
+/* 	uint32_t					file_len; */
+/* 	uint32_t					member_len; */
+/* }; */
 
 struct			s_bininfo
 {
+	t_substr					member;
+
 	void const					*addr;
 	void const					*addrend;
 	size_t						st_size;
@@ -101,11 +117,28 @@ struct			s_bininfo
 	enum e_nm_arch				arch:8;
 };
 
+struct			s_objinfo
+{
+	t_bininfo const				*bi;
+	t_ftvector					sects[1];
+	char const					*strtab;
+};
+
 struct			s_fileinfo
 {
-	t_filename					path;
+	t_substr					path;
 	int							fd;
 	t_bininfo					bi[1];
+};
+
+
+struct			s_syminfo
+{
+	char const					*str;
+	uint8_t						n_type;
+	void const					*section;
+	int16_t						n_desc;
+	int64_t						n_value;
 };
 
 struct			s_env
@@ -117,14 +150,14 @@ struct			s_env
 int				nm_env_make(int ac, char const *const *av, t_env e[1]);
 
 int				nm_file_make(t_env const e[1], char const *p, t_fileinfo f[1]);
-t_filename		nm_file_make_processpath(char const *file);
+void			nm_file_make_processpath(char const *file, t_substr *dst[2]);
 void			nm_file_release(t_fileinfo f[1]);
 
 void			nm_bin_readmagic(t_bininfo bi[1]);
-int				nm_bin_handle(t_env const e[1], t_bininfo bi[1]);
+int				nm_bin_handle(t_env const e[1], t_bininfo const bi[1]);
 bool			nm_bin_ckaddr(t_bininfo const bi[1], void const *ptr, size_t s);
 
-int				nm_obj_handle(t_env const e[1], t_bininfo bi[1]);
+int				nm_obj_handle(t_env const e[1], t_bininfo const bi[1]);
 int				nm_obj_buildsections(t_bininfo const bi[1], t_ftvector vec[1]);
 
 #endif

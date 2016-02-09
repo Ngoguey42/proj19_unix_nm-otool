@@ -40,7 +40,7 @@ DEBUG_MODE		?= 0
 export DEBUG_MODE
 
 # Jobs
-JOBS			:= 4
+JOBS			:= 1
 
 # Column output
 COLUMN_OUTPUT	:= 0

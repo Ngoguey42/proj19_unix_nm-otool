@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/07 18:24:54 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/07 18:24:54 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/09 16:24:17 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@
 
 #include "ft_nm.h"
 
-static int	err(t_filename const f[1], char const *pb, int errnum)
+static int	err(t_substr const f[1], char const *pb, int errnum)
 {
 	ft_printf("error: ./ft_nm: can't %s file: %.*r (%s)\n",
-				pb, f->file_len, f->file, ft_strerror(errnum));
+				pb, f->len, f->str, ft_strerror(errnum));
 	return (1);
 }
 
@@ -29,9 +29,9 @@ static int	open_f(t_fileinfo f[1])
 {
 	char	fpath[PATH_MAX];
 
-	if (f->path.file_len + 1 > PATH_MAX)
+	if (f->path.len + 1 > PATH_MAX)
 		return (err(&f->path, "open", ENAMETOOLONG));
-	ft_strlcpy(fpath, f->path.file, f->path.file_len + 1);
+	ft_strlcpy(fpath, f->path.str, f->path.len + 1);
 	f->fd = open(fpath, O_RDONLY);
 	if (f->fd < 0)
 		return (err(&f->path, "open", errno));
@@ -61,7 +61,7 @@ int			nm_file_make(t_env const e[1], char const *path, t_fileinfo f[1])
 	ft_bzero(f, sizeof(*f));
 	f->bi->addr = MAP_FAILED;
 	f->fd = -1;
-	f->path = nm_file_make_processpath(path);
+	nm_file_make_processpath(path, (t_substr*[2]){&f->path, &f->bi->member});
 	if (open_f(f))
 		return (1);
 	if (map_f(f))
