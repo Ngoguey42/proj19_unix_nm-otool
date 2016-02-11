@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 02:19:52 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/11 16:39:01 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/11 18:44:14 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,6 +145,6 @@ bool			nm_bin_ckaddr(t_bininfo const bi[1], void const *ptr, size_t s);
 
 int				nm_obj_handle(t_env const e[1], t_bininfo bi[1]);
 int				nm_obj_buildsections(t_bininfo const bi[1], t_ftvector vec[1]);
-int				nm_obj_printsym(t_env const e[1], t_syminfo const si[1]);
+int				nm_obj_printsym(t_env const e[1], t_bininfo const bi[1], t_syminfo const si[1]);
 
 #endif

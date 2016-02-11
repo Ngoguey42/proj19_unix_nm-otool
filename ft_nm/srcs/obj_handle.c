@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/07 18:12:02 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/11 16:44:36 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/11 18:45:49 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static int	read_nlist(t_env const e[1], t_bininfo const bi[1],
 	si->n_desc = ft_i16toh(ACCESS_NL(n_desc, nl, bi->arch), bi->endian);
 	si->n_value = ft_i64toh(ACCESS_NL(n_value, nl, bi->arch), bi->endian);
 	/* qprintf("%s\n", si->str); */
-	return (nm_obj_printsym(e, si));
+	return (nm_obj_printsym(e, bi, si));
 }
 
 static int	scroll_symbols(t_env const e[1], t_bininfo const bi[1], t_sc const *sc)

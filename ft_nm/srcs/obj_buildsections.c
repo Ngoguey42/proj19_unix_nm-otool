@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/07 18:00:39 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/07 19:36:09 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/11 19:07:28 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ static int	extract_sections(t_bininfo const bi[1], t_ftvector vec[1],
 	{
 		if (!nm_bin_ckaddr(bi, sect, sec_size))
 			return (ERRORF("mmap overflow"));
-		ft_printf("(%s,%s)\n"
-				  , ACCESS_SEC(segname, sect, bi->arch)
-				  , ACCESS_SEC(sectname, sect, bi->arch));
+		/* ft_printf("(%s,%s)\n" */
+		/* 		  , ACCESS_SEC(segname, sect, bi->arch) */
+		/* 		  , ACCESS_SEC(sectname, sect, bi->arch)); */
 		if (ftv_push_back(vec, &sect))
 			return (ERRORNO("ftv_push_back"));
 		sect = (void const *)sect + sec_size;
