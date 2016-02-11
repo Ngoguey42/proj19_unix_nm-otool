@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 02:19:52 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/09 19:15:08 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/11 16:19:25 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,6 @@ typedef struct s_env			t_env;
 typedef struct s_substr			t_substr;
 typedef struct s_fileinfo		t_fileinfo;
 typedef struct s_bininfo		t_bininfo;
-typedef struct s_objinfo		t_objinfo;
 typedef struct s_syminfo		t_syminfo;
 
 /*
@@ -96,17 +95,11 @@ struct			s_substr
 	size_t						len;
 };
 
-/* struct			s_filename */
-/* { */
-/* 	char const					*file; */
-/* 	char const					*member; */
-/* 	uint32_t					file_len; */
-/* 	uint32_t					member_len; */
-/* }; */
-
 struct			s_bininfo
 {
-	t_substr					member;
+	t_substr					pathname;
+	t_substr					membername;
+	t_substr					archname;
 
 	void const					*addr;
 	void const					*addrend;
@@ -115,22 +108,15 @@ struct			s_bininfo
 	enum e_nm_bintype			type:8;
 	enum e_nm_endian			endian:8;
 	enum e_nm_arch				arch:8;
-};
 
-struct			s_objinfo
-{
-	t_bininfo const				*bi;
 	t_ftvector					sects[1];
-	char const					*strtab;
 };
 
 struct			s_fileinfo
 {
-	t_substr					path;
 	int							fd;
 	t_bininfo					bi[1];
 };
-
 
 struct			s_syminfo
 {
@@ -154,10 +140,10 @@ void			nm_file_make_processpath(char const *file, t_substr *dst[2]);
 void			nm_file_release(t_fileinfo f[1]);
 
 void			nm_bin_readmagic(t_bininfo bi[1]);
-int				nm_bin_handle(t_env const e[1], t_bininfo const bi[1]);
+int				nm_bin_handle(t_env const e[1], t_bininfo bi[1]);
 bool			nm_bin_ckaddr(t_bininfo const bi[1], void const *ptr, size_t s);
 
-int				nm_obj_handle(t_env const e[1], t_bininfo const bi[1]);
+int				nm_obj_handle(t_env const e[1], t_bininfo bi[1]);
 int				nm_obj_buildsections(t_bininfo const bi[1], t_ftvector vec[1]);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/07 18:24:54 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/09 16:24:17 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/11 15:55:36 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,12 @@ static int	open_f(t_fileinfo f[1])
 {
 	char	fpath[PATH_MAX];
 
-	if (f->path.len + 1 > PATH_MAX)
-		return (err(&f->path, "open", ENAMETOOLONG));
-	ft_strlcpy(fpath, f->path.str, f->path.len + 1);
+	if (f->bi->pathname.len + 1 > PATH_MAX)
+		return (err(&f->bi->pathname, "open", ENAMETOOLONG));
+	ft_strlcpy(fpath, f->bi->pathname.str, f->bi->pathname.len + 1);
 	f->fd = open(fpath, O_RDONLY);
 	if (f->fd < 0)
-		return (err(&f->path, "open", errno));
+		return (err(&f->bi->pathname, "open", errno));
 	return (0);
 }
 
@@ -47,11 +47,11 @@ static int	map_f(t_fileinfo f[1])
 
 	e = fstat(f->fd, stat);
 	if (e != 0)
-		return (err(&f->path, "open", errno));
+		return (err(&f->bi->pathname, "open", errno));
 	f->bi->st_size = stat->st_size;
 	f->bi->addr = mmap(NULL, stat->st_size, PROT_READ, MAP_PRIVATE, f->fd, 0);
 	if (f->bi->addr == MAP_FAILED)
-		return (err(&f->path, "map", errno));
+		return (err(&f->bi->pathname, "map", errno));
 	f->bi->addrend = f->bi->addr + f->bi->st_size;
 	return (0);
 }
@@ -61,7 +61,8 @@ int			nm_file_make(t_env const e[1], char const *path, t_fileinfo f[1])
 	ft_bzero(f, sizeof(*f));
 	f->bi->addr = MAP_FAILED;
 	f->fd = -1;
-	nm_file_make_processpath(path, (t_substr*[2]){&f->path, &f->bi->member});
+	nm_file_make_processpath(
+		path, (t_substr*[2]){&f->bi->pathname, &f->bi->membername});
 	if (open_f(f))
 		return (1);
 	if (map_f(f))
