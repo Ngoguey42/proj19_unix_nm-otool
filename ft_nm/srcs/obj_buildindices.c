@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   obj_buildsections.c                                :+:      :+:    :+:   */
+/*   obj_buildindices.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/02/07 18:00:39 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/11 19:07:28 by ngoguey          ###   ########.fr       */
+/*   Created: 2016/02/11 19:24:56 by ngoguey           #+#    #+#             */
+/*   Updated: 2016/02/11 20:02:59 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,30 +39,65 @@ static int	extract_sections(t_bininfo const bi[1], t_ftvector vec[1],
 	return (0);
 }
 
-int			nm_obj_buildsections(t_bininfo const bi[1], t_ftvector vec[1])
+/*
+** LC_LOAD_DYLIB dylib_command
+** LC_LOAD_WEAK_DYLIB dylib_command
+** LC_REEXPORT_DYLIB dylib_command
+*/
+
+static uint32_t const dylibs[] = {
+	LC_LOAD_DYLIB, LC_LOAD_WEAK_DYLIB, LC_REEXPORT_DYLIB,
+	/* LC_LOAD_UPWARD_DYLIB, LC_LAZY_LOAD_DYLIB
+	   TODO: handle those libs ?
+*/
+};
+
+static int	read_lc(t_bininfo bi[1], t_lc const *lc, uint32_t cmd)
+{
+	unsigned int		i;
+
+	if (cmd == LC_SEGMENT || cmd == LC_SEGMENT_64)
+	{
+		if (extract_sections(bi, bi->sects, lc))
+			return (1);
+	}
+	else
+	{
+		i = 0;
+		while (i < SIZE_ARRAY(dylibs))
+		{
+			if (cmd == dylibs[i])
+				break ;
+			i++;
+		}
+		if (i != SIZE_ARRAY(dylibs))
+		{
+			if (ftv_push_back(bi->dylibs, &lc))
+				return (ERRORNO("ftv_push_back"));
+		}
+	}
+	return (0);
+}
+
+
+int			nm_obj_buildindices(t_bininfo bi[1])
 {
 	size_t const	mh_size = SIZEOF_DYN(mach_header, bi->arch);
 	uint32_t		ncmds;
-	uint32_t		tmp32;
 	unsigned int	i;
 	t_lc const		*lc;
 
 	ncmds = ft_i32toh(ACCESS_MH(ncmds, bi->addr, bi->arch), bi->endian);
 	if (!nm_bin_ckaddr(bi, bi->addr, mh_size))
 		return (ERRORF("mmap overflow"));
-	ftv_init_instance(vec, sizeof(void const *));
-	if (ftv_push_back(vec, (void*[]){NULL}))
-		return (ERRORNO("ftv_push_back"));
 	lc = bi->addr + mh_size;
 	i = 0;
 	while (i++ < ncmds)
 	{
 		if (!nm_bin_ckaddr(bi, lc, sizeof(*lc)))
 			return (ERRORF("mmap overflow"));
-		tmp32 = ft_i32toh(lc->cmd, bi->endian);
-		if (tmp32 == LC_SEGMENT || tmp32 == LC_SEGMENT_64)
-			if (extract_sections(bi, vec, lc))
-				return (1);
+		if (read_lc(bi, lc, ft_i32toh(lc->cmd, bi->endian)))
+			return (1);
 		lc = (void const*)lc + lc->cmdsize;
 	}
 	return (0);

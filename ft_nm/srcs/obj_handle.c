@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/07 18:12:02 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/11 18:45:49 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/11 19:51:39 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,13 +98,17 @@ static int	scroll_symtabs(t_env const e[1], t_bininfo const bi[1])
 
 int		nm_obj_handle(t_env const e[1], t_bininfo bi[1])
 {
-	/* t_ftvector	bi->sects[1]; */
-	/* t_objinfo	oi[1]; */
-	/* bi = bi; */
-
 	ft_bzero(bi->sects, sizeof(t_ftvector));
-	nm_obj_buildsections(bi, bi->sects);
+	ftv_init_instance(bi->sects, sizeof(void const *));
+	if (ftv_push_back(bi->sects, (void*[]){NULL}))
+		return (ERRORNO("ftv_push_back"));
+	ft_bzero(bi->dylibs, sizeof(t_ftvector));
+	ftv_init_instance(bi->dylibs, sizeof(void const *));
+	if (ftv_push_back(bi->dylibs, (void*[]){NULL}))
+		return (ERRORNO("ftv_push_back"));
+	nm_obj_buildindices(bi);
 	scroll_symtabs(e, bi);
 	ftv_release(bi->sects, NULL);
+	ftv_release(bi->dylibs, NULL);
 	return (0);
 }

@@ -1,6 +1,6 @@
 O_FILES :=	o/srcs/bin_handle.o o/srcs/bin_readmagic.o o/srcs/env_make.o \
 			o/srcs/file_make.o o/srcs/file_processpath.o o/srcs/file_release.o \
-			o/srcs/main.o o/srcs/obj_buildsections.o o/srcs/obj_handle.o \
+			o/srcs/main.o o/srcs/obj_buildindices.o o/srcs/obj_handle.o \
 			o/srcs/obj_printsym.o
 
 LIBS_DEPEND := libft/libft.a
@@ -11,7 +11,7 @@ libs:
 
 
 
-MAX_SOURCE_LEN := 24
+MAX_SOURCE_LEN := 23
 o/srcs/bin_handle.o: srcs/bin_handle.c include/ft_nm.h \
 	libft/include/ft_ctype.h libft/include/ft_macroes.h \
 	libft/include/ft_stdio.h libft/include/ft_stdlib.h \
@@ -47,7 +47,7 @@ o/srcs/main.o: srcs/main.c include/ft_nm.h libft/include/ft_ctype.h \
 	libft/include/ft_stdlib.h libft/include/ft_string.h \
 	libft/include/ft_typedefs.h libft/include/fterror.h libft/include/libft.h \
 	| o/srcs/
-o/srcs/obj_buildsections.o: srcs/obj_buildsections.c include/ft_nm.h \
+o/srcs/obj_buildindices.o: srcs/obj_buildindices.c include/ft_nm.h \
 	libft/include/ft_ctype.h libft/include/ft_macroes.h \
 	libft/include/ft_stdio.h libft/include/ft_stdlib.h \
 	libft/include/ft_string.h libft/include/ft_typedefs.h \

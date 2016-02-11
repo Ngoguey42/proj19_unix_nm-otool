@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 16:37:11 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/11 19:08:01 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/11 20:22:34 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,40 @@
 
 #include <mach-o/loader.h>
 #include <mach-o/nlist.h>
+
+
+int		print_library(t_bininfo const bi[1], t_syminfo const si[1])
+{
+	char		buf[256];
+	int const	libi = GET_LIBRARY_ORDINAL(si->n_desc);
+	void const	*ptr1;
+	void const	*ptr2;
+	size_t		size;
+
+	qprintf("libi:%d\n", libi);
+	ptr1 = bi->dylibs->data;
+	ptr1 = ((struct dylib_command const *const *)ptr1)[libi];
+	ptr1 = ptr1 + ((struct dylib_command const *)ptr1)->dylib.name.offset;
+
+	ptr2 = ft_strrchr(ptr1, '/');
+	if (ptr2 != NULL)
+		ptr1 = ptr2 + 1;
+
+	ptr2 = ft_strchr(ptr1, '.');
+	if (ptr2 != NULL)
+		size = ptr2 - ptr1;
+	else
+		size = ft_strlen(ptr1);
+
+
+	/* qprintf("%x\n", ((struct dylib_command const *)ptr)->dylib.name.offset); */
+	/* qprintf("%s\n", ptr); */
+
+	ft_putstr(" (from ");
+	write(1, ptr1, size);
+	ft_putchar(')');
+	return (0);
+}
 
 int		nm_obj_printsym(t_env const e[1], t_bininfo const bi[1], t_syminfo const si[1])
 {
@@ -46,7 +80,9 @@ int		nm_obj_printsym(t_env const e[1], t_bininfo const bi[1], t_syminfo const si
 	ft_putstr(si->str);
 
 	if (GET_LIBRARY_ORDINAL(si->n_desc))
-		ft_putstr(" (from )");
+	{
+		print_library(bi, si);
+	}
 	ft_putchar('\n');
 	return (0);
 }
