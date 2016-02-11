@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 16:37:11 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/11 20:22:34 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/11 20:41:13 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ int		print_library(t_bininfo const bi[1], t_syminfo const si[1])
 	void const	*ptr2;
 	size_t		size;
 
-	qprintf("libi:%d\n", libi);
 	ptr1 = bi->dylibs->data;
 	ptr1 = ((struct dylib_command const *const *)ptr1)[libi];
 	ptr1 = ptr1 + ((struct dylib_command const *)ptr1)->dylib.name.offset;
@@ -49,6 +48,9 @@ int		print_library(t_bininfo const bi[1], t_syminfo const si[1])
 	return (0);
 }
 
+
+
+
 int		nm_obj_printsym(t_env const e[1], t_bininfo const bi[1], t_syminfo const si[1])
 {
 	if (si->n_value == 0)
@@ -58,21 +60,30 @@ int		nm_obj_printsym(t_env const e[1], t_bininfo const bi[1], t_syminfo const si
 	if (si->sect == NULL)
 		ft_printf("(undefined) ");
 	else
+	{
 		ft_printf("(%s,%s) "
 				  , ACCESS_SEC(segname, si->sect, bi->arch)
 				  , ACCESS_SEC(sectname, si->sect, bi->arch)
 			);
+	}
 	if ((si->n_desc) & REFERENCED_DYNAMICALLY)
 		ft_putstr("[referenced dynamically] ");
+	if ((si->n_desc) & N_WEAK_REF)
+		ft_putstr("weak ");
+
+
+
 	if ((si->n_type) & N_EXT)
 		ft_putstr("external ");
+	else if (si->n_type & N_PEXT)
+		ft_putstr("non-external (was a private external) ");
 	else
 		ft_putstr("non-external ");
 
 	ft_dprintf(2, "%Is(pext%I1b type%I03b ext%I01b) ", "type"
-			  , (si->n_type >> 4) & N_PEXT
-			  , (si->n_type >> 1) & N_TYPE
-			  , (si->n_type) & N_EXT
+			   , (si->n_type & N_PEXT) >> 4
+			   , (si->n_type & N_TYPE) >> 1
+			   , (si->n_type) & N_EXT
 		);
 	ft_dprintf(2, "%Js(%J011p) ", "sect", si->sect);
 	ft_dprintf(2, "%Ks(%K#016b) ", "desc", si->n_desc);
