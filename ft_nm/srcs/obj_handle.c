@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/07 18:12:02 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/11 16:23:12 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/11 16:44:36 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,26 +27,29 @@
 ** sections being indexed from 1, cur_file_sections[0] is a placeholder
 */
 
-static int	nn3(t_env const e[1], t_bininfo const bi[1],
+static int	read_nlist(t_env const e[1], t_bininfo const bi[1],
 				void const *nl, void const *strtab)
 {
 	t_syminfo	si[1];
 	uint8_t		n_sect;
 
-	n_sect = ACCESS_NL(n_sect, nl, bi->arch);
-	if (n_sect >= bi->sects->size)
-		return (ERRORF("sections index overflow"));
+	si->n_type = ACCESS_NL(n_type, nl, bi->arch);
+	if ((si->n_type & N_STAB) != 0)
+		return (0);
 	si->str = strtab + ft_i32toh(ACCESS_NL_N_STRX(nl, bi->arch), bi->endian);
 	if (!nm_bin_ckaddr(bi, strtab, sizeof(char)))
 		return (ERRORF("mmap overflow"));
-	si->n_type = ACCESS_NL(n_type, nl, bi->arch);
+	n_sect = ACCESS_NL(n_sect, nl, bi->arch);
+	if (n_sect >= bi->sects->size)
+		return (ERRORF("sections index overflow"));
+	si->sect = ((void const *const *)bi->sects->data)[n_sect];
 	si->n_desc = ft_i16toh(ACCESS_NL(n_desc, nl, bi->arch), bi->endian);
 	si->n_value = ft_i64toh(ACCESS_NL(n_value, nl, bi->arch), bi->endian);
 	/* qprintf("%s\n", si->str); */
-	return (0);
+	return (nm_obj_printsym(e, si));
 }
 
-static int	nn2(t_env const e[1], t_bininfo const bi[1], t_sc const *sc)
+static int	scroll_symbols(t_env const e[1], t_bininfo const bi[1], t_sc const *sc)
 {
 	void const			*nl;
 	uint32_t const		nsyms = ft_i32toh(sc->nsyms, bi->endian);
@@ -63,13 +66,13 @@ static int	nn2(t_env const e[1], t_bininfo const bi[1], t_sc const *sc)
 			return (ERRORF("mmap overflow"));
 		/* qprintf("hello %d\n", i - 1); */
 		ft_i32toh(ACCESS_NL_N_STRX(nl, bi->arch), bi->endian);
-		nn3(e, bi, nl, strtab);
+		read_nlist(e, bi, nl, strtab);
 		nl = (void const*)nl + nl_size;
 	}
 	return (0);
 }
 
-static int	nn1(t_env const e[1], t_bininfo const bi[1])
+static int	scroll_symtabs(t_env const e[1], t_bininfo const bi[1])
 {
 	size_t const	mh_size = SIZEOF_DYN(mach_header, bi->arch);
 	size_t			ncmds;
@@ -86,8 +89,7 @@ static int	nn1(t_env const e[1], t_bininfo const bi[1])
 		{
 			if (!nm_bin_ckaddr(bi, lc, sizeof(t_sc)))
 				return (ERRORF("mmap overflow"));
-			tmp = nn2(e, bi, (void const *)lc);
-			break ;
+			tmp = scroll_symbols(e, bi, (void const *)lc);
 		}
 		lc = (void const*)lc + lc->cmdsize;
 	}
@@ -102,7 +104,7 @@ int		nm_obj_handle(t_env const e[1], t_bininfo bi[1])
 
 	ft_bzero(bi->sects, sizeof(t_ftvector));
 	nm_obj_buildsections(bi, bi->sects);
-	nn1(e, bi);
+	scroll_symtabs(e, bi);
 	ftv_release(bi->sects, NULL);
 	return (0);
 }
