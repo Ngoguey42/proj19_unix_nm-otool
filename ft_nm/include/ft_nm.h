@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 02:19:52 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/15 17:45:06 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/15 19:02:57 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ typedef struct s_fileinfo		t_fileinfo;
 typedef struct s_bininfo		t_bininfo;
 typedef struct s_syminfo		t_syminfo;
 typedef struct s_acvinfo		t_acvinfo;
+typedef struct s_fatinfo		t_fatinfo;
 
 /*
 ** t_filename					is itself a t_bininfo
@@ -139,6 +140,13 @@ struct			s_acvinfo
 	size_t						filesize;
 };
 
+struct			s_fatinfo
+{
+	void const					*hdr;
+	void const					*data;
+	size_t						filesize;
+};
+
 struct			s_env
 {
 	unsigned int				opt;
@@ -157,9 +165,12 @@ bool			nm_bin_ckaddr(t_bininfo const bi[1], void const *ptr, size_t s);
 
 int				nm_obj_handle(t_env const e[1], t_bininfo bi[1]);
 int				nm_obj_buildindices(t_bininfo bi[1]);
-int				nm_obj_printsym(t_env const e[1], t_bininfo const bi[1],
-								t_syminfo const si[1]);
+int				nm_obj_printsym(
+	t_env const e[1], t_bininfo const bi[1], t_syminfo const si[1]);
 
 int				nm_acv_handle(t_env const e[1], t_bininfo bi[1]);
 int				nm_acv_read_header(t_bininfo const bi[1], t_acvinfo ai[1]);
+
+int				nm_fat_handle(t_env const e[1], t_bininfo bi[1]);
+
 #endif

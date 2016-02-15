@@ -1,7 +1,7 @@
 O_FILES :=	o/srcs/acv_handle.o o/srcs/acv_read_header.o o/srcs/bin_handle.o \
-			o/srcs/bin_readmagic.o o/srcs/env_make.o o/srcs/file_make.o \
-			o/srcs/file_processpath.o o/srcs/file_release.o o/srcs/main.o \
-			o/srcs/obj_buildindices.o o/srcs/obj_handle.o \
+			o/srcs/bin_readmagic.o o/srcs/env_make.o o/srcs/fat_handle.o \
+			o/srcs/file_make.o o/srcs/file_processpath.o o/srcs/file_release.o \
+			o/srcs/main.o o/srcs/obj_buildindices.o o/srcs/obj_handle.o \
 			o/srcs/obj_printsym.o
 
 LIBS_DEPEND := libft/libft.a
@@ -38,6 +38,7 @@ o/srcs/env_make.o: srcs/env_make.c include/ft_nm.h libft/include/ft_ctype.h \
 	libft/include/ft_stdlib.h libft/include/ft_string.h \
 	libft/include/ft_typedefs.h libft/include/fterror.h libft/include/libft.h \
 	libft/include/ft_arg.h | o/srcs/
+o/srcs/fat_handle.o: srcs/fat_handle.c | o/srcs/
 o/srcs/file_make.o: srcs/file_make.c include/ft_nm.h libft/include/ft_ctype.h \
 	libft/include/ft_macroes.h libft/include/ft_stdio.h \
 	libft/include/ft_stdlib.h libft/include/ft_string.h \

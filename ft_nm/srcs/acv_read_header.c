@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/15 16:05:20 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/15 18:37:32 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/15 18:44:40 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int				nm_acv_read_header(t_bininfo const bi[1], t_acvinfo ai[1])
 	void const *const	ptr = ai->hdr;
 	size_t				tmp[1];
 
-	if (parse_name_data(bi, ai, ptr, tmp))
+	if (parse_name_data(bi, ai, ptr))
 		return (1);
 	if (!nm_bin_ckaddr(bi, ptr, 60))
 		return (ERRORF("mmap overflow"));
