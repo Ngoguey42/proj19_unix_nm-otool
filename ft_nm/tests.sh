@@ -3,15 +3,16 @@ launch(){
 	file $1
 	./ft_nm $1 >mine 2>/dev/null
 	nm -mp $1 >ref 2>/dev/null
-	diff ref mine | head -n 50
+	diff ref mine | head -n 10
 	# echo "\n\n"
 }
 
 
 
-
 #archive
 # launch '/usr/lib/libQMIParser.a'
+# launch '/nfs/zfs-student-4/users/ngoguey/.brew/Cellar/camlp4/4.02.3+6/lib/ocaml/camlp4/camlp4fulllib.a'
+# launch '/nfs/zfs-student-4/users/ngoguey/.brew/Cellar/ocaml/4.02.3/lib/ocaml/libasmrun.a'
 
 
 #fat
@@ -30,6 +31,7 @@ launch(){
 # launch '/usr/lib/libgmalloc.dylib'
 # launch '/usr/lib/libiconv.2.4.0.dylib'
 # launch '/usr/bin/audiodevice'
+# launch '/usr/lib/bundle1.o'
 
 
 #binaries:
@@ -61,5 +63,9 @@ launch o/srcs/obj_buildsections.o
 launch o/srcs/obj_handle.o
 launch o/srcs/obj_printsym.o
 launch o/srcs/processpath.o
+launch '/sbin/mount_smbfs'
+launch '/sbin/fsck_udf'
+launch '/usr/share/rbx/gems/gems/rubysl-openssl-2.1.0/ext/rubysl/openssl/ossl.o'
+
 
 # launch $1
