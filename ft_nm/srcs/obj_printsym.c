@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 16:37:11 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/15 12:10:51 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/15 12:52:05 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,23 +89,26 @@ static void	print_seg_sect(t_bininfo const bi[1], t_syminfo const si[1])
 }
 
 
+char const *ref_types[] = {
+	[REFERENCE_FLAG_UNDEFINED_LAZY] = "(undefined [lazy bound]) ",
+	[REFERENCE_FLAG_PRIVATE_DEFINED] = "(undefined [private]) "
+};
+
 int		nm_obj_printsym(t_env const e[1], t_bininfo const bi[1], t_syminfo const si[1])
 {
+	unsigned int i = 0;
 
 	if (si->n_value == 0)
-		ft_printf("%16s ", "");
+		ft_printf("%*s ", bi->arch ? 16 : 8, "");
 	else
-		ft_printf("%016llx ", si->n_value);
-	if (si->sect == NULL)
+		ft_printf("%0*llx ", bi->arch ? 16 : 8, si->n_value);
+	i = si->n_desc & REFERENCE_TYPE;
+	if (si->sect == NULL && i < SIZE_ARRAY(ref_types) && ref_types[i] != NULL)
+		ft_putstr(ref_types[i]);
+	else if (si->sect == NULL)
 		ft_printf("(undefined) ");
 	else
-	{
 		print_seg_sect(bi, si);
-		/* ft_printf("(%s,%s) " */
-		/* 		  , ACCESS_SEC(segname, si->sect, bi->arch) */
-		/* 		  , ACCESS_SEC(sectname, si->sect, bi->arch) */
-		/* 	); */
-	}
 	if ((si->n_desc) & REFERENCED_DYNAMICALLY)
 		ft_putstr("[referenced dynamically] ");
 	if ((si->n_desc) & N_WEAK_REF)
@@ -125,8 +128,17 @@ int		nm_obj_printsym(t_env const e[1], t_bininfo const bi[1], t_syminfo const si
 			   , (si->n_type & N_TYPE) >> 1
 			   , (si->n_type) & N_EXT
 		);
-	ft_dprintf(2, "%Js(%J011p) ", "sect", si->sect);
-	ft_dprintf(2, "%Ks(%K#016b) ", "desc", si->n_desc);
+	ft_dprintf(2, "%Js(%J010p) ", "sect", si->sect);
+	ft_dprintf(2, "%Ks(lib%#0K4x 8bit%K1b weak%K1b 6bit%K1b dynref%K1b thumb%K1b ref%K03b) ", "desc"
+			   /* , si->n_desc */
+			   , GET_LIBRARY_ORDINAL(si->n_desc)
+			   , (si->n_desc & N_WEAK_DEF) >> 7
+			   , (si->n_desc & N_WEAK_REF) >> 6
+			   , (si->n_desc & N_NO_DEAD_STRIP) >> 5
+			   , (si->n_desc & REFERENCED_DYNAMICALLY) >> 4
+			   , (si->n_desc & N_ARM_THUMB_DEF) >> 3
+			   , (si->n_desc & REFERENCE_TYPE)
+		);
 
 	ft_putstr(si->str);
 
