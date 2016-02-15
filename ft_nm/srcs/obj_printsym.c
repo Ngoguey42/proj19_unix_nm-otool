@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 16:37:11 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/15 14:50:29 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/15 15:12:50 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 
 int		print_library(t_bininfo const bi[1], t_syminfo const si[1])
 {
-	char		buf[256];
 	int const	libi = GET_LIBRARY_ORDINAL(si->n_desc);
 	void const	*ptr1;
 	void const	*ptr2;
@@ -106,13 +105,9 @@ char const *ref_types[] = {
 */
 
 
-int		print_common(t_bininfo const bi[1], t_syminfo const si[1])
-{
-	return (0);
-}
-
 int		nm_obj_printsym(t_env const e[1], t_bininfo const bi[1], t_syminfo const si[1])
 {
+	(void)e;
 	unsigned int i;
 
 

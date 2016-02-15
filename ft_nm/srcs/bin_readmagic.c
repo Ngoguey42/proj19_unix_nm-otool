@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/07 17:51:25 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/07 17:57:23 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/15 15:25:21 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	nm_bin_readmagic(t_bininfo bi[1])
 		bi->type = obj_file;
 	else if (m == FAT_MAGIC || m == FAT_CIGAM)
 		bi->type = fat_file;
-	else if (ft_strncmp("!<arch>", bi->addr, 7) == 0)
+	else if (ft_memcmp("!<arch>\n", bi->addr, 8) == 0)
 		bi->type = archive_file;
 	else
 		return ;

@@ -43,6 +43,10 @@ launch /Applications/BetterTouchTool.app/Contents/Resources/relaunch
 launch /usr/libexec/nsurlsessiond
 launch /usr/bin/unzip
 launch /sbin/autodiskmount
+launch '/sbin/mount_smbfs'
+launch '/sbin/fsck_udf'
+launch '/usr/share/rbx/gems/gems/rubysl-openssl-2.1.0/ext/rubysl/openssl/ossl.o'
+
 launch o/srcs/bin_handle.o
 launch o/srcs/bin_readmagic.o
 launch o/srcs/build_sections_vector.o
@@ -63,9 +67,7 @@ launch o/srcs/obj_buildsections.o
 launch o/srcs/obj_handle.o
 launch o/srcs/obj_printsym.o
 launch o/srcs/processpath.o
-launch '/sbin/mount_smbfs'
-launch '/sbin/fsck_udf'
-launch '/usr/share/rbx/gems/gems/rubysl-openssl-2.1.0/ext/rubysl/openssl/ossl.o'
+
 
 
 # launch $1

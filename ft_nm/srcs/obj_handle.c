@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/07 18:12:02 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/11 19:51:39 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/15 15:23:09 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 ** all segment_command(_64)	checked in nm_obj_buildsections
 ** symtab_command			checked in nn1
 ** nlist					checked in nn2
+** TODO
 */
 
 /*

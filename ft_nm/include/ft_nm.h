@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 02:19:52 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/15 11:41:44 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/15 16:28:57 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ typedef struct s_substr			t_substr;
 typedef struct s_fileinfo		t_fileinfo;
 typedef struct s_bininfo		t_bininfo;
 typedef struct s_syminfo		t_syminfo;
+typedef struct s_acvinfo		t_acvinfo;
 
 /*
 ** t_filename					is itself a t_bininfo
@@ -130,6 +131,14 @@ struct			s_syminfo
 	int64_t						n_value;
 };
 
+struct			s_acvinfo
+{
+	void const					*hdr;
+	void const					*data;
+	t_substr					filename;
+	size_t						filesize;
+};
+
 struct			s_env
 {
 	unsigned int				opt;
@@ -151,4 +160,6 @@ int				nm_obj_buildindices(t_bininfo bi[1]);
 int				nm_obj_printsym(t_env const e[1], t_bininfo const bi[1],
 								t_syminfo const si[1]);
 
+int				nm_acv_handle(t_env const e[1], t_bininfo bi[1]);
+int				nm_acv_read_header(t_bininfo const bi[1], t_acvinfo ai[1]);
 #endif
