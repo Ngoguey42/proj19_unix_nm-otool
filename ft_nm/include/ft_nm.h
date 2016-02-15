@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 02:19:52 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/15 19:02:57 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/15 19:21:39 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ struct			s_acvinfo
 
 struct			s_fatinfo
 {
-	void const					*hdr;
+	struct fat_arch const		*hdr;
 	void const					*data;
 	size_t						filesize;
 };

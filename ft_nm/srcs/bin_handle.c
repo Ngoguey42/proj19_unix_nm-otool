@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/07 18:06:17 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/15 18:47:17 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/15 19:32:56 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 bool	nm_bin_ckaddr(t_bininfo const bi[1], void const *ptr, size_t s)
 {
-	if (ptr + s < bi->addrend)
+	if (ptr + s <= bi->addrend)
 		return (true);
 	return (false);
 }
