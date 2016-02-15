@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/15 16:05:20 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/15 17:13:24 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/15 17:49:32 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,15 +50,21 @@ static bool		range_uinteger(char const *ptr, size_t len, size_t dst[1])
 static int		parse_name_data(t_bininfo const bi[1], t_acvinfo ai[1],
 						   void const *const ptr, size_t tmp[1])
 {
+	char const	*tmpptr;
+
 	if (ft_memcmp(ptr, "#1/", 3) == 0)
 	{
 		if (!range_uinteger(ptr + 3, 16 - 3, tmp))
 			return (1);
 		ai->filename.str = ptr + 60;
-		ai->filename.len = *tmp;
-		if (!nm_bin_ckaddr(bi, ai->filename.str, ai->filename.len))
+		tmpptr = ft_strchr(ai->filename.str, '\0');
+		if (tmpptr == NULL)
+			ai->filename.len = *tmp;
+		else
+			ai->filename.len = tmpptr - ai->filename.str;
+		if (!nm_bin_ckaddr(bi, ai->filename.str, *tmp))
 			return (ERRORF("mmap overflow"));
-		ai->data = ptr + 60 + ai->filename.len;
+		ai->data = ptr + 60 + *tmp;
 	}
 	else
 	{

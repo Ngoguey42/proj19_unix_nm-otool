@@ -3,16 +3,21 @@ launch(){
 	file $1
 	./ft_nm $1 >mine 2>/dev/null
 	nm -mp $1 >ref 2>/dev/null
-	diff ref mine | head -n 10
-	# echo "\n\n"
+	diff ref mine | head -n 50
+	echo ""
 }
 
 
 
 #archive
-# launch '/usr/lib/libQMIParser.a'
-# launch '/nfs/zfs-student-4/users/ngoguey/.brew/Cellar/camlp4/4.02.3+6/lib/ocaml/camlp4/camlp4fulllib.a'
-# launch '/nfs/zfs-student-4/users/ngoguey/.brew/Cellar/ocaml/4.02.3/lib/ocaml/libasmrun.a'
+# launch ''
+launch '../libft/libft.a'
+launch '1txt.a'
+launch '2obj.a'
+launch '0txt.a'
+launch '1obj.a'
+launch '/nfs/zfs-student-4/users/ngoguey/.brew/Cellar/camlp4/4.02.3+6/lib/ocaml/camlp4/camlp4fulllib.a'
+launch '/nfs/zfs-student-4/users/ngoguey/.brew/Cellar/ocaml/4.02.3/lib/ocaml/libasmrun.a'
 
 
 #fat

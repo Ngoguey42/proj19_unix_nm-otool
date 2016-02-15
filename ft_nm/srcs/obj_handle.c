@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/07 18:12:02 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/15 15:23:09 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/15 17:50:43 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,20 @@ static int	scroll_symbols(t_env const e[1], t_bininfo const bi[1], t_sc const *s
 	return (0);
 }
 
+static void	print_header(t_env const e[1], t_bininfo const bi[1], size_t ncmds)
+{
+	if (ncmds == 0)
+		ft_dprintf(2, "warning: ./ft_nm: no name list");
+	else if (bi->membername.len != 0)
+		ft_printf("\n%! $0.*hr(%! $0.*hr):\n",
+				  bi->pathname.len, bi->pathname.str,
+				  bi->membername.len, bi->membername.str);
+	/* else */
+	/* 	ft_printf("\n%! $0.*hr:\n", */
+	/* 			  bi->pathname.len, bi->pathname.str); */
+	return ;
+}
+
 static int	scroll_symtabs(t_env const e[1], t_bininfo const bi[1])
 {
 	size_t const	mh_size = SIZEOF_DYN(mach_header, bi->arch);
@@ -82,6 +96,7 @@ static int	scroll_symtabs(t_env const e[1], t_bininfo const bi[1])
 	t_lc const		*lc;
 
 	ncmds = ft_i32toh(ACCESS_MH(ncmds, bi->addr, bi->arch), bi->endian);
+	print_header(e, bi, ncmds);
 	lc = bi->addr + mh_size;
 	i = 0;
 	while (i++ < ncmds)

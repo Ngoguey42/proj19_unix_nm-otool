@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/15 15:13:30 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/15 17:16:48 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/15 17:46:11 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,18 @@
 ** file size				in nm_acv_read_header
 */
 
-/*
-** #1/20           1455545839  9273  4215  100644  92        `$
-*/
+static int	sub_binary(t_env const e[1], t_bininfo acvbi[1], t_acvinfo ai[1])
+{
+	t_bininfo	bi[1];
 
+	*bi = *acvbi;
+	bi->membername = ai->filename;
+	bi->addr = ai->data;
+	bi->st_size = ai->filesize;
+	bi->addrend = bi->addr + bi->st_size;
+	nm_bin_readmagic(bi);
+	return (nm_bin_handle(e, bi));
+}
 
 int			nm_acv_handle(t_env const e[1], t_bininfo bi[1])
 {
@@ -34,7 +42,6 @@ int			nm_acv_handle(t_env const e[1], t_bininfo bi[1])
 	qprintf("begin%p end%p\n", ai->hdr, bi->addrend);
 	while (ai->hdr < bi->addrend)
 	{
-		/* T; */
 		ft_dprintf(2, "60BYTES: %$M.60r \n", ai->hdr);
 		if (nm_acv_read_header(bi, ai))
 			return (0);
@@ -42,9 +49,8 @@ int			nm_acv_handle(t_env const e[1], t_bininfo bi[1])
 				   , ai->filename.len, ai->filename.str
 				   , ai->filesize
 			);
+		(void)sub_binary(e, bi, ai);
 		ai->hdr = ai->hdr + ai->filesize + 60;
-		/* break ; */
 	}
-
 	return (0);
 }

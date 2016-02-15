@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 02:19:52 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/15 16:28:57 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/15 17:45:06 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ struct			s_bininfo
 {
 	t_substr					pathname;
 	t_substr					membername;
-	t_substr					archname;
+	t_substr					architecname;
 
 	void const					*addr;
 	void const					*addrend;
