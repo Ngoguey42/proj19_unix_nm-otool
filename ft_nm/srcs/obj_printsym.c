@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 16:37:11 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/15 14:04:15 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/15 14:50:29 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,13 @@ int		print_library(t_bininfo const bi[1], t_syminfo const si[1])
 	void const	*ptr2;
 	size_t		size;
 
+	if (libi >= (int)bi->dylibs->size)
+		return (0);
 	ptr1 = bi->dylibs->data;
 	ptr1 = ((struct dylib_command const *const *)ptr1)[libi];
 	ptr1 = ptr1 + ((struct dylib_command const *)ptr1)->dylib.name.offset;
+	if (!nm_bin_ckaddr(bi, ptr1, sizeof(char)))
+		return (ERRORF("mmap overflow"));
 
 	ptr2 = ft_strrchr(ptr1, '/');
 	if (ptr2 != NULL)
@@ -39,10 +43,6 @@ int		print_library(t_bininfo const bi[1], t_syminfo const si[1])
 		size = ptr2 - ptr1;
 	else
 		size = ft_strlen(ptr1);
-
-
-	/* qprintf("%x\n", ((struct dylib_command const *)ptr)->dylib.name.offset); */
-	/* qprintf("%s\n", ptr); */
 
 	ft_putstr(" (from ");
 	write(1, ptr1, size);
@@ -105,16 +105,39 @@ char const *ref_types[] = {
 ** 0x0007		REFERENCE_TYPE
 */
 
+
+int		print_common(t_bininfo const bi[1], t_syminfo const si[1])
+{
+	return (0);
+}
+
 int		nm_obj_printsym(t_env const e[1], t_bininfo const bi[1], t_syminfo const si[1])
 {
-	unsigned int i = 0;
+	unsigned int i;
 
-	if ((si->n_type & N_TYPE) == N_SECT || (si->n_desc) & REFERENCED_DYNAMICALLY)
+
+	if ((si->n_type & N_TYPE) == N_SECT
+		|| (si->n_desc) & REFERENCED_DYNAMICALLY
+		|| si->n_value != 0)
 		ft_printf("%0*llx ", bi->arch ? 16 : 8, si->n_value);
 	else
 		ft_printf("%*s ", bi->arch ? 16 : 8, "");
 
-	if (((si->n_type) & N_TYPE) == N_ABS)
+/*
+  0000000100016fa0 (__TEXT,__text) non-external (was a private external)
+  ___clang_call_terminate
+
+0000000100016fa0 (__TEXT,__text) weak non-external (was a private external)
+type(pext1 type111 ext0)
+sect(0x10c5150b0)
+desc(lib0000 8bit1 weak0 6bit0 dynref0 thumb0 ref000)
+___clang_call_terminate
+
+ */
+
+	if (si->n_value != 0 && (si->n_type & N_TYPE) == N_UNDF && si->n_type & N_EXT)
+		ft_printf("(common) (alignment 2^%u) ", GET_COMM_ALIGN(si->n_desc));
+	else if (((si->n_type) & N_TYPE) == N_ABS)
 		ft_printf("(absolute) ");
 	else if (((si->n_type) & N_TYPE) == N_UNDF)
 	{
@@ -126,9 +149,12 @@ int		nm_obj_printsym(t_env const e[1], t_bininfo const bi[1], t_syminfo const si
 	}
 	else
 		print_seg_sect(bi, si);
+
 	if ((si->n_desc) & REFERENCED_DYNAMICALLY)
 		ft_putstr("[referenced dynamically] ");
-	if ((si->n_desc) & N_WEAK_REF)
+
+	if (si->n_desc & N_WEAK_REF
+		|| (si->n_desc & N_WEAK_DEF && !(si->n_type & N_PEXT)))
 		ft_putstr("weak ");
 
 
@@ -139,7 +165,6 @@ int		nm_obj_printsym(t_env const e[1], t_bininfo const bi[1], t_syminfo const si
 		ft_putstr("non-external (was a private external) ");
 	else
 		ft_putstr("non-external ");
-
 	ft_dprintf(2, "%Is(pext%I1b type%I03b ext%I01b) ", "type"
 			   , (si->n_type & N_PEXT) >> 4
 			   , (si->n_type & N_TYPE) >> 1
@@ -160,9 +185,7 @@ int		nm_obj_printsym(t_env const e[1], t_bininfo const bi[1], t_syminfo const si
 	ft_putstr(si->str);
 
 	if (GET_LIBRARY_ORDINAL(si->n_desc))
-	{
 		print_library(bi, si);
-	}
 	ft_putchar('\n');
 	return (0);
 }
