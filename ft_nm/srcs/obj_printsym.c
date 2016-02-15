@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 16:37:11 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/15 13:38:07 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/15 14:04:15 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,17 +109,17 @@ int		nm_obj_printsym(t_env const e[1], t_bininfo const bi[1], t_syminfo const si
 {
 	unsigned int i = 0;
 
-	if (si->n_value == 0)
-		ft_printf("%*s ", bi->arch ? 16 : 8, "");
-	else
+	if ((si->n_type & N_TYPE) == N_SECT || (si->n_desc) & REFERENCED_DYNAMICALLY)
 		ft_printf("%0*llx ", bi->arch ? 16 : 8, si->n_value);
+	else
+		ft_printf("%*s ", bi->arch ? 16 : 8, "");
 
-	if (si->sect == NULL)
+	if (((si->n_type) & N_TYPE) == N_ABS)
+		ft_printf("(absolute) ");
+	else if (((si->n_type) & N_TYPE) == N_UNDF)
 	{
 		i = si->n_desc & REFERENCE_TYPE;
-		if (((si->n_type) & N_TYPE) == N_ABS)
-			ft_printf("(absolute) ");
-		else if (i < SIZE_ARRAY(ref_types) && ref_types[i] != NULL)
+		if (i < SIZE_ARRAY(ref_types) && ref_types[i] != NULL)
 			ft_putstr(ref_types[i]);
 		else
 			ft_printf("(undefined) ");
