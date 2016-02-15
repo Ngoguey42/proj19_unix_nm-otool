@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 16:37:11 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/15 15:12:50 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/15 17:54:40 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,6 +160,9 @@ ___clang_call_terminate
 		ft_putstr("non-external (was a private external) ");
 	else
 		ft_putstr("non-external ");
+	if (si->n_desc & N_NO_DEAD_STRIP)
+		ft_putstr("[no dead strip] ");
+
 	ft_dprintf(2, "%Is(pext%I1b type%I03b ext%I01b) ", "type"
 			   , (si->n_type & N_PEXT) >> 4
 			   , (si->n_type & N_TYPE) >> 1
