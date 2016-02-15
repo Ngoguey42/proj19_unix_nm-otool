@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/07 14:53:13 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/07 19:35:33 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/15 18:39:09 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static int	args(t_arg_parser p[1], unsigned int opt[1], t_ftvector paths[1])
 		else if (a == FTARG_STRING)
 		{
 			if (ftv_push_back(paths, &p->s))
-				 return (ERRORNO("ftv_push_back"));
+				return (ERRORNO("ftv_push_back"));
 			expect = FTARG_STRING;
 		}
 	}

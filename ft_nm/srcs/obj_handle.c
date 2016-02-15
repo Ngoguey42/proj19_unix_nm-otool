@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/07 18:12:02 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/15 17:50:43 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/15 18:33:36 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,11 @@ static int	read_nlist(t_env const e[1], t_bininfo const bi[1],
 	si->sect = ((void const *const *)bi->sects->data)[n_sect];
 	si->n_desc = ft_i16toh(ACCESS_NL(n_desc, nl, bi->arch), bi->endian);
 	si->n_value = ft_i64toh(ACCESS_NL(n_value, nl, bi->arch), bi->endian);
-	/* qprintf("%s\n", si->str); */
 	return (nm_obj_printsym(e, bi, si));
 }
 
-static int	scroll_symbols(t_env const e[1], t_bininfo const bi[1], t_sc const *sc)
+static int	scroll_symbols(t_env const e[1], t_bininfo const bi[1],
+						   t_sc const *sc)
 {
 	void const			*nl;
 	uint32_t const		nsyms = ft_i32toh(sc->nsyms, bi->endian);
@@ -65,7 +65,6 @@ static int	scroll_symbols(t_env const e[1], t_bininfo const bi[1], t_sc const *s
 	{
 		if (!nm_bin_ckaddr(bi, nl, nl_size))
 			return (ERRORF("mmap overflow"));
-		/* qprintf("hello %d\n", i - 1); */
 		ft_i32toh(ACCESS_NL_N_STRX(nl, bi->arch), bi->endian);
 		read_nlist(e, bi, nl, strtab);
 		nl = (void const*)nl + nl_size;
@@ -112,7 +111,7 @@ static int	scroll_symtabs(t_env const e[1], t_bininfo const bi[1])
 	return (0);
 }
 
-int		nm_obj_handle(t_env const e[1], t_bininfo bi[1])
+int			nm_obj_handle(t_env const e[1], t_bininfo bi[1])
 {
 	ft_bzero(bi->sects, sizeof(t_ftvector));
 	ftv_init_instance(bi->sects, sizeof(void const *));

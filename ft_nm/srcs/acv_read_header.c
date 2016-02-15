@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/15 16:05:20 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/15 17:49:32 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/15 18:37:32 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,10 @@ static bool		range_uinteger(char const *ptr, size_t len, size_t dst[1])
 	return (true);
 }
 
-static int		parse_name_data(t_bininfo const bi[1], t_acvinfo ai[1],
-						   void const *const ptr, size_t tmp[1])
+static int		parse_name_data(
+	t_bininfo const bi[1], t_acvinfo ai[1], void const *const ptr)
 {
+	size_t		tmp[1];
 	char const	*tmpptr;
 
 	if (ft_memcmp(ptr, "#1/", 3) == 0)
@@ -75,7 +76,7 @@ static int		parse_name_data(t_bininfo const bi[1], t_acvinfo ai[1],
 	return (0);
 }
 
-int		nm_acv_read_header(t_bininfo const bi[1], t_acvinfo ai[1])
+int				nm_acv_read_header(t_bininfo const bi[1], t_acvinfo ai[1])
 {
 	void const *const	ptr = ai->hdr;
 	size_t				tmp[1];
