@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 16:37:11 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/15 12:52:05 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/15 13:38:07 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,17 @@ char const *ref_types[] = {
 	[REFERENCE_FLAG_PRIVATE_DEFINED] = "(undefined [private]) "
 };
 
+/*
+** n_desc:
+** 0xff00		GET_LIBRARY_ORDINAL()
+** 0x0080		N_WEAK_DEF and N_REF_TO_WEAK
+** 0x0040		N_WEAK_REF
+** 0x0020		N_NO_DEAD_STRIP and N_DESC_DISCARDED
+** 0x0010		REFERENCED_DYNAMICALLY
+** 0x0008		N_ARM_THUMB_DEF
+** 0x0007		REFERENCE_TYPE
+*/
+
 int		nm_obj_printsym(t_env const e[1], t_bininfo const bi[1], t_syminfo const si[1])
 {
 	unsigned int i = 0;
@@ -102,11 +113,17 @@ int		nm_obj_printsym(t_env const e[1], t_bininfo const bi[1], t_syminfo const si
 		ft_printf("%*s ", bi->arch ? 16 : 8, "");
 	else
 		ft_printf("%0*llx ", bi->arch ? 16 : 8, si->n_value);
-	i = si->n_desc & REFERENCE_TYPE;
-	if (si->sect == NULL && i < SIZE_ARRAY(ref_types) && ref_types[i] != NULL)
-		ft_putstr(ref_types[i]);
-	else if (si->sect == NULL)
-		ft_printf("(undefined) ");
+
+	if (si->sect == NULL)
+	{
+		i = si->n_desc & REFERENCE_TYPE;
+		if (((si->n_type) & N_TYPE) == N_ABS)
+			ft_printf("(absolute) ");
+		else if (i < SIZE_ARRAY(ref_types) && ref_types[i] != NULL)
+			ft_putstr(ref_types[i]);
+		else
+			ft_printf("(undefined) ");
+	}
 	else
 		print_seg_sect(bi, si);
 	if ((si->n_desc) & REFERENCED_DYNAMICALLY)
