@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 16:37:11 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/11 20:41:13 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/15 12:10:51 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 #include <mach-o/loader.h>
 #include <mach-o/nlist.h>
+
+#include <unistd.h>
 
 
 int		print_library(t_bininfo const bi[1], t_syminfo const si[1])
@@ -48,11 +50,48 @@ int		print_library(t_bininfo const bi[1], t_syminfo const si[1])
 	return (0);
 }
 
+#define SZ_SEC64 MEM_SIZEOF(struct section_64, sectname)
+#define SZ_SEC32 MEM_SIZEOF(struct section, sectname)
 
+#define SZ_SEG64 MEM_SIZEOF(struct section_64, segname)
+#define SZ_SEG32 MEM_SIZEOF(struct section, segname)
+
+#define SZ_BUF MAX(SZ_SEG64, SZ_SEG32) + MAX(SZ_SEC64, SZ_SEC32) + 5
+
+
+
+
+static void	print_seg_sect(t_bininfo const bi[1], t_syminfo const si[1])
+{
+	char			buf[SZ_BUF];
+	unsigned int	m;
+	unsigned int	i;
+	char const		*ptr;
+	char			*ptrbuf;
+
+	ft_strcpy(buf, "(");
+	ptrbuf = buf + 1;
+	m = bi->arch ? SZ_SEG64 : SZ_SEG32;
+	ptr = ACCESS_SEC(segname, si->sect, bi->arch);
+	i = 0;
+	while (i++ < m && *ptr != '\0')
+		*ptrbuf++ = *ptr++;
+	*ptrbuf++ = ',';
+	m = bi->arch ? SZ_SEC64 : SZ_SEC32;
+	ptr = ACCESS_SEC(sectname, si->sect, bi->arch);
+	i = 0;
+	while (i++ < m && *ptr != '\0')
+		*ptrbuf++ = *ptr++;
+	*ptrbuf++ = ')';
+	*ptrbuf = ' ';
+	write(1, buf, ptrbuf - buf + 1);
+	return ;
+}
 
 
 int		nm_obj_printsym(t_env const e[1], t_bininfo const bi[1], t_syminfo const si[1])
 {
+
 	if (si->n_value == 0)
 		ft_printf("%16s ", "");
 	else
@@ -61,10 +100,11 @@ int		nm_obj_printsym(t_env const e[1], t_bininfo const bi[1], t_syminfo const si
 		ft_printf("(undefined) ");
 	else
 	{
-		ft_printf("(%s,%s) "
-				  , ACCESS_SEC(segname, si->sect, bi->arch)
-				  , ACCESS_SEC(sectname, si->sect, bi->arch)
-			);
+		print_seg_sect(bi, si);
+		/* ft_printf("(%s,%s) " */
+		/* 		  , ACCESS_SEC(segname, si->sect, bi->arch) */
+		/* 		  , ACCESS_SEC(sectname, si->sect, bi->arch) */
+		/* 	); */
 	}
 	if ((si->n_desc) & REFERENCED_DYNAMICALLY)
 		ft_putstr("[referenced dynamically] ");

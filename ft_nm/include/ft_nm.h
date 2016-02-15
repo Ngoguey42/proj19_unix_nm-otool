@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 02:19:52 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/11 19:52:32 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/15 11:41:44 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@
 # define ACCESS_NL(f,p,a) ACCESS(nlist, f, p, a)
 # define ACCESS_NL_N_STRX(p,a) ((a) == arch_32b ? _N_STRX32(p) : _N_STRX64(p))
 # define SIZEOF_DYN(s,a) ((a)==arch_32b?sizeof(struct s):sizeof(struct s##_64))
+
+# define MEM_SIZEOF(type, member) sizeof(((type *)0)->member)
 
 enum			e_nm_option
 {
