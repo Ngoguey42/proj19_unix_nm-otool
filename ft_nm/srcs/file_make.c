@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/07 18:24:54 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/11 15:55:36 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/16 18:25:37 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 
 static int	err(t_substr const f[1], char const *pb, int errnum)
 {
-	ft_printf("error: ./ft_nm: can't %s file: %.*r (%s)\n",
+	ft_dprintf(2, "error: ./ft_nm: can't %s file: %.*r (%s)\n",
 				pb, f->len, f->str, ft_strerror(errnum));
 	return (1);
 }

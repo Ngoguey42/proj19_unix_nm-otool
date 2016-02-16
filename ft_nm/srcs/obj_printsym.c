@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 16:37:11 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/16 17:03:06 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/16 18:52:45 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,10 +182,10 @@ int		nm_obj_printsym(t_env const e[1], t_bininfo const bi[1], t_syminfo const si
 		ft_putstr("[referenced dynamically] ");
 
 	if (si->n_desc & N_WEAK_REF
-		|| (si->n_desc & N_WEAK_DEF && si->n_type & N_PEXT && si->n_type & N_EXT)
-		|| (si->n_desc & N_WEAK_DEF && !(si->n_type & N_PEXT))
+		|| (si->n_desc & N_WEAK_DEF && si->n_type & N_EXT)
 		)
 		ft_putstr("weak ");
+
 
 
 
@@ -197,8 +197,31 @@ int		nm_obj_printsym(t_env const e[1], t_bininfo const bi[1], t_syminfo const si
 		ft_putstr("non-external (was a private external) ");
 	else
 		ft_putstr("non-external ");
-	if (si->n_desc & N_NO_DEAD_STRIP)
+	if ((si->n_desc & N_NO_DEAD_STRIP) && ((si->n_type & N_TYPE) == N_SECT))
 		ft_putstr("[no dead strip] ");
+
+	/* if ((si->n_desc & N_WEAK_REF */
+	/* 	 || (si->n_desc & N_WEAK_DEF && si->n_type & N_EXT) */
+	/* 		) && */
+	/* 	(si->n_type & N_EXT) && */
+	/* 	((si->n_type & N_TYPE) == N_SECT) && */
+	/* 	!(si->n_type & N_PEXT)) */
+	/* 	ft_putstr("automatically hidden "); */
+
+
+	/* 0000000000000040 (__DATA,__program_vars) non-external */
+	/* 	type(pext0 type111 ext0) */
+	/* 	sect(0x10bbd10b8) */
+	/* 	desc(lib0000 8bit0 weak0 6bit1 dynref0 thumb0 ref000) _pvars */
+
+	/* (undefined [lazy bound]) external [no dead strip] */
+	/* 	type(pext0 type000 ext1) */
+	/* 	sect(0x00000000) */
+	/* 	desc(lib0x01 8bit0 weak0 6bit1 dynref0 thumb0 ref001) */
+	/* 	.objc_class_name_Protocol (from Cocoa) */
+
+	/* (undefined [lazy bound]) external _CGLGetCurrentContext (from OpenGL) */
+	/* (undefined [lazy bound]) external _CGLGetCurrentContext (from OpenGL) */
 
 	ft_dprintf(2, "%Is(pext%I1b type%I03b ext%I01b) ", "type"
 			   , (si->n_type & N_PEXT) >> 4
