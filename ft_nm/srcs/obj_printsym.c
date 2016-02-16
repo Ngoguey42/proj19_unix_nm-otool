@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 16:37:11 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/16 15:21:26 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/16 15:42:45 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,14 +129,18 @@ int		nm_obj_printsym(t_env const e[1], t_bininfo const bi[1], t_syminfo const si
 	unsigned int i;
 
 
-	if (
-		((si->n_type & N_TYPE) != N_INDR
+	if ((
+			((si->n_type & N_TYPE) != N_INDR)
+			/* && ((si->n_type & N_TYPE) != N_ABS) */
 
-			)&&
-		((si->n_type & N_TYPE) == N_SECT
-		|| si->n_desc & REFERENCED_DYNAMICALLY
-		 || si->n_value != 0)
-		)
+			) && (
+
+				(si->n_type & N_TYPE) == N_SECT
+				|| (si->n_desc & REFERENCED_DYNAMICALLY)
+				|| ((si->n_type & N_TYPE) == N_ABS)
+				|| si->n_value != 0
+
+				))
 		ft_printf("%0*llx ", bi->arch ? 16 : 8, si->n_value);
 	else
 		ft_printf("%*s ", bi->arch ? 16 : 8, "");
@@ -145,13 +149,13 @@ int		nm_obj_printsym(t_env const e[1], t_bininfo const bi[1], t_syminfo const si
   0000000100016fa0 (__TEXT,__text) non-external (was a private external)
   ___clang_call_terminate
 
-0000000100016fa0 (__TEXT,__text) weak non-external (was a private external)
-type(pext1 type111 ext0)
-sect(0x10c5150b0)
-desc(lib0000 8bit1 weak0 6bit0 dynref0 thumb0 ref000)
-___clang_call_terminate
+  0000000100016fa0 (__TEXT,__text) weak non-external (was a private external)
+  type(pext1 type111 ext0)
+  sect(0x10c5150b0)
+  desc(lib0000 8bit1 weak0 6bit0 dynref0 thumb0 ref000)
+  ___clang_call_terminate
 
- */
+*/
 
 	if (si->n_value != 0 && (si->n_type & N_TYPE) == N_UNDF && si->n_type & N_EXT)
 		ft_printf("(common) (alignment 2^%u) ", GET_COMM_ALIGN(si->n_desc));
@@ -174,12 +178,16 @@ ___clang_call_terminate
 		ft_putstr("[referenced dynamically] ");
 
 	if (si->n_desc & N_WEAK_REF
-		|| (si->n_desc & N_WEAK_DEF && !(si->n_type & N_PEXT)))
+		|| (si->n_desc & N_WEAK_DEF && si->n_type & N_PEXT && si->n_type & N_EXT)
+		|| (si->n_desc & N_WEAK_DEF && !(si->n_type & N_PEXT))
+		)
 		ft_putstr("weak ");
 
 
 
-	if (si->n_type & N_EXT)
+	if ((si->n_type & N_EXT) && (si->n_type & N_PEXT))
+		ft_putstr("private external ");
+	else if (si->n_type & N_EXT)
 		ft_putstr("external ");
 	else if (si->n_type & N_PEXT)
 		ft_putstr("non-external (was a private external) ");
