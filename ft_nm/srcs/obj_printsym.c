@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 16:37:11 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/16 18:52:45 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/16 19:37:45 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,24 +16,6 @@
 #include <mach-o/nlist.h>
 
 #include <unistd.h>
-
-/* static size_t  ft_strcspn_n(const char *s1r, const char *s2r, size_t size) */
-/* { */
-/* 	const char *s1 = s1r; */
-/* 	const char *s2; */
-
-/* 	while (*s1 && size-- > 0) */
-/* 	{ */
-/* 		s2 = s2r; */
-/* 		while (*s2) */
-/* 		{ */
-/* 			if (*s1 == *s2++) */
-/* 				return (s1 - s1r); */
-/* 		} */
-/* 		s1++; */
-/* 	} */
-/* 	return (s1 - s1r); */
-/* } */
 
 int		print_library(t_bininfo const bi[1], t_syminfo const si[1])
 {
@@ -59,11 +41,6 @@ int		print_library(t_bininfo const bi[1], t_syminfo const si[1])
 		ptr1 = ptr2 + 1;
 
 	size = ft_strcspn(ptr1, "._");
-	/* ptr2 = ft_strchr(ptr1, '.'); */
-	/* if (ptr2 != NULL) */
-	/* 	size = ptr2 - ptr1; */
-	/* else */
-	/* 	size = ft_strlen(ptr1); */
 
 	ft_putstr(" (from ");
 	write(1, ptr1, size);
@@ -78,9 +55,6 @@ int		print_library(t_bininfo const bi[1], t_syminfo const si[1])
 #define SZ_SEG32 MEM_SIZEOF(struct section, segname)
 
 #define SZ_BUF MAX(SZ_SEG64, SZ_SEG32) + MAX(SZ_SEC64, SZ_SEC32) + 5
-
-
-
 
 static void	print_seg_sect(t_bininfo const bi[1], t_syminfo const si[1])
 {
@@ -109,7 +83,6 @@ static void	print_seg_sect(t_bininfo const bi[1], t_syminfo const si[1])
 	return ;
 }
 
-
 char const *ref_types[] = {
 	[REFERENCE_FLAG_UNDEFINED_LAZY] = "(undefined [lazy bound]) ",
 	[REFERENCE_FLAG_PRIVATE_DEFINED] = "(undefined [private]) "
@@ -126,40 +99,79 @@ char const *ref_types[] = {
 ** 0x0007		REFERENCE_TYPE
 */
 
-
-int		nm_obj_printsym(t_env const e[1], t_bininfo const bi[1], t_syminfo const si[1])
+void	nm_obj_print_value(
+	t_env const e[1], t_bininfo const bi[1], t_syminfo const si[1])
 {
-	(void)e;
-	unsigned int i;
-
-
-	if ((
-			((si->n_type & N_TYPE) != N_INDR)
-			/* && ((si->n_type & N_TYPE) != N_ABS) */
-
-			) && (
-
-				(si->n_type & N_TYPE) == N_SECT
-				|| (si->n_desc & REFERENCED_DYNAMICALLY)
-				|| ((si->n_type & N_TYPE) == N_ABS)
-				|| si->n_value != 0
-
-				))
+	if ((si->n_type & N_TYPE) != N_INDR &&
+		(
+			(si->n_type & N_TYPE) == N_SECT
+			|| (si->n_desc & REFERENCED_DYNAMICALLY)
+			|| ((si->n_type & N_TYPE) == N_ABS)
+			|| si->n_value != 0
+			))
 		ft_printf("%0*llx ", bi->arch ? 16 : 8, si->n_value);
 	else
 		ft_printf("%*s ", bi->arch ? 16 : 8, "");
+	return ;
+	(void)e;
+}
 
-/*
-  0000000100016fa0 (__TEXT,__text) non-external (was a private external)
-  ___clang_call_terminate
+/* (si->n_type & N_EXT) */
 
-  0000000100016fa0 (__TEXT,__text) weak non-external (was a private external)
-  type(pext1 type111 ext0)
-  sect(0x10c5150b0)
-  desc(lib0000 8bit1 weak0 6bit0 dynref0 thumb0 ref000)
-  ___clang_call_terminate
+void	toto(
+	t_bininfo const bi[1], t_syminfo const si[1], char c)
+{
+	char 	b[2];
 
-*/
+	b[1] = ' ';
+	if (si->n_type & N_EXT)
+		b[0] = c;
+	else
+		b[0] = ft_tolower(c);
+	write(1, b, 2);
+	return ;
+}
+
+void	nm_obj_print_char1(
+	t_env const e[1], t_bininfo const bi[1], t_syminfo const si[1])
+{
+	if (si->n_value != 0 && (si->n_type & N_TYPE) == N_UNDF && si->n_type & N_EXT)
+		write(1, "C ", 2);
+	else if ((si->n_type & N_TYPE) == N_ABS)
+		write(1, "A ", 2);
+	else if ((si->n_type & N_TYPE) == N_UNDF)
+		write(1, "U ", 2);
+	else if ((si->n_type & N_TYPE) == N_INDR)
+	{
+		write(1, "I ", 2);
+	}
+	else if ((si->n_type & N_TYPE) == N_SECT)
+	{
+		/* qprintf("%s\n", ACCESS_SEC(segname, si->sect, bi->arch)); */
+
+		if (ft_strncmp(SECT_TEXT, ACCESS_SEC(sectname, si->sect, bi->arch), 16) == 0)
+			toto(bi, si, 'T');
+		else if (ft_strncmp(SECT_DATA, ACCESS_SEC(sectname, si->sect, bi->arch), 16) == 0)
+			toto(bi, si, 'D');
+		else if (ft_strncmp(SECT_BSS, ACCESS_SEC(sectname, si->sect, bi->arch), 16) == 0)
+			toto(bi, si, 'B');
+		else
+			toto(bi, si, 'S');
+			}
+	return ;
+}
+
+void	nm_obj_print_char2(
+	t_env const e[1], t_bininfo const bi[1], t_syminfo const si[1])
+{
+	if ((si->n_type & N_TYPE) == N_INDR)
+		ft_printf(" (indirect for %s)", si->strtab + si->n_value);
+	return ;
+}
+void	nm_obj_print_mopt1(
+	t_env const e[1], t_bininfo const bi[1], t_syminfo const si[1])
+{
+	unsigned int i;
 
 	if (si->n_value != 0 && (si->n_type & N_TYPE) == N_UNDF && si->n_type & N_EXT)
 		ft_printf("(common) (alignment 2^%u) ", GET_COMM_ALIGN(si->n_desc));
@@ -178,6 +190,7 @@ int		nm_obj_printsym(t_env const e[1], t_bininfo const bi[1], t_syminfo const si
 	else
 		print_seg_sect(bi, si);
 
+
 	if (si->n_desc & REFERENCED_DYNAMICALLY)
 		ft_putstr("[referenced dynamically] ");
 
@@ -185,9 +198,6 @@ int		nm_obj_printsym(t_env const e[1], t_bininfo const bi[1], t_syminfo const si
 		|| (si->n_desc & N_WEAK_DEF && si->n_type & N_EXT)
 		)
 		ft_putstr("weak ");
-
-
-
 
 	if ((si->n_type & N_EXT) && (si->n_type & N_PEXT))
 		ft_putstr("private external ");
@@ -199,38 +209,21 @@ int		nm_obj_printsym(t_env const e[1], t_bininfo const bi[1], t_syminfo const si
 		ft_putstr("non-external ");
 	if ((si->n_desc & N_NO_DEAD_STRIP) && ((si->n_type & N_TYPE) == N_SECT))
 		ft_putstr("[no dead strip] ");
+	return ;
+	(void)e;
+}
 
-	/* if ((si->n_desc & N_WEAK_REF */
-	/* 	 || (si->n_desc & N_WEAK_DEF && si->n_type & N_EXT) */
-	/* 		) && */
-	/* 	(si->n_type & N_EXT) && */
-	/* 	((si->n_type & N_TYPE) == N_SECT) && */
-	/* 	!(si->n_type & N_PEXT)) */
-	/* 	ft_putstr("automatically hidden "); */
-
-
-	/* 0000000000000040 (__DATA,__program_vars) non-external */
-	/* 	type(pext0 type111 ext0) */
-	/* 	sect(0x10bbd10b8) */
-	/* 	desc(lib0000 8bit0 weak0 6bit1 dynref0 thumb0 ref000) _pvars */
-
-	/* (undefined [lazy bound]) external [no dead strip] */
-	/* 	type(pext0 type000 ext1) */
-	/* 	sect(0x00000000) */
-	/* 	desc(lib0x01 8bit0 weak0 6bit1 dynref0 thumb0 ref001) */
-	/* 	.objc_class_name_Protocol (from Cocoa) */
-
-	/* (undefined [lazy bound]) external _CGLGetCurrentContext (from OpenGL) */
-	/* (undefined [lazy bound]) external _CGLGetCurrentContext (from OpenGL) */
-
+void	nm_obj_print_debug(
+	t_env const e[1], t_bininfo const bi[1], t_syminfo const si[1])
+{
 	ft_dprintf(2, "%Is(pext%I1b type%I03b ext%I01b) ", "type"
 			   , (si->n_type & N_PEXT) >> 4
 			   , (si->n_type & N_TYPE) >> 1
 			   , si->n_type & N_EXT
 		);
 	ft_dprintf(2, "%Js(%J010p) ", "sect", si->sect);
-	ft_dprintf(2, "%Ks(lib%#0K4x 8bit%K1b weak%K1b 6bit%K1b dynref%K1b thumb%K1b ref%K03b) ", "desc"
-			   /* , si->n_desc */
+	ft_dprintf(2, "%Ks(lib%#0K4x 8bit%K1b weak%K1b 6bit%K1b"
+			   " dynref%K1b thumb%K1b ref%K03b) ", "desc"
 			   , GET_LIBRARY_ORDINAL(si->n_desc)
 			   , (si->n_desc & N_WEAK_DEF) >> 7
 			   , (si->n_desc & N_WEAK_REF) >> 6
@@ -239,9 +232,14 @@ int		nm_obj_printsym(t_env const e[1], t_bininfo const bi[1], t_syminfo const si
 			   , (si->n_desc & N_ARM_THUMB_DEF) >> 3
 			   , (si->n_desc & REFERENCE_TYPE)
 		);
+	return ;
+	(void)e;
+	(void)bi;
+}
 
-	ft_putstr(si->str);
-
+int		nm_obj_print_mopt2(
+	t_env const e[1], t_bininfo const bi[1], t_syminfo const si[1])
+{
 	if ((si->n_type & N_TYPE) == N_INDR)
 		ft_printf(" (for %s)", si->strtab + si->n_value);
 	if (GET_LIBRARY_ORDINAL(si->n_desc) == DYNAMIC_LOOKUP_ORDINAL)
@@ -251,6 +249,27 @@ int		nm_obj_printsym(t_env const e[1], t_bininfo const bi[1], t_syminfo const si
 		if (print_library(bi, si))
 			return (1);
 	}
+	return (0);
+	(void)e;
+}
+
+int		nm_obj_printsym(
+	t_env const e[1], t_bininfo const bi[1], t_syminfo const si[1])
+{
+	nm_obj_print_value(e, bi, si);
+	if (e->opt & opt_m_verbose)
+		nm_obj_print_mopt1(e, bi, si);
+	else
+		nm_obj_print_char1(e, bi, si);
+	/* nm_obj_print_debug(e, bi, si); */
+	ft_putstr(si->str);
+	if (e->opt & opt_m_verbose)
+	{
+		if (nm_obj_print_mopt2(e, bi, si))
+			return (1);
+	}
+	else
+		nm_obj_print_char2(e, bi, si);
 	ft_putchar('\n');
 	return (0);
 }

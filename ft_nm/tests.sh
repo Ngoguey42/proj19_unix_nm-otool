@@ -3,9 +3,10 @@ launch(){
 	# ls -ld $1
 	# file $1
 
-	file "$1" 2>/dev/null | head -n 1
-	./ft_nm "$1" >mine 2>/dev/null
-	nm -mp "$1" >ref 2>/dev/null
+	file $@ 2>/dev/null | head -n 1
+	./ft_nm $@ >mine 2>/dev/null
+	nm -p $@ >ref 2>/dev/null
+	# nm -mp $@ >ref 2>/dev/null
 	diff ref mine
 	# diff ref mine | head -n 30
 	# echo ""
@@ -32,8 +33,8 @@ launch(){
 # launch '/Applications/CocoaDialog.app/Contents/MacOS/CocoaDialog'
 
 echo "=============MULT:============"
-# launch '../libft/libft.a' '1txt.a' '2obj.a' '0txt.a' '1obj.a' 'ppc'
-# launch 'ppc' 'ppc'
+launch '../libft/libft.a' '1txt.a' '2obj.a' '0txt.a' '1obj.a' 'ppc'
+launch 'ppc' 'ppc'
 
 echo ''
 echo "=============FATS:============"
