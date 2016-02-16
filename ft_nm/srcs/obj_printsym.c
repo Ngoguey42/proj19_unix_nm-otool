@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 16:37:11 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/16 15:00:30 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/16 15:11:48 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int		print_library(t_bininfo const bi[1], t_syminfo const si[1])
 	size_t		size;
 
 	if (libi >= (int)bi->dylibs->size)
-		return (0);
+		return (0); //TODO: why return 0
 	ptr1 = bi->dylibs->data;
 	ptr1 = ((struct dylib_command const *const *)ptr1)[libi];
 	ptr1 = ptr1 + ((struct dylib_command const *)ptr1)->dylib.name.offset;
@@ -129,9 +129,14 @@ int		nm_obj_printsym(t_env const e[1], t_bininfo const bi[1], t_syminfo const si
 	unsigned int i;
 
 
-	if ((si->n_type & N_TYPE) == N_SECT
-		|| (si->n_desc) & REFERENCED_DYNAMICALLY
-		|| si->n_value != 0)
+	if (
+		((si->n_type & N_TYPE) != N_INDR
+
+			)&&
+		((si->n_type & N_TYPE) == N_SECT
+		|| si->n_desc & REFERENCED_DYNAMICALLY
+		 || si->n_value != 0)
+		)
 		ft_printf("%0*llx ", bi->arch ? 16 : 8, si->n_value);
 	else
 		ft_printf("%*s ", bi->arch ? 16 : 8, "");
@@ -150,9 +155,9 @@ ___clang_call_terminate
 
 	if (si->n_value != 0 && (si->n_type & N_TYPE) == N_UNDF && si->n_type & N_EXT)
 		ft_printf("(common) (alignment 2^%u) ", GET_COMM_ALIGN(si->n_desc));
-	else if (((si->n_type) & N_TYPE) == N_ABS)
+	else if ((si->n_type & N_TYPE) == N_ABS)
 		ft_printf("(absolute) ");
-	else if (((si->n_type) & N_TYPE) == N_UNDF)
+	else if ((si->n_type & N_TYPE) == N_UNDF)
 	{
 		i = si->n_desc & REFERENCE_TYPE;
 		if (i < SIZE_ARRAY(ref_types) && ref_types[i] != NULL)
@@ -160,10 +165,12 @@ ___clang_call_terminate
 		else
 			ft_printf("(undefined) ");
 	}
+	else if ((si->n_type & N_TYPE) == N_INDR)
+		ft_putstr("(indirect) ");
 	else
 		print_seg_sect(bi, si);
 
-	if ((si->n_desc) & REFERENCED_DYNAMICALLY)
+	if (si->n_desc & REFERENCED_DYNAMICALLY)
 		ft_putstr("[referenced dynamically] ");
 
 	if (si->n_desc & N_WEAK_REF
@@ -172,7 +179,7 @@ ___clang_call_terminate
 
 
 
-	if ((si->n_type) & N_EXT)
+	if (si->n_type & N_EXT)
 		ft_putstr("external ");
 	else if (si->n_type & N_PEXT)
 		ft_putstr("non-external (was a private external) ");
@@ -184,7 +191,7 @@ ___clang_call_terminate
 	ft_dprintf(2, "%Is(pext%I1b type%I03b ext%I01b) ", "type"
 			   , (si->n_type & N_PEXT) >> 4
 			   , (si->n_type & N_TYPE) >> 1
-			   , (si->n_type) & N_EXT
+			   , si->n_type & N_EXT
 		);
 	ft_dprintf(2, "%Js(%J010p) ", "sect", si->sect);
 	ft_dprintf(2, "%Ks(lib%#0K4x 8bit%K1b weak%K1b 6bit%K1b dynref%K1b thumb%K1b ref%K03b) ", "desc"
@@ -203,7 +210,10 @@ ___clang_call_terminate
 	if (GET_LIBRARY_ORDINAL(si->n_desc) == DYNAMIC_LOOKUP_ORDINAL)
 		ft_putstr(" (dynamically looked up)");
 	else if (GET_LIBRARY_ORDINAL(si->n_desc))
-		print_library(bi, si);
+	{
+		if (print_library(bi, si))
+			return (1);
+	}
 	ft_putchar('\n');
 	return (0);
 }

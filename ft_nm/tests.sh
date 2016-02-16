@@ -31,7 +31,7 @@ launch(){
 
 #fat
 echo "=============FATS:============"
-# launch '/usr/lib/system/libsystem_c.dylib'
+launch '/usr/lib/system/libsystem_c.dylib'
 # launch '/usr/lib/libc++.1.dylib'
 # launch '/usr/bin/audiodevice'  #2arch no x86_64
 
