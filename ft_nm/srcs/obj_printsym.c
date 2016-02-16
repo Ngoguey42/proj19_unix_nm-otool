@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 16:37:11 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/15 17:54:40 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/16 14:50:54 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,23 @@
 
 #include <unistd.h>
 
+/* static size_t  ft_strcspn_n(const char *s1r, const char *s2r, size_t size) */
+/* { */
+/* 	const char *s1 = s1r; */
+/* 	const char *s2; */
+
+/* 	while (*s1 && size-- > 0) */
+/* 	{ */
+/* 		s2 = s2r; */
+/* 		while (*s2) */
+/* 		{ */
+/* 			if (*s1 == *s2++) */
+/* 				return (s1 - s1r); */
+/* 		} */
+/* 		s1++; */
+/* 	} */
+/* 	return (s1 - s1r); */
+/* } */
 
 int		print_library(t_bininfo const bi[1], t_syminfo const si[1])
 {
@@ -37,11 +54,12 @@ int		print_library(t_bininfo const bi[1], t_syminfo const si[1])
 	if (ptr2 != NULL)
 		ptr1 = ptr2 + 1;
 
-	ptr2 = ft_strchr(ptr1, '.');
-	if (ptr2 != NULL)
-		size = ptr2 - ptr1;
-	else
-		size = ft_strlen(ptr1);
+	size = ft_strcspn(ptr1, "._");
+	/* ptr2 = ft_strchr(ptr1, '.'); */
+	/* if (ptr2 != NULL) */
+	/* 	size = ptr2 - ptr1; */
+	/* else */
+	/* 	size = ft_strlen(ptr1); */
 
 	ft_putstr(" (from ");
 	write(1, ptr1, size);

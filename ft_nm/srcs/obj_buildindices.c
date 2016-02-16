@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 19:24:56 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/15 18:34:10 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/16 14:41:26 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,10 @@ static int	extract_sections(t_bininfo const bi[1], t_ftvector vec[1],
 
 static uint32_t const dylibs[] = {
 	LC_LOAD_DYLIB, LC_LOAD_WEAK_DYLIB, LC_REEXPORT_DYLIB,
+	LC_LOAD_UPWARD_DYLIB,
 	/* LC_LOAD_UPWARD_DYLIB, LC_LAZY_LOAD_DYLIB
 	   TODO: handle those libs ?
-*/
+	*/
 };
 
 static int	read_lc(t_bininfo bi[1], t_lc const *lc, uint32_t cmd)
@@ -63,6 +64,9 @@ static int	read_lc(t_bininfo bi[1], t_lc const *lc, uint32_t cmd)
 		i = 0;
 		while (i < SIZE_ARRAY(dylibs))
 		{
+			if (cmd == LC_LOAD_UPWARD_DYLIB)
+				qprintf("LC_LOAD_UPWARD_DYLIB!!!\n");
+
 			if (cmd == dylibs[i])
 				break ;
 			i++;

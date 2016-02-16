@@ -6,7 +6,8 @@ launch(){
 	file $1 | head -n 1
 	./ft_nm $1 >mine 2>/dev/null
 	nm -mp $1 >ref 2>/dev/null
-	diff ref mine | head -n 30
+	diff ref mine
+	# diff ref mine | head -n 70
 	# echo ""
 }
 
@@ -31,23 +32,25 @@ launch(){
 #fat
 echo "=============FATS:============"
 # launch '/usr/share/examshell/venv/lib/python2.7/site-packages/_cffi_backend.so'
-# launch '/usr/lib/system/libsystem_trace.dylib'
-# launch '/usr/lib/system/libdyld.dylib'
 # launch '/usr/lib/system/libsystem_c.dylib'
-# launch '/usr/lib/libobjc.A.dylib'
-launch '/usr/lib/crt1.10.6.o'
-# launch '/usr/lib/crt1.o'
-launch '/usr/lib/dyld'
-# launch '/usr/lib/lazydylib1.o'
 # launch '/usr/lib/libc++.1.dylib'
+# launch '/usr/bin/audiodevice'  #2arch no x86_64
+
+#small diffs:
+# launch '/usr/lib/bundle1.o'
+# launch '/usr/lib/lazydylib1.o'
+# launch '/usr/lib/libobjc.A.dylib'
+# launch '/usr/lib/crt1.o'
+# exit
+
+
+launch '/usr/lib/system/libsystem_trace.dylib'
+launch '/usr/lib/system/libdyld.dylib'
+launch '/usr/lib/crt1.10.6.o'
+launch '/usr/lib/dyld'
 launch '/usr/lib/libextension.dylib'
 launch '/usr/lib/libgmalloc.dylib'
 launch '/usr/lib/libiconv.2.4.0.dylib'
-# launch '/usr/bin/audiodevice'  #2arch no x86_64
-# launch '/usr/lib/bundle1.o'
-
-
-exit
 
 
 
@@ -66,7 +69,7 @@ launch '/nfs/zfs-student-4/users/ngoguey/.brew/Cellar/ocaml/4.02.3/lib/ocaml/lib
 
 echo ''
 #dylibs
-echo "=============OBJS:============"
+echo "=============DYLB:============"
 launch '/usr/lib/libATCommandStudioDynamic.dylib'
 launch '/usr/lib/libAccountPolicyTranslation.dylib'
 launch '/usr/lib/libBSDPClient.A.dylib'
@@ -110,6 +113,7 @@ launch '/usr/lib/ssh-keychain.dylib'
 
 echo ''
 #binaries:
+echo "=============OBJS:============"
 launch '/usr/share/rbx/gems/gems/rubysl-bigdecimal-2.0.2/ext/rubysl/bigdecimal/bigdecimal.o'
 launch '/usr/bin/iscsictl'
 launch /sbin/mount_acfs
