@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 02:19:52 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/16 15:59:09 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/16 17:53:04 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,12 @@ struct			s_substr
 {
 	char const					*str;
 	size_t						len;
+};
+
+struct			s_cpu_name
+{
+	uint32_t					id;
+	char						*str;
 };
 
 struct			s_bininfo

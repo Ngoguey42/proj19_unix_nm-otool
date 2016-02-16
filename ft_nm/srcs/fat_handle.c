@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/15 18:44:46 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/16 16:57:14 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/16 17:52:49 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,27 @@
 
 #include <mach-o/fat.h>
 #include <sys/sysctl.h>
+
+struct s_cpu_name const	cpu[] = {
+	(struct s_cpu_name){CPU_TYPE_I386, "i386"},
+	(struct s_cpu_name){CPU_TYPE_X86_64, "x86_64"},
+	(struct s_cpu_name){CPU_TYPE_POWERPC, "ppc"},
+};
+
+/* #define CPU_TYPE_VAX        ((cpu_type_t) 1) */
+/* #define CPU_TYPE_MC680x0    ((cpu_type_t) 6) */
+/* #define CPU_TYPE_X86        ((cpu_type_t) 7) */
+/* #define CPU_TYPE_I386       CPU_TYPE_X86        /\* compatibility *\/ */
+/* #define CPU_TYPE_X86_64     (CPU_TYPE_X86 | CPU_ARCH_ABI64) */
+/* #define CPU_TYPE_MC98000    ((cpu_type_t) 10) */
+/* #define CPU_TYPE_HPPA           ((cpu_type_t) 11) */
+/* #define CPU_TYPE_ARM        ((cpu_type_t) 12) */
+/* #define CPU_TYPE_ARM64          (CPU_TYPE_ARM | CPU_ARCH_ABI64) */
+/* #define CPU_TYPE_MC88000    ((cpu_type_t) 13) */
+/* #define CPU_TYPE_SPARC      ((cpu_type_t) 14) */
+/* #define CPU_TYPE_I860       ((cpu_type_t) 15) */
+/* #define CPU_TYPE_POWERPC        ((cpu_type_t) 18) */
+/* #define CPU_TYPE_POWERPC64      (CPU_TYPE_POWERPC | CPU_ARCH_ABI64) */
 
 /*
 ** mmap overflow verifications:
@@ -25,11 +46,24 @@
 static int		sub_binary(
 	t_env const e[1], t_bininfo fatbi[1], t_fatinfo fi[1], bool print_hdr)
 {
-	t_bininfo	bi[1];
+	t_bininfo		bi[1];
+	unsigned int	i;
 
 	*bi = *fatbi;
 	if (print_hdr)
-		bi->architecname = (t_substr){"bordel", 6};
+	{
+		i = 0;
+		while (i < SIZE_ARRAY(cpu))
+		{
+			if (ft_i32toh(fi->hdr->cputype, bi->endian) == cpu[i].id)
+				break ;
+			i++;
+		}
+		if (i != SIZE_ARRAY(cpu))
+			bi->architecname = (t_substr){cpu[i].str, ft_strlen(cpu[i].str)};
+		else
+			bi->architecname = (t_substr){"unknown", 7};
+	}
 	else
 		bi->architecname = (t_substr){NULL, 0};
 	bi->addr = fi->data;
@@ -100,7 +134,7 @@ static int		read_header(t_bininfo const bi[1], t_fatinfo fi[1])
 		return (ERRORF("mmap overflow"));
 	fi->data = bi->addr + ft_i32toh(fi->hdr->offset, bi->endian);
 	/* qprintf("\tsetting fi->data to: %p (offset = %i)\n", fi->data */
-			/* , ft_i32toh(fi->hdr->offset, bi->endian)); */
+	/* , ft_i32toh(fi->hdr->offset, bi->endian)); */
 	fi->filesize = ft_i32toh(fi->hdr->size, bi->endian);
 	ft_dprintf(2, "cpu%d subcpu%d off%d size%d align%d\n"
 			   , ft_i32toh(fi->hdr->cputype, bi->endian)
@@ -125,20 +159,16 @@ int				nm_fat_handle(t_env const e[1], t_bininfo bi[1])
 		fi->hdr += fi->arch_index;
 		if (read_header(bi, fi) || sub_binary(e, bi, fi, false))
 			return (1);
-		/* (void)sub_binary(e, bi, fi, false); */
 	}
 	else
 	{
 		i = 0;
 		while (i < (int)fi->nfat_arch)
 		{
-			/* T; */
 			if (read_header(bi, fi) || sub_binary(e, bi, fi, true))
 				return (1);
 			i++;
-			/* qprintf("----------->lol?: %p\n", fi->hdr); */
 			fi->hdr++;
-			/* qprintf("----------->lol?: %p\n", fi->hdr); */
 		}
 	}
 	return (0);

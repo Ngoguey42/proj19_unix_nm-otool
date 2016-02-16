@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 19:24:56 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/16 16:59:41 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/16 17:41:06 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,6 @@ static int	read_lc(t_bininfo bi[1], t_lc const *lc, uint32_t cmd)
 		i = 0;
 		while (i < SIZE_ARRAY(dylibs))
 		{
-			if (cmd == LC_LOAD_UPWARD_DYLIB)
-				qprintf("LC_LOAD_UPWARD_DYLIB!!!\n");
-
 			if (cmd == dylibs[i])
 				break ;
 			i++;

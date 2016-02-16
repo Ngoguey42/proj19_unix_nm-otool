@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/07 18:12:02 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/16 17:30:17 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/16 17:48:28 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,11 @@ static void	print_header(t_env const e[1], t_bininfo const bi[1], size_t ncmds)
 		ft_printf("\n%! $0.*hr(%! $0.*hr):\n",
 				  bi->pathname.len, bi->pathname.str,
 				  bi->membername.len, bi->membername.str);
+	else if (bi->architecname.len != 0)
+		ft_printf("\n%! $0.*hr (for architecture %! $0.*hr):\n",
+				  bi->pathname.len, bi->pathname.str,
+				  bi->architecname.len, bi->architecname.str);
+
 	/* else */
 	/* 	ft_printf("\n%! $0.*hr:\n", */
 	/* 			  bi->pathname.len, bi->pathname.str); */
