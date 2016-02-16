@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 02:19:52 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/16 12:11:03 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/16 14:04:55 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,6 +150,7 @@ struct			s_fatinfo
 	cpu_type_t					cpu;
 	cpu_subtype_t				subcpu;
 	uint32_t					nfat_arch;
+	int							arch_index;
 };
 
 struct			s_env
