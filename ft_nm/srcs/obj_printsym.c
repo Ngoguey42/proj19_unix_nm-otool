@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 16:37:11 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/16 15:11:48 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/16 15:21:26 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,6 +207,8 @@ ___clang_call_terminate
 
 	ft_putstr(si->str);
 
+	if ((si->n_type & N_TYPE) == N_INDR)
+		ft_printf(" (for %s)", si->strtab + si->n_value);
 	if (GET_LIBRARY_ORDINAL(si->n_desc) == DYNAMIC_LOOKUP_ORDINAL)
 		ft_putstr(" (dynamically looked up)");
 	else if (GET_LIBRARY_ORDINAL(si->n_desc))

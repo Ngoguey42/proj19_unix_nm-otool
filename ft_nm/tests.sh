@@ -31,8 +31,6 @@ launch(){
 
 #fat
 echo "=============FATS:============"
-launch '/usr/lib/system/libsystem_c.dylib'
-# launch '/usr/lib/libc++.1.dylib'
 # launch '/usr/bin/audiodevice'  #2arch no x86_64
 
 #small diffs:
@@ -43,6 +41,8 @@ launch '/usr/lib/system/libsystem_c.dylib'
 exit
 
 
+launch '/usr/lib/libc++.1.dylib'
+launch '/usr/lib/system/libsystem_c.dylib'
 launch '/usr/share/examshell/venv/lib/python2.7/site-packages/_cffi_backend.so'
 launch '/usr/lib/system/libsystem_trace.dylib'
 launch '/usr/lib/system/libdyld.dylib'

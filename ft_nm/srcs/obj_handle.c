@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/07 18:12:02 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/15 18:33:36 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/16 15:20:37 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ static int	read_nlist(t_env const e[1], t_bininfo const bi[1],
 	si->n_type = ACCESS_NL(n_type, nl, bi->arch);
 	if ((si->n_type & N_STAB) != 0)
 		return (0);
+	si->strtab = strtab;
 	si->str = strtab + ft_i32toh(ACCESS_NL_N_STRX(nl, bi->arch), bi->endian);
 	if (!nm_bin_ckaddr(bi, strtab, sizeof(char)))
 		return (ERRORF("mmap overflow"));

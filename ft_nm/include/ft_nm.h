@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 02:19:52 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/16 14:04:55 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/16 15:20:26 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,7 @@ struct			s_fileinfo
 
 struct			s_syminfo
 {
+	char const					*strtab;
 	char const					*str;
 	uint8_t						n_type;
 	void const					*sect;
