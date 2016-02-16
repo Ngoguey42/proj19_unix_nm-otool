@@ -31,7 +31,6 @@ launch(){
 
 #fat
 echo "=============FATS:============"
-# launch '/usr/share/examshell/venv/lib/python2.7/site-packages/_cffi_backend.so'
 # launch '/usr/lib/system/libsystem_c.dylib'
 # launch '/usr/lib/libc++.1.dylib'
 # launch '/usr/bin/audiodevice'  #2arch no x86_64
@@ -41,9 +40,10 @@ echo "=============FATS:============"
 # launch '/usr/lib/lazydylib1.o'
 # launch '/usr/lib/libobjc.A.dylib'
 # launch '/usr/lib/crt1.o'
-# exit
+exit
 
 
+launch '/usr/share/examshell/venv/lib/python2.7/site-packages/_cffi_backend.so'
 launch '/usr/lib/system/libsystem_trace.dylib'
 launch '/usr/lib/system/libdyld.dylib'
 launch '/usr/lib/crt1.10.6.o'
