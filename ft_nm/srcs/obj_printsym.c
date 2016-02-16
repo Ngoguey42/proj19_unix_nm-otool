@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 16:37:11 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/16 19:37:45 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/16 19:49:07 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ void	nm_obj_print_value(
 
 /* (si->n_type & N_EXT) */
 
-void	toto(
+static void	toto(
 	t_bininfo const bi[1], t_syminfo const si[1], char c)
 {
 	char 	b[2];
@@ -132,32 +132,35 @@ void	toto(
 	return ;
 }
 
+static bool	cmp(char const *str, void const *ptr)
+{
+	return (ft_strncmp(str, ptr, 16) == 0);
+}
+
 void	nm_obj_print_char1(
 	t_env const e[1], t_bininfo const bi[1], t_syminfo const si[1])
 {
-	if (si->n_value != 0 && (si->n_type & N_TYPE) == N_UNDF && si->n_type & N_EXT)
+	if (si->n_value != 0 &&
+		(si->n_type & N_TYPE) == N_UNDF &&
+		si->n_type & N_EXT)
 		write(1, "C ", 2);
 	else if ((si->n_type & N_TYPE) == N_ABS)
-		write(1, "A ", 2);
-	else if ((si->n_type & N_TYPE) == N_UNDF)
-		write(1, "U ", 2);
+		toto(bi, si, 'A');
 	else if ((si->n_type & N_TYPE) == N_INDR)
-	{
 		write(1, "I ", 2);
-	}
 	else if ((si->n_type & N_TYPE) == N_SECT)
 	{
-		/* qprintf("%s\n", ACCESS_SEC(segname, si->sect, bi->arch)); */
-
-		if (ft_strncmp(SECT_TEXT, ACCESS_SEC(sectname, si->sect, bi->arch), 16) == 0)
+		if (cmp(SECT_TEXT, ACCESS_SEC(sectname, si->sect, bi->arch)))
 			toto(bi, si, 'T');
-		else if (ft_strncmp(SECT_DATA, ACCESS_SEC(sectname, si->sect, bi->arch), 16) == 0)
+		else if (cmp(SECT_DATA, ACCESS_SEC(sectname, si->sect, bi->arch)))
 			toto(bi, si, 'D');
-		else if (ft_strncmp(SECT_BSS, ACCESS_SEC(sectname, si->sect, bi->arch), 16) == 0)
+		else if (cmp(SECT_BSS, ACCESS_SEC(sectname, si->sect, bi->arch)))
 			toto(bi, si, 'B');
 		else
 			toto(bi, si, 'S');
-			}
+	}
+	else
+		toto(bi, si, 'U');
 	return ;
 }
 
