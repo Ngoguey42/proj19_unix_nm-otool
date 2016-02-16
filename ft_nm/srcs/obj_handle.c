@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/07 18:12:02 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/16 15:20:37 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/16 15:52:18 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,7 @@ static int	scroll_symtabs(t_env const e[1], t_bininfo const bi[1])
 
 int			nm_obj_handle(t_env const e[1], t_bininfo bi[1])
 {
+	qprintf("HELLO: %s Size: %zd\n", __FUNCTION__, bi->st_size);
 	ft_bzero(bi->sects, sizeof(t_ftvector));
 	ftv_init_instance(bi->sects, sizeof(void const *));
 	if (ftv_push_back(bi->sects, (void*[]){NULL}))
@@ -122,7 +123,8 @@ int			nm_obj_handle(t_env const e[1], t_bininfo bi[1])
 	ftv_init_instance(bi->dylibs, sizeof(void const *));
 	if (ftv_push_back(bi->dylibs, (void*[]){NULL}))
 		return (ERRORNO("ftv_push_back"));
-	nm_obj_buildindices(bi);
+	if (nm_obj_buildindices(bi))
+		return (1);
 	scroll_symtabs(e, bi);
 	ftv_release(bi->sects, NULL);
 	ftv_release(bi->dylibs, NULL);

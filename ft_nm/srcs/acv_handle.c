@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/15 15:13:30 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/15 18:38:25 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/16 16:00:30 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ int			nm_acv_handle(t_env const e[1], t_bininfo bi[1])
 		ft_dprintf(2, "(%.*r) (%u)\n"
 				   , ai->filename.len, ai->filename.str
 				   , ai->filesize);
-		(void)sub_binary(e, bi, ai);
+		if (sub_binary(e, bi, ai))
+			return (1);
 		ai->hdr = ai->hdr + ai->filesize + 60;
 	}
 	return (0);

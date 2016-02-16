@@ -6,14 +6,14 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/15 18:44:46 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/16 14:14:11 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/16 15:54:15 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ft_nm.h"
+
 #include <mach-o/fat.h>
 #include <sys/sysctl.h>
-
-#include "ft_nm.h"
 
 /*
 ** mmap overflow verifications:
@@ -120,18 +120,17 @@ int				nm_fat_handle(t_env const e[1], t_bininfo bi[1])
 	if (fi->arch_index >= 0)
 	{
 		fi->hdr += fi->arch_index;
-		if (read_header(bi, fi))
+		if (read_header(bi, fi) || sub_binary(e, bi, fi, false))
 			return (1);
-		(void)sub_binary(e, bi, fi, false);
+		/* (void)sub_binary(e, bi, fi, false); */
 	}
 	else
 	{
 		i = 0;
 		while (i < (int)fi->nfat_arch)
 		{
-			if (read_header(bi, fi))
+			if (read_header(bi, fi) || sub_binary(e, bi, fi, true))
 				return (1);
-			(void)sub_binary(e, bi, fi, true);
 			i++;
 			fi->hdr++;
 		}
