@@ -1,11 +1,53 @@
 
 launch(){
-	file $1 | head -n 1
-	./ft_nm $1 >mine 2>/dev/null
-	nm -mp $1 >ref 2>/dev/null
-	diff ref mine | head -n 3
-	# echo ""
+	ls -ld $1
+	file $1
+
+	# file $1 | head -n 1
+	# ./ft_nm $1 >mine 2>/dev/null
+	# nm -mp $1 >ref 2>/dev/null
+	# diff ref mine | head -n 3
+	echo ""
 }
+
+# /usr/lib/bundle1.o: Mach-O universal binary with 2 architectures
+# /usr/lib/bundle1.o (for architecture x86_64):Mach-O 64-bit object x86_64
+# /usr/lib/bundle1.o (for architecture i386):Mach-O object i386
+# cpu16777223 subcpu3 off4096 size520 align12
+# cpu7 subcpu3 off8192 size608 align12
+
+# /usr/bin/audiodevice: Mach-O universal binary with 2 architectures
+# /usr/bin/audiodevice (for architecture ppc):Mach-O executable ppc
+# /usr/bin/audiodevice (for architecture i386):Mach-O executable i386
+# cpu18 subcpu0 off4096 size29532 align12
+# cpu7 subcpu3 off36864 size33412 align12
+
+# /usr/lib/libgmalloc.dylib: Mach-O universal binary with 2 architectures
+# /usr/lib/libgmalloc.dylib (for architecture x86_64):Mach-O 64-bit dynamically linked shared library x86_64
+# /usr/lib/libgmalloc.dylib (for architecture i386):Mach-O dynamically linked shared library i386
+# cpu16777223 subcpu3 off4096 size43168 align12
+# cpu7 subcpu3 off49152 size42512 align12
+
+#fat
+launch '/usr/share/examshell/venv/lib/python2.7/site-packages/_cffi_backend.so'
+launch '/usr/lib/system/libsystem_trace.dylib'
+launch '/usr/lib/system/libdyld.dylib'
+launch '/usr/lib/system/libsystem_c.dylib'
+launch '/usr/lib/libobjc.A.dylib'
+launch '/usr/lib/crt1.10.6.o'
+launch '/usr/lib/crt1.o'
+launch '/usr/lib/dyld'
+launch '/usr/lib/lazydylib1.o'
+launch '/usr/lib/libc++.1.dylib'
+launch '/usr/lib/libextension.dylib'
+launch '/usr/lib/libgmalloc.dylib'
+launch '/usr/lib/libiconv.2.4.0.dylib'
+launch '/usr/bin/audiodevice'  #2arch no x86_64
+launch '/usr/lib/bundle1.o'
+
+
+exit
+
 
 
 
@@ -62,25 +104,6 @@ launch '/usr/lib/ssh-keychain.dylib'
 # launch '/usr/lib/libnetwork.dylib'
 # launch '/usr/lib/libxcselect.dylib'
 
-
-#fat
-# launch '/usr/share/examshell/venv/lib/python2.7/site-packages/_cffi_backend.so'
-# launch '/usr/lib/system/libsystem_trace.dylib'
-# launch '/usr/lib/system/libdyld.dylib'
-# launch '/usr/lib/system/libsystem_c.dylib'
-# launch '/usr/lib/libobjc.A.dylib'
-# launch '/usr/lib/crt1.10.6.o'
-# launch '/usr/lib/crt1.o'
-# launch '/usr/lib/dyld'
-# launch '/usr/lib/lazydylib1.o'
-# launch '/usr/lib/libc++.1.dylib'
-# launch '/usr/lib/libextension.dylib'
-# launch '/usr/lib/libgmalloc.dylib'
-# launch '/usr/lib/libiconv.2.4.0.dylib'
-# launch '/usr/bin/audiodevice'
-# launch '/usr/lib/bundle1.o'
-
-
 echo ''
 #binaries:
 launch '/usr/share/rbx/gems/gems/rubysl-bigdecimal-2.0.2/ext/rubysl/bigdecimal/bigdecimal.o'
@@ -97,24 +120,14 @@ launch '/usr/share/rbx/gems/gems/rubysl-openssl-2.1.0/ext/rubysl/openssl/ossl.o'
 
 launch o/srcs/bin_handle.o
 launch o/srcs/bin_readmagic.o
-launch o/srcs/build_sections_vector.o
-launch o/srcs/endianness.o
-launch o/srcs/env.o
 launch o/srcs/env_make.o
-launch o/srcs/file.o
 launch o/srcs/file_make.o
 launch o/srcs/file_processpath.o
 launch o/srcs/file_release.o
-launch o/srcs/filename.o
-launch o/srcs/ft_arg.o
-launch o/srcs/handle_file.o
 launch o/srcs/main.o
-launch o/srcs/mmap_file.o
 launch o/srcs/obj_buildindices.o
-launch o/srcs/obj_buildsections.o
 launch o/srcs/obj_handle.o
 launch o/srcs/obj_printsym.o
-launch o/srcs/processpath.o
 
 
 
