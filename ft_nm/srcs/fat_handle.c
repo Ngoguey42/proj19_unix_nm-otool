@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/15 18:44:46 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/16 12:51:09 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/16 13:52:41 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,55 +46,63 @@ static int		sub_binary(
 
 static int		closest_arch(t_bininfo const bi[1], t_fatinfo const fi[1])
 {
+	unsigned int			close_i;
 	cpu_type_t				close_cpu;
-	cpu_subtype_t			close_subcpu;
 	struct fat_arch const	*hdr;
 	unsigned int			i;
 
-	if (fi->nfat_arch == 0)
-		return (-1);
+	close_i = 0;
+	close_cpu = (cpu_type_t)ft_i32toh(fi->hdr->cputype, bi->endian);
 	hdr = fi->hdr + 1;
-	close_cpu = ft_i32toh(hdr->cputype, bi->endian);
-	close_subcpu = ft_i32toh(hdr->cpusubtype, bi->endian);
 	i = 0;
-	while (i < fi->nfat_arch)
+	while (++i < fi->nfat_arch)
 	{
-		T;
-		if ((cpu_type_t)ft_i32toh(hdr->cputype, bi->endian) == fi->cpu)
+ 		if ((cpu_type_t)ft_i32toh(hdr->cputype, bi->endian) == fi->cpu)
 		{
 			if ((cpu_subtype_t)ft_i32toh(hdr->cpusubtype, bi->endian) == fi->subcpu)
 				return (i);
-			else if (close_cpu != fi->subcpu)
+			else if (close_cpu != fi->cpu)
 			{
-				close_cpu = ft_i32toh(hdr->cputype, bi->endian);
-				close_subcpu = ft_i32toh(hdr->cpusubtype, bi->endian);
+				close_i = i;
+				close_cpu = fi->cpu;
 			}
 		}
-		i++;
 		hdr++;
 	}
-	return (close_cpu == fi->cpu ? i - 1 : -1);
+	return (close_cpu == fi->cpu ? close_i : -1);
+}
+
+static void		init_fatinfo(t_bininfo bi[1], t_fatinfo fi[1])
+{
+	size_t	size[1];
+	size_t	tmp[1];
+
+	*size = sizeof(cpu_type_t);
+	(void)sysctlbyname("hw.cputype", &fi->cpu, size, NULL, 0);
+	*size = sizeof(cpu_subtype_t);
+	(void)sysctlbyname("hw.cpusubtype", &fi->subcpu, size, NULL, 0);
+	*tmp = 0;
+	*size = sizeof(size_t);
+	(void)sysctlbyname("hw.cpu64bit_capable", tmp, size, NULL, 0);
+	if (*tmp)
+		fi->cpu |= CPU_ARCH_ABI64;
+	qprintf("types: %d %d \n", fi->cpu, fi->subcpu);
+	fi->nfat_arch =
+		ft_i32toh(((struct fat_header*)bi->addr)->nfat_arch, bi->endian);
+	fi->hdr = bi->addr + sizeof(struct fat_header);
+	return ;
 }
 
 int				nm_fat_handle(t_env const e[1], t_bininfo bi[1])
 {
 	t_fatinfo		fi[1];
 	unsigned int	i;
-    size_t			size;
 
-	size = sizeof(cpu_type_t);
-	(void)sysctlbyname("hw.cputype", &fi->cpu, &size, NULL, 0);
-	size = sizeof(cpu_subtype_t);
-	(void)sysctlbyname("hw.cpusubtype", &fi->subcpu, &size, NULL, 0);
-
-	qprintf("types: %d %d \n", fi->cpu, fi->subcpu);
-	fi->nfat_arch =
-		ft_i32toh(((struct fat_header*)bi->addr)->nfat_arch, bi->endian);
-	fi->hdr = bi->addr + sizeof(struct fat_header);
+	init_fatinfo(bi, fi);
+	if (fi->nfat_arch == 0)
+		return (0);
 	i = closest_arch(bi, fi);
 	qprintf("truclol: %d\n", i);
-
-	//hw.cpu64bit_capable: 1
 	i = 0;
 	while (i < fi->nfat_arch)
 	{
