@@ -31,7 +31,7 @@ launch(){
 
 #fat
 echo "=============FATS:============"
-# launch '/usr/bin/audiodevice'  #2arch no x86_64
+launch '/usr/bin/audiodevice'  #2arch no x86_64
 
 # exit
 
@@ -113,6 +113,7 @@ launch '/usr/lib/ssh-keychain.dylib'
 echo ''
 #binaries:
 echo "=============OBJS:============"
+launch './ppc'
 launch '/usr/share/rbx/gems/gems/rubysl-bigdecimal-2.0.2/ext/rubysl/bigdecimal/bigdecimal.o'
 launch '/usr/bin/iscsictl'
 launch /sbin/mount_acfs

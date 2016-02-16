@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 16:37:11 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/16 15:42:45 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/16 17:03:06 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,11 @@ int		print_library(t_bininfo const bi[1], t_syminfo const si[1])
 		return (0); //TODO: why return 0
 	ptr1 = bi->dylibs->data;
 	ptr1 = ((struct dylib_command const *const *)ptr1)[libi];
-	ptr1 = ptr1 + ((struct dylib_command const *)ptr1)->dylib.name.offset;
+	ptr1 = ptr1 +
+		ft_i32toh(
+			((struct dylib_command const *)ptr1)->dylib.name.offset
+			, bi->endian
+			);
 	if (!nm_bin_ckaddr(bi, ptr1, sizeof(char)))
 		return (ERRORF("mmap overflow"));
 

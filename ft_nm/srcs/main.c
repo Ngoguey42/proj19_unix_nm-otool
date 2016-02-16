@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 02:19:24 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/11 15:56:12 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/16 16:57:33 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static int	scroll_paths(t_env const e[1])
 
 	p = e->paths.data;
 	pend = e->paths.data + sizeof(char *) * e->paths.size;
-	ftv_print(&e->paths, "s");
+	/* ftv_print(&e->paths, "s"); */
 	while (p < pend)
 	{
 		if (nm_file_make(e, *p, f) == 0)
@@ -47,8 +47,8 @@ int			main(int ac, char *av[])
 {
 	t_env				e[1];
 
-	PRINTSIZEOF(t_fileinfo);
-	PRINTSIZEOF(t_bininfo);
+	/* PRINTSIZEOF(t_fileinfo); */
+	/* PRINTSIZEOF(t_bininfo); */
 	if (nm_env_make(ac, (char const *const *)av, e))
 		return (1);
 	ft_dprintf(2, "flags: %I#.*b\n", ARG_NUM_OPTIONS, e->opt);

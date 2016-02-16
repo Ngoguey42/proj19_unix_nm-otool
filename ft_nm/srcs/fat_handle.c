@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/15 18:44:46 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/16 15:54:15 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/16 16:57:14 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ static int		sub_binary(
 	bi->addrend = bi->addr + bi->st_size;
 	nm_bin_readmagic(bi);
 	return (nm_bin_handle(e, bi));
+	/* return (0); */
 }
 
 static int		closest_arch(t_bininfo const bi[1], t_fatinfo const fi[1])
@@ -82,7 +83,7 @@ static void		init_fatinfo(t_bininfo bi[1], t_fatinfo fi[1])
 	(void)sysctlbyname("hw.cpu64bit_capable", tmp, size, NULL, 0);
 	if (*tmp)
 		fi->cpu |= CPU_ARCH_ABI64;
-	qprintf("types: %d %d \n", fi->cpu, fi->subcpu);
+	/* qprintf("types: %d %d \n", fi->cpu, fi->subcpu); */
 	fi->nfat_arch =
 		ft_i32toh(((struct fat_header*)bi->addr)->nfat_arch, bi->endian);
 	fi->hdr = bi->addr + sizeof(struct fat_header);
@@ -98,6 +99,8 @@ static int		read_header(t_bininfo const bi[1], t_fatinfo fi[1])
 	if (!nm_bin_ckaddr(bi, fi->hdr, sizeof(struct fat_arch)))
 		return (ERRORF("mmap overflow"));
 	fi->data = bi->addr + ft_i32toh(fi->hdr->offset, bi->endian);
+	/* qprintf("\tsetting fi->data to: %p (offset = %i)\n", fi->data */
+			/* , ft_i32toh(fi->hdr->offset, bi->endian)); */
 	fi->filesize = ft_i32toh(fi->hdr->size, bi->endian);
 	ft_dprintf(2, "cpu%d subcpu%d off%d size%d align%d\n"
 			   , ft_i32toh(fi->hdr->cputype, bi->endian)
@@ -129,10 +132,13 @@ int				nm_fat_handle(t_env const e[1], t_bininfo bi[1])
 		i = 0;
 		while (i < (int)fi->nfat_arch)
 		{
+			/* T; */
 			if (read_header(bi, fi) || sub_binary(e, bi, fi, true))
 				return (1);
 			i++;
+			/* qprintf("----------->lol?: %p\n", fi->hdr); */
 			fi->hdr++;
+			/* qprintf("----------->lol?: %p\n", fi->hdr); */
 		}
 	}
 	return (0);

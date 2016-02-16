@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 19:24:56 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/16 15:51:14 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/16 16:59:41 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,12 +94,14 @@ int			nm_obj_buildindices(t_bininfo bi[1])
 	i = 0;
 	while (i++ < ncmds)
 	{
-		T;
+		/* T; */
+		/* qprintf("Foolin' at offset %zu/%zu endian is %d\n", */
+		/* 		(void*)lc - (void*)bi->addr, bi->st_size, bi->endian); */
 		if (!nm_bin_ckaddr(bi, lc, sizeof(*lc)))
 			return (ERRORF("mmap overflow"));
 		if (read_lc(bi, lc, ft_i32toh(lc->cmd, bi->endian)))
 			return (1);
-		lc = (void const*)lc + lc->cmdsize;
+		lc = (void const*)lc +  ft_i32toh(lc->cmdsize, bi->endian);
 	}
 	return (0);
 }
