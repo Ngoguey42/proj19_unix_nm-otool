@@ -7,8 +7,8 @@ launch(){
 	./ft_nm -p $@ >mine 2>/dev/null
 	nm -p $@ >ref 2>/dev/null
 	# nm -mp $@ >ref 2>/dev/null
-	diff ref mine
-	# diff ref mine | head -n 30
+	# diff ref mine
+	diff ref mine | head -n 30
 	# echo ""
 }
 

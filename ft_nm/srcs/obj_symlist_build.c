@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/17 12:25:55 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/17 14:21:19 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/17 15:55:16 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static int	scroll_symbols(t_env const e[1], t_bininfo bi[1], t_sc const *sc)
 		si->str = NULL;
 		if (read_nlist(e, bi, nl, si))
 			return (1);
-		if (si->str != NULL && nm_obj_symlist_insert(e, bi, si))
+		if (si->str != NULL && e->sym_insert(e, bi, si))
 			return (1);
 		nl = (void const*)nl + nl_size;
 	}

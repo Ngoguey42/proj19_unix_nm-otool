@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 02:19:52 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/17 13:37:57 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/17 16:33:10 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,6 +167,7 @@ struct			s_env
 {
 	unsigned int				opt;
 	t_ftvector					paths;
+	int64_t						(*sym_insert)();
 };
 
 int				nm_env_make(int ac, char const *const *av, t_env e[1]);
@@ -182,7 +183,11 @@ bool			nm_bin_ckaddr(t_bininfo const bi[1], void const *ptr, size_t s);
 int				nm_obj_handle(t_env const e[1], t_bininfo bi[1]);
 int				nm_obj_buildindices(t_bininfo bi[1]);
 int				nm_obj_symlist_build(t_env const e[1], t_bininfo bi[1]);
-int				nm_obj_symlist_insert(
+int				nm_obj_symlist_insert_popt(
+	t_env const e[1], t_bininfo bi[1], t_syminfo const si[1]);
+int				nm_obj_symlist_insert_noopt(
+	t_env const e[1], t_bininfo bi[1], t_syminfo const si[1]);
+int				nm_obj_symlist_insert_nopt(
 	t_env const e[1], t_bininfo bi[1], t_syminfo const si[1]);
 int				nm_obj_printsym(
 	t_env const e[1], t_bininfo const bi[1], t_syminfo const si[1]);

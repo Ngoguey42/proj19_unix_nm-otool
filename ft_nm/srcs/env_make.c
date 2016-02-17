@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/07 14:53:13 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/15 18:39:09 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/17 15:54:37 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,16 @@ static int	args(t_arg_parser p[1], unsigned int opt[1], t_ftvector paths[1])
 	return (0);
 }
 
+static void		*get_sym_insert_fn(unsigned int opt)
+{
+	if (opt & opt_n_numsort)
+		return (&nm_obj_symlist_insert_nopt);
+	else if (opt & opt_p_nosort)
+		return (&nm_obj_symlist_insert_popt);
+	else
+		return (&nm_obj_symlist_insert_noopt);
+}
+
 int			nm_env_make(int ac, char const *const *av, t_env e[1])
 {
 	unsigned int	opt[1];
@@ -86,6 +96,6 @@ int			nm_env_make(int ac, char const *const *av, t_env e[1])
 		*opt |= opt_j_symonly;
 	if (*opt & opt_m_verbose)
 		*opt &= ~opt_j_symonly;
-	*e = (t_env){*opt & ARG_FIELD, *paths};
+	*e = (t_env){*opt & ARG_FIELD, *paths, get_sym_insert_fn(*opt)};
 	return (0);
 }

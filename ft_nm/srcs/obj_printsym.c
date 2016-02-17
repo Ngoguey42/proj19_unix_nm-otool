@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 16:37:11 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/17 14:21:43 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/17 16:44:55 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ void	nm_obj_print_value(
 			(si->n_type & N_TYPE) == N_SECT
 			|| (si->n_desc & REFERENCED_DYNAMICALLY)
 			|| ((si->n_type & N_TYPE) == N_ABS)
-			|| si->n_value != 0
+			/* || si->n_value != 0 */
 			))
 		ft_printf("%0*llx ", bi->arch ? 16 : 8, si->n_value);
 	else
