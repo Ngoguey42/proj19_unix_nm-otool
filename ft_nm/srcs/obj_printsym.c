@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 16:37:11 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/16 19:49:07 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/17 14:21:43 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,12 +259,13 @@ int		nm_obj_print_mopt2(
 int		nm_obj_printsym(
 	t_env const e[1], t_bininfo const bi[1], t_syminfo const si[1])
 {
+	nm_obj_print_debug(e, bi, si);
 	nm_obj_print_value(e, bi, si);
 	if (e->opt & opt_m_verbose)
 		nm_obj_print_mopt1(e, bi, si);
 	else
 		nm_obj_print_char1(e, bi, si);
-	/* nm_obj_print_debug(e, bi, si); */
+
 	ft_putstr(si->str);
 	if (e->opt & opt_m_verbose)
 	{

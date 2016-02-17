@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/07 18:12:02 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/17 11:48:41 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/17 14:21:10 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,31 +28,6 @@
 ** sections being indexed from 1, cur_file_sections[0] is a placeholder
 */
 
-static int	read_nlist(t_env const e[1], t_bininfo const bi[1],
-				void const *nl, void const *strtab)
-{
-	t_syminfo	si[1];
-	uint8_t		n_sect;
-
-	si->n_type = ACCESS_NL(n_type, nl, bi->arch);
-	if ((si->n_type & N_STAB) != 0)
-		return (0);
-	si->strtab = strtab;
-	si->str = strtab + ft_i32toh(ACCESS_NL_N_STRX(nl, bi->arch), bi->endian);
-	if (!nm_bin_ckaddr(bi, strtab, sizeof(char)))
-		return (ERRORF("mmap overflow"));
-	n_sect = ACCESS_NL(n_sect, nl, bi->arch);
-	if (n_sect >= bi->sects->size)
-		return (ERRORF("sections index overflow"));
-	si->sect = ((void const *const *)bi->sects->data)[n_sect];
-	si->n_desc = ft_i16toh(ACCESS_NL(n_desc, nl, bi->arch), bi->endian);
-	if (bi->arch)
-		si->n_value = ft_i64toh(ACCESS_NL(n_value, nl, bi->arch), bi->endian);
-	else
-		si->n_value = ft_i32toh(ACCESS_NL(n_value, nl, bi->arch), bi->endian);
-	return (nm_obj_printsym(e, bi, si));
-}
-
 static void	print_header(t_env const e[1], t_bininfo const bi[1])
 {
 	if (bi->membername.len != 0)
@@ -73,77 +48,29 @@ static void	print_header(t_env const e[1], t_bininfo const bi[1])
 	return ;
 }
 
-static int	scroll_symbols(t_env const e[1], t_bininfo const bi[1],
-						   t_sc const *sc, bool header[1])
-{
-	void const			*nl;
-	uint32_t const		nsyms = ft_i32toh(sc->nsyms, bi->endian);
-	size_t const		nl_size = SIZEOF_DYN(nlist, bi->arch);
-	unsigned int		i;
-	char const			*strtab;
-
-	nl = (void const*)bi->addr + ft_i32toh(sc->symoff, bi->endian);
-	strtab = (void const*)bi->addr + ft_i32toh(sc->stroff, bi->endian);
-	i = 0;
-	while (i++ < nsyms)
-	{
-		if (*header == false)
-		{
-			*header = true;
-			print_header(e, bi);
-		}
-		if (!nm_bin_ckaddr(bi, nl, nl_size))
-			return (ERRORF("mmap overflow"));
-		ft_i32toh(ACCESS_NL_N_STRX(nl, bi->arch), bi->endian);
-		read_nlist(e, bi, nl, strtab);
-		nl = (void const*)nl + nl_size;
-	}
-	return (0);
-}
-
-static int	scroll_symtabs(t_env const e[1], t_bininfo const bi[1])
-{
-	size_t const	mh_size = SIZEOF_DYN(mach_header, bi->arch);
-	size_t			ncmds;
-	unsigned int	i;
-	bool			header[1];
-	t_lc const		*lc;
-
-	ncmds = ft_i32toh(ACCESS_MH(ncmds, bi->addr, bi->arch), bi->endian);
-	*header = false;
-	lc = bi->addr + mh_size;
-	i = 0;
-	while (i++ < ncmds)
-	{
-		if (ft_i32toh(lc->cmd, bi->endian) == LC_SYMTAB)
-		{
-			if (!nm_bin_ckaddr(bi, lc, sizeof(t_sc)))
-				return (ERRORF("mmap overflow"));
-			if (scroll_symbols(e, bi, (void const *)lc, header))
-				return (1);
-		}
-		lc = (void const*)lc + ft_i32toh(lc->cmdsize, bi->endian);
-	}
-	if (*header == false)
-		ft_dprintf(2, "warning: ./ft_nm: no name list");
-	return (0);
-}
+/* void ftl_foreach(t_ftlist const *l, void (*fun)(), void *ext); */
+/* nm_obj_printsym(e, bi, si) */
 
 int			nm_obj_handle(t_env const e[1], t_bininfo bi[1])
 {
-	/* qprintf("HELLO: %s Size: %zd\n", __FUNCTION__, bi->st_size); */
-	ft_bzero(bi->sects, sizeof(t_ftvector));
 	ftv_init_instance(bi->sects, sizeof(void const *));
 	if (ftv_push_back(bi->sects, (void*[]){NULL}))
 		return (ERRORNO("ftv_push_back"));
-	ft_bzero(bi->dylibs, sizeof(t_ftvector));
 	ftv_init_instance(bi->dylibs, sizeof(void const *));
 	if (ftv_push_back(bi->dylibs, (void*[]){NULL}))
 		return (ERRORNO("ftv_push_back"));
+	ftl_init_instance(bi->syms, sizeof(t_syminfo));
 	if (nm_obj_buildindices(bi))
 		return (1);
-	scroll_symtabs(e, bi);
+	if (nm_obj_symlist_build(e, bi))
+		return (1);
+	if (bi->syms->size > 0)
+		print_header(e, bi);
+	else
+		ft_dprintf(2, "warning: ./ft_nm: no name list");
+	ftl_foreach2(bi->syms, nm_obj_printsym, e, bi);
 	ftv_release(bi->sects, NULL);
 	ftv_release(bi->dylibs, NULL);
+	ftl_release(bi->syms, NULL);
 	return (0);
 }

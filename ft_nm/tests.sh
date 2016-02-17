@@ -4,7 +4,7 @@ launch(){
 	# file $1
 
 	file $@ 2>/dev/null | head -n 1
-	./ft_nm $@ >mine 2>/dev/null
+	./ft_nm -p $@ >mine 2>/dev/null
 	nm -p $@ >ref 2>/dev/null
 	# nm -mp $@ >ref 2>/dev/null
 	diff ref mine
@@ -132,6 +132,8 @@ launch /sbin/autodiskmount
 launch '/sbin/mount_smbfs'
 launch '/sbin/fsck_udf'
 launch '/usr/share/rbx/gems/gems/rubysl-openssl-2.1.0/ext/rubysl/openssl/ossl.o'
+launch '/usr/bin/vmmap32'
+
 
 launch o/srcs/bin_handle.o
 launch o/srcs/bin_readmagic.o
