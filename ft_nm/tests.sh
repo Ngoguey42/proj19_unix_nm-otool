@@ -40,6 +40,7 @@ echo ''
 echo "=============FATS:============"
 launch '/usr/bin/audiodevice'  #2arch no x86_64
 
+
 launch '/usr/lib/lazydylib1.o'
 launch '/Applications/iTunes.app/Contents/Frameworks/iAdCore.framework/iAdCore'
 launch '/usr/lib/libobjc.A.dylib'
@@ -69,6 +70,9 @@ launch '1obj.a'
 # launch '/usr/lib/libQMIParser.a'
 launch '/nfs/zfs-student-4/users/ngoguey/.brew/Cellar/camlp4/4.02.3+6/lib/ocaml/camlp4/camlp4fulllib.a'
 launch '/nfs/zfs-student-4/users/ngoguey/.brew/Cellar/ocaml/4.02.3/lib/ocaml/libasmrun.a'
+
+launch '/usr/lib//libATCommandStudio.a'
+
 
 echo ''
 echo "=============DYLB:============"

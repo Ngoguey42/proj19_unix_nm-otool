@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/07 18:12:02 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/16 17:57:18 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/17 11:48:41 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,34 +53,9 @@ static int	read_nlist(t_env const e[1], t_bininfo const bi[1],
 	return (nm_obj_printsym(e, bi, si));
 }
 
-static int	scroll_symbols(t_env const e[1], t_bininfo const bi[1],
-						   t_sc const *sc)
+static void	print_header(t_env const e[1], t_bininfo const bi[1])
 {
-	void const			*nl;
-	uint32_t const		nsyms = ft_i32toh(sc->nsyms, bi->endian);
-	size_t const		nl_size = SIZEOF_DYN(nlist, bi->arch);
-	unsigned int		i;
-	char const			*strtab;
-
-	nl = (void const*)bi->addr + ft_i32toh(sc->symoff, bi->endian);
-	strtab = (void const*)bi->addr + ft_i32toh(sc->stroff, bi->endian);
-	i = 0;
-	while (i++ < nsyms)
-	{
-		if (!nm_bin_ckaddr(bi, nl, nl_size))
-			return (ERRORF("mmap overflow"));
-		ft_i32toh(ACCESS_NL_N_STRX(nl, bi->arch), bi->endian);
-		read_nlist(e, bi, nl, strtab);
-		nl = (void const*)nl + nl_size;
-	}
-	return (0);
-}
-
-static void	print_header(t_env const e[1], t_bininfo const bi[1], size_t ncmds)
-{
-	if (ncmds == 0)
-		ft_dprintf(2, "warning: ./ft_nm: no name list");
-	else if (bi->membername.len != 0)
+	if (bi->membername.len != 0)
 		ft_printf("\n%! $0.*hr(%! $0.*hr):\n",
 				  bi->pathname.len, bi->pathname.str,
 				  bi->membername.len, bi->membername.str);
@@ -98,16 +73,44 @@ static void	print_header(t_env const e[1], t_bininfo const bi[1], size_t ncmds)
 	return ;
 }
 
+static int	scroll_symbols(t_env const e[1], t_bininfo const bi[1],
+						   t_sc const *sc, bool header[1])
+{
+	void const			*nl;
+	uint32_t const		nsyms = ft_i32toh(sc->nsyms, bi->endian);
+	size_t const		nl_size = SIZEOF_DYN(nlist, bi->arch);
+	unsigned int		i;
+	char const			*strtab;
+
+	nl = (void const*)bi->addr + ft_i32toh(sc->symoff, bi->endian);
+	strtab = (void const*)bi->addr + ft_i32toh(sc->stroff, bi->endian);
+	i = 0;
+	while (i++ < nsyms)
+	{
+		if (*header == false)
+		{
+			*header = true;
+			print_header(e, bi);
+		}
+		if (!nm_bin_ckaddr(bi, nl, nl_size))
+			return (ERRORF("mmap overflow"));
+		ft_i32toh(ACCESS_NL_N_STRX(nl, bi->arch), bi->endian);
+		read_nlist(e, bi, nl, strtab);
+		nl = (void const*)nl + nl_size;
+	}
+	return (0);
+}
+
 static int	scroll_symtabs(t_env const e[1], t_bininfo const bi[1])
 {
 	size_t const	mh_size = SIZEOF_DYN(mach_header, bi->arch);
 	size_t			ncmds;
 	unsigned int	i;
-	int				tmp;
+	bool			header[1];
 	t_lc const		*lc;
 
 	ncmds = ft_i32toh(ACCESS_MH(ncmds, bi->addr, bi->arch), bi->endian);
-	print_header(e, bi, ncmds);
+	*header = false;
 	lc = bi->addr + mh_size;
 	i = 0;
 	while (i++ < ncmds)
@@ -116,10 +119,13 @@ static int	scroll_symtabs(t_env const e[1], t_bininfo const bi[1])
 		{
 			if (!nm_bin_ckaddr(bi, lc, sizeof(t_sc)))
 				return (ERRORF("mmap overflow"));
-			tmp = scroll_symbols(e, bi, (void const *)lc);
+			if (scroll_symbols(e, bi, (void const *)lc, header))
+				return (1);
 		}
 		lc = (void const*)lc + ft_i32toh(lc->cmdsize, bi->endian);
 	}
+	if (*header == false)
+		ft_dprintf(2, "warning: ./ft_nm: no name list");
 	return (0);
 }
 
