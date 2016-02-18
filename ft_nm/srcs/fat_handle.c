@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/15 18:44:46 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/18 19:07:23 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/18 19:18:08 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,11 @@
 #include <mach-o/fat.h>
 #include <sys/sysctl.h>
 
-/*
-** struct s_cpu_name const	cpu[] = {
-** 	(struct s_cpu_name){CPU_TYPE_I386, "i386"},
-** 	(struct s_cpu_name){CPU_TYPE_X86_64, "x86_64"},
-** 	(struct s_cpu_name){CPU_TYPE_POWERPC, "ppc"},
-** };
-*/
+struct s_cpu_name const	cpu[] = {
+	(struct s_cpu_name){CPU_TYPE_I386, "i386"},
+	(struct s_cpu_name){CPU_TYPE_X86_64, "x86_64"},
+	(struct s_cpu_name){CPU_TYPE_POWERPC, "ppc"},
+};
 
 /*
 ** mmap overflow verifications:
@@ -121,8 +119,10 @@ static void		init_fatinfo(t_bininfo bi[1], t_fatinfo fi[1])
 	fi->hdr = bi->addr + sizeof(struct fat_header);
 	local = NXGetLocalArchInfo();
 	if (local == NULL)
+	{
 		fi->arch_index = -1;
 		return ;
+	}
 	copy = ft_memdup(fi->hdr, fi->nfat_arch * sizeof(struct fat_arch));
 	if (copy == NULL)
 	{

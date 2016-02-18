@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 16:37:11 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/17 16:44:55 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/18 19:18:19 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ void	nm_obj_print_value(
 			(si->n_type & N_TYPE) == N_SECT
 			|| (si->n_desc & REFERENCED_DYNAMICALLY)
 			|| ((si->n_type & N_TYPE) == N_ABS)
-			/* || si->n_value != 0 */
+			|| si->n_value != 0
 			))
 		ft_printf("%0*llx ", bi->arch ? 16 : 8, si->n_value);
 	else
@@ -220,20 +220,20 @@ void	nm_obj_print_debug(
 	t_env const e[1], t_bininfo const bi[1], t_syminfo const si[1])
 {
 	ft_dprintf(2, "%Is(pext%I1b type%I03b ext%I01b) ", "type"
-			   , (si->n_type & N_PEXT) >> 4
-			   , (si->n_type & N_TYPE) >> 1
-			   , si->n_type & N_EXT
+		, (si->n_type & N_PEXT) >> 4
+		, (si->n_type & N_TYPE) >> 1
+		, si->n_type & N_EXT
 		);
 	ft_dprintf(2, "%Js(%J010p) ", "sect", si->sect);
 	ft_dprintf(2, "%Ks(lib%#0K4x 8bit%K1b weak%K1b 6bit%K1b"
-			   " dynref%K1b thumb%K1b ref%K03b) ", "desc"
-			   , GET_LIBRARY_ORDINAL(si->n_desc)
-			   , (si->n_desc & N_WEAK_DEF) >> 7
-			   , (si->n_desc & N_WEAK_REF) >> 6
-			   , (si->n_desc & N_NO_DEAD_STRIP) >> 5
-			   , (si->n_desc & REFERENCED_DYNAMICALLY) >> 4
-			   , (si->n_desc & N_ARM_THUMB_DEF) >> 3
-			   , (si->n_desc & REFERENCE_TYPE)
+		" dynref%K1b thumb%K1b ref%K03b) ", "desc"
+		, GET_LIBRARY_ORDINAL(si->n_desc)
+		, (si->n_desc & N_WEAK_DEF) >> 7
+		, (si->n_desc & N_WEAK_REF) >> 6
+		, (si->n_desc & N_NO_DEAD_STRIP) >> 5
+		, (si->n_desc & REFERENCED_DYNAMICALLY) >> 4
+		, (si->n_desc & N_ARM_THUMB_DEF) >> 3
+		, (si->n_desc & REFERENCE_TYPE)
 		);
 	return ;
 	(void)e;
