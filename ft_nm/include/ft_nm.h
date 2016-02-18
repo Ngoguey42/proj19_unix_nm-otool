@@ -6,14 +6,15 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 02:19:52 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/17 16:33:10 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/18 18:51:56 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_NM_H
 # define FT_NM_H
 
-#include <mach/machine.h>
+#include <mach/machine.h> //delete ?
+#include <mach-o/arch.h>
 
 # include "libft.h"
 # include "ft_list.h"
@@ -78,6 +79,8 @@ enum			e_nm_bintype
 
 typedef struct load_command		t_lc;
 typedef struct symtab_command	t_sc;
+typedef struct fat_arch			t_fa;
+
 
 typedef struct s_env			t_env;
 typedef struct s_substr			t_substr;
@@ -157,8 +160,13 @@ struct			s_fatinfo
 	struct fat_arch const		*hdr;
 	void const					*data;
 	size_t						filesize;
-	cpu_type_t					cpu;
-	cpu_subtype_t				subcpu;
+
+	/* NXArchInfo const			*local_arch; */
+
+	/* cpu_type_t					cpu; */
+	/* cpu_subtype_t				subcpu; */
+
+
 	uint32_t					nfat_arch;
 	int							arch_index;
 };
