@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/15 18:44:46 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/22 12:54:50 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/22 14:13:01 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 #include <mach-o/fat.h>
 #include <sys/sysctl.h>
+#include <mach-o/arch.h>
 #include <stdlib.h>
 
 struct s_cpu_name const	cpu[] = {

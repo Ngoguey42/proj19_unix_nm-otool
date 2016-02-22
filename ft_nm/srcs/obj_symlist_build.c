@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/17 12:25:55 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/22 13:02:34 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/22 14:10:50 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ static int	read_nlist(
 	else
 		si->n_value = ft_i32toh(ACCESS_NL(n_value, nl, bi->arch), bi->endian);
 	return (0);
+	(void)e;
 }
 
 static int	scroll_symbols(t_env const e[1], t_bininfo bi[1], t_sc const *sc)

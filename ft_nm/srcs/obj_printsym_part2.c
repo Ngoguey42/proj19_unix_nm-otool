@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   obj_printsym.c                                     :+:      :+:    :+:   */
+/*   obj_printsym_part2.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/02/11 16:37:11 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/22 13:57:52 by ngoguey          ###   ########.fr       */
+/*   Created: 2016/02/22 14:07:22 by ngoguey           #+#    #+#             */
+/*   Updated: 2016/02/22 14:07:56 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ void	nm_obj_print_char2(
 {
 	if ((si->n_type & N_TYPE) == N_INDR)
 		ft_printf(" (indirect for %s)", si->strtab + si->n_value);
+	(void)e;
+	(void)bi;
 	return ;
 }
 

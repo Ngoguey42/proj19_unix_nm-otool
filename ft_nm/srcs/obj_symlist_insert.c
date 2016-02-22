@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/17 13:27:47 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/17 16:33:20 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/22 14:11:12 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ int				nm_obj_symlist_insert_popt(
 	if (ftl_push_back(bi->syms, (void const *)si))
 		return (ERROR("ftl_push_back"));
 	return (0);
+	(void)e;
 }
 
 static int64_t	compare_str(t_syminfo const *a, t_syminfo const *b)
@@ -34,6 +35,7 @@ int				nm_obj_symlist_insert_noopt(
 	if (ftl_insert_sort(bi->syms, (void const *)si, &compare_str))
 		return (ERROR("ftl_push_back"));
 	return (0);
+	(void)e;
 }
 
 static int64_t	compare_value(t_syminfo const *a, t_syminfo const *b)
@@ -47,4 +49,5 @@ int				nm_obj_symlist_insert_nopt(
 	if (ftl_insert_sort(bi->syms, (void const *)si, &compare_value))
 		return (ERROR("ftl_push_back"));
 	return (0);
+	(void)e;
 }

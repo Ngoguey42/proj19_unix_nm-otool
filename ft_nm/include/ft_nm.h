@@ -6,20 +6,21 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 02:19:52 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/22 13:56:54 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/22 14:13:26 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_NM_H
 # define FT_NM_H
 
-#include <mach/machine.h> //delete ?
-#include <mach-o/arch.h>
-
 # include "libft.h"
 # include "ft_list.h"
-# include "ft_debug.h" //debug
+# include "ft_vector.h"
 # include "fterror.h"
+
+/*
+** # include "ft_debug.h" //debug
+*/
 
 # define PRINT_DEBUG false
 
@@ -83,7 +84,6 @@ typedef struct load_command		t_lc;
 typedef struct symtab_command	t_sc;
 typedef struct fat_arch			t_fa;
 typedef struct dylib_command	t_dc;
-
 
 typedef struct s_env			t_env;
 typedef struct s_substr			t_substr;
@@ -164,12 +164,6 @@ struct			s_fatinfo
 	void const					*data;
 	size_t						filesize;
 
-	/* NXArchInfo const			*local_arch; */
-
-	/* cpu_type_t					cpu; */
-	/* cpu_subtype_t				subcpu; */
-
-
 	uint32_t					nfat_arch;
 	int							arch_index;
 };
@@ -201,6 +195,16 @@ int				nm_obj_symlist_insert_noopt(
 int				nm_obj_symlist_insert_nopt(
 	t_env const e[1], t_bininfo bi[1], t_syminfo const si[1]);
 int				nm_obj_printsym(
+	t_env const e[1], t_bininfo const bi[1], t_syminfo const si[1]);
+void			nm_obj_print_value(
+	t_env const e[1], t_bininfo const bi[1], t_syminfo const si[1]);
+void			nm_obj_print_mopt1(
+	t_env const e[1], t_bininfo const bi[1], t_syminfo const si[1]);
+void			nm_obj_print_char1(
+	t_env const e[1], t_bininfo const bi[1], t_syminfo const si[1]);
+int				nm_obj_print_mopt2(
+	t_env const e[1], t_bininfo const bi[1], t_syminfo const si[1]);
+void			nm_obj_print_char2(
 	t_env const e[1], t_bininfo const bi[1], t_syminfo const si[1]);
 
 int				nm_acv_handle(t_env const e[1], t_bininfo bi[1]);

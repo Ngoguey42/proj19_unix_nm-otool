@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/07 18:12:02 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/22 13:02:10 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/22 14:10:32 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static void	foreach_symbols(
 		node = l->prev;
 		while (node != ftl_cend(l))
 		{
-			nm_obj_printsym(e, bi, node);
+			nm_obj_printsym(e, bi, (const t_syminfo *)node);
 			node = node->prev;
 		}
 	}
@@ -63,7 +63,7 @@ static void	foreach_symbols(
 		node = l->next;
 		while (node != ftl_cend(l))
 		{
-			nm_obj_printsym(e, bi, node);
+			nm_obj_printsym(e, bi, (const t_syminfo *)node);
 			node = node->next;
 		}
 	}

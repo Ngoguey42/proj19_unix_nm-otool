@@ -6,16 +6,13 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/22 13:52:36 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/22 14:03:24 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/22 14:04:18 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_nm.h"
 
-#include <mach-o/loader.h>
 #include <mach-o/nlist.h>
-
-#include <unistd.h>
 
 void	nm_obj_print_value(
 	t_env const e[1], t_bininfo const bi[1], t_syminfo const si[1])

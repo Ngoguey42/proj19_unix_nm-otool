@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/22 13:53:44 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/22 14:03:03 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/22 14:08:55 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,8 @@ static void		toto(t_bininfo const bi[1], t_syminfo const si[1], char c)
 	else
 		b[0] = ft_tolower(c);
 	write(1, b, 2);
+	(void)bi;
+	(void)si;
 	return ;
 }
 
@@ -107,6 +109,7 @@ void			nm_obj_print_char1(
 	else
 		toto(bi, si, 'U');
 	return ;
+	(void)e;
 }
 
 static void		left_part(
@@ -133,6 +136,7 @@ static void		left_part(
 	else
 		print_seg_sect(bi, si);
 	return ;
+	(void)e;
 }
 
 void			nm_obj_print_mopt1(
