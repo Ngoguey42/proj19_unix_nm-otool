@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/15 18:44:46 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/22 12:18:06 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/22 12:54:50 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,13 +117,13 @@ static int		read_header(t_bininfo const bi[1], t_fatinfo fi[1])
 		return (ERRORF("mmap overflow"));
 	fi->data = bi->addr + ft_i32toh(fi->hdr->offset, bi->endian);
 	fi->filesize = ft_i32toh(fi->hdr->size, bi->endian);
-	ft_dprintf(2, "cpu%d subcpu%d off%d size%d align%d\n"
-			   , ft_i32toh(fi->hdr->cputype, bi->endian)
-			   , ft_i32toh(fi->hdr->cpusubtype, bi->endian)
-			   , fi->data - bi->addr
-			   , fi->filesize
-			   , ft_i32toh(fi->hdr->align, bi->endian)
-		);
+	if (PRINT_DEBUG)
+		ft_dprintf(2, "cpu%d subcpu%d off%d size%d align%d\n"
+			, ft_i32toh(fi->hdr->cputype, bi->endian)
+			, ft_i32toh(fi->hdr->cpusubtype, bi->endian)
+			, fi->data - bi->addr
+			, fi->filesize
+			, ft_i32toh(fi->hdr->align, bi->endian));
 	if (!nm_bin_ckaddr(bi, fi->data, fi->filesize))
 		return (ERRORF("mmap overflow"));
 	return (0);

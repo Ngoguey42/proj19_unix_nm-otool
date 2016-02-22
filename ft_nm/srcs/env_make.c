@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/07 14:53:13 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/22 12:42:17 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/22 12:53:04 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 
 static char const *const g_default_file = "./a.out";
 
-static int	save_option(unsigned int opt[1], char c)
+static int		save_option(unsigned int opt[1], char c)
 {
 	unsigned int	i;
 
@@ -43,7 +43,8 @@ static int	save_option(unsigned int opt[1], char c)
 	return (1);
 }
 
-static int	args(t_arg_parser p[1], unsigned int opt[1], t_ftvector paths[1])
+static int		args(
+	t_arg_parser p[1], unsigned int opt[1], t_ftvector paths[1])
 {
 	enum e_arg		a;
 	enum e_arg		expect;
@@ -76,7 +77,7 @@ static void		*get_sym_insert_fn(unsigned int opt)
 		return (&nm_obj_symlist_insert_noopt);
 }
 
-int			nm_env_make(int ac, char const *const *av, t_env e[1])
+int				nm_env_make(int ac, char const *const *av, t_env e[1])
 {
 	unsigned int	opt[1];
 	t_ftvector		paths[1];

@@ -19,26 +19,6 @@ launch(){
 	# echo ""
 }
 
-# /usr/lib/bundle1.o: Mach-O universal binary with 2 architectures
-# /usr/lib/bundle1.o (for architecture x86_64):Mach-O 64-bit object x86_64
-# /usr/lib/bundle1.o (for architecture i386):Mach-O object i386
-# cpu16777223 subcpu3 off4096 size520 align12
-# cpu7 subcpu3 off8192 size608 align12
-
-# /usr/bin/audiodevice: Mach-O universal binary with 2 architectures
-# /usr/bin/audiodevice (for architecture ppc):Mach-O executable ppc
-# /usr/bin/audiodevice (for architecture i386):Mach-O executable i386
-# cpu18 subcpu0 off4096 size29532 align12
-# cpu7 subcpu3 off36864 size33412 align12
-
-# /usr/lib/libgmalloc.dylib: Mach-O universal binary with 2 architectures
-# /usr/lib/libgmalloc.dylib (for architecture x86_64):Mach-O 64-bit dynamically linked shared library x86_64
-# /usr/lib/libgmalloc.dylib (for architecture i386):Mach-O dynamically linked shared library i386
-# cpu16777223 subcpu3 off4096 size43168 align12
-# cpu7 subcpu3 off49152 size42512 align12
-
-# launch '/Applications/CocoaDialog.app/Contents/MacOS/CocoaDialog'
-
 echo "============================================================MULT:============================================================"
 launch '../libft/libft.a' '1txt.a' '2obj.a' '0txt.a' '1obj.a' 'ppc'
 launch 'ppc' 'ppc'

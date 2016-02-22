@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 19:24:56 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/16 17:41:06 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/22 13:00:21 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,13 @@ static int	extract_sections(t_bininfo const bi[1], t_ftvector vec[1],
 ** LC_LOAD_DYLIB dylib_command
 ** LC_LOAD_WEAK_DYLIB dylib_command
 ** LC_REEXPORT_DYLIB dylib_command
+** LC_LOAD_UPWARD_DYLIB (not dylib_command, but similar)
+** LC_LAZY_LOAD_DYLIB (NOT HANDLED, NOT ENCOUNTERED)
 */
 
-static uint32_t const dylibs[] = {
+static uint32_t const	g_dylibs[] = {
 	LC_LOAD_DYLIB, LC_LOAD_WEAK_DYLIB, LC_REEXPORT_DYLIB,
 	LC_LOAD_UPWARD_DYLIB,
-	/* LC_LOAD_UPWARD_DYLIB, LC_LAZY_LOAD_DYLIB
-	   TODO: handle those libs ?
-	*/
 };
 
 static int	read_lc(t_bininfo bi[1], t_lc const *lc, uint32_t cmd)
@@ -62,13 +61,13 @@ static int	read_lc(t_bininfo bi[1], t_lc const *lc, uint32_t cmd)
 	else
 	{
 		i = 0;
-		while (i < SIZE_ARRAY(dylibs))
+		while (i < SIZE_ARRAY(g_dylibs))
 		{
-			if (cmd == dylibs[i])
+			if (cmd == g_dylibs[i])
 				break ;
 			i++;
 		}
-		if (i != SIZE_ARRAY(dylibs))
+		if (i != SIZE_ARRAY(g_dylibs))
 		{
 			if (ftv_push_back(bi->dylibs, &lc))
 				return (ERRORNO("ftv_push_back"));
@@ -91,14 +90,11 @@ int			nm_obj_buildindices(t_bininfo bi[1])
 	i = 0;
 	while (i++ < ncmds)
 	{
-		/* T; */
-		/* qprintf("Foolin' at offset %zu/%zu endian is %d\n", */
-		/* 		(void*)lc - (void*)bi->addr, bi->st_size, bi->endian); */
 		if (!nm_bin_ckaddr(bi, lc, sizeof(*lc)))
 			return (ERRORF("mmap overflow"));
 		if (read_lc(bi, lc, ft_i32toh(lc->cmd, bi->endian)))
 			return (1);
-		lc = (void const*)lc +  ft_i32toh(lc->cmdsize, bi->endian);
+		lc = (void const*)lc + ft_i32toh(lc->cmdsize, bi->endian);
 	}
 	return (0);
 }

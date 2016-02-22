@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 02:19:24 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/16 16:57:33 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/22 12:50:35 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,22 +20,18 @@ static int	scroll_paths(t_env const e[1])
 
 	p = e->paths.data;
 	pend = e->paths.data + sizeof(char *) * e->paths.size;
-	/* ftv_print(&e->paths, "s"); */
 	while (p < pend)
 	{
 		if (nm_file_make(e, *p, f) == 0)
 		{
-			ft_dprintf(2, "%M45.*r with %J-15.*r"
-					   "size(%u) type(%hhu) end(%hhu) arch(%hhu)\n"
-					   , f->bi->pathname.len, f->bi->pathname.str
-					   , f->bi->membername.len, f->bi->membername.str
-					   , f->bi->st_size , f->bi->type
-					   , f->bi->endian, f->bi->arch
-				); // debug
-			if (nm_bin_handle(e, f->bi) == 0)
-			{
-
-			}
+			if (PRINT_DEBUG)
+				ft_dprintf(2, "%M45.*r with %J-15.*r"
+					"size(%u) type(%hhu) end(%hhu) arch(%hhu)\n"
+					, f->bi->pathname.len, f->bi->pathname.str
+					, f->bi->membername.len, f->bi->membername.str
+					, f->bi->st_size, f->bi->type
+					, f->bi->endian, f->bi->arch);
+			(void)nm_bin_handle(e, f->bi);
 		}
 		nm_file_release(f);
 		p++;
@@ -47,8 +43,6 @@ int			main(int ac, char *av[])
 {
 	t_env				e[1];
 
-	/* PRINTSIZEOF(t_fileinfo); */
-	/* PRINTSIZEOF(t_bininfo); */
 	if (nm_env_make(ac, (char const *const *)av, e))
 		return (1);
 	ft_dprintf(2, "flags: %I#.*b\n", ARG_NUM_OPTIONS, e->opt);

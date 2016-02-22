@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/07 18:12:02 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/22 12:36:23 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/22 13:02:10 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,24 +32,17 @@ static void	print_header(t_env const e[1], t_bininfo const bi[1])
 {
 	if (bi->membername.len != 0)
 		ft_printf("\n%! $0.*hr(%! $0.*hr):\n",
-				  bi->pathname.len, bi->pathname.str,
-				  bi->membername.len, bi->membername.str);
+					bi->pathname.len, bi->pathname.str,
+					bi->membername.len, bi->membername.str);
 	else if (bi->architecname.len != 0)
 		ft_printf("\n%! $0.*hr (for architecture %! $0.*hr):\n",
-				  bi->pathname.len, bi->pathname.str,
-				  bi->architecname.len, bi->architecname.str);
+					bi->pathname.len, bi->pathname.str,
+					bi->architecname.len, bi->architecname.str);
 	else if (e->paths.size > 1)
 		ft_printf("\n%! $0.*hr:\n",
-				  bi->pathname.len, bi->pathname.str);
-
-	/* else */
-	/* 	ft_printf("\n%! $0.*hr:\n", */
-	/* 			  bi->pathname.len, bi->pathname.str); */
+					bi->pathname.len, bi->pathname.str);
 	return ;
 }
-
-/* void ftl_foreach(t_ftlist const *l, void (*fun)(), void *ext); */
-/* nm_obj_printsym(e, bi, si) */
 
 static void	foreach_symbols(
 	t_ftlist const *l, t_env const e[1], t_bininfo bi[1])
@@ -77,7 +70,6 @@ static void	foreach_symbols(
 	return ;
 }
 
-
 int			nm_obj_handle(t_env const e[1], t_bininfo bi[1])
 {
 	ftv_init_instance(bi->sects, sizeof(void const *));
@@ -96,7 +88,6 @@ int			nm_obj_handle(t_env const e[1], t_bininfo bi[1])
 	else
 		ft_dprintf(2, "warning: ./ft_nm: no name list");
 	foreach_symbols(bi->syms, e, bi);
-	/* ftl_foreach2(bi->syms, nm_obj_printsym, e, bi); */
 	ftv_release(bi->sects, NULL);
 	ftv_release(bi->dylibs, NULL);
 	ftl_release(bi->syms, NULL);

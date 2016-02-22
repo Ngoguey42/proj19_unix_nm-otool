@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/17 12:25:55 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/17 15:55:16 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/22 13:02:34 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ static int	scroll_symbols(t_env const e[1], t_bininfo bi[1], t_sc const *sc)
 	return (0);
 }
 
-
 int			nm_obj_symlist_build(t_env const e[1], t_bininfo bi[1])
 {
 	size_t const	mh_size = SIZEOF_DYN(mach_header, bi->arch);
@@ -75,8 +74,6 @@ int			nm_obj_symlist_build(t_env const e[1], t_bininfo bi[1])
 	t_lc const		*lc;
 
 	ncmds = ft_i32toh(ACCESS_MH(ncmds, bi->addr, bi->arch), bi->endian);
-	qprintf("%d cmds\n", ncmds);
-
 	lc = bi->addr + mh_size;
 	i = 0;
 	while (i++ < ncmds)

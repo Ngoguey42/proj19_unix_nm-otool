@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 02:19:52 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/18 18:51:56 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/22 12:48:26 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 # include "ft_list.h"
 # include "ft_debug.h" //debug
 # include "fterror.h"
+
+# define PRINT_DEBUG true
 
 # define ARG_OPTIONS "nprguUjm"
 # define ARG_NUM_OPTIONS (sizeof(ARG_OPTIONS) - 1)

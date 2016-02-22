@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/15 15:13:30 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/16 16:00:30 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/22 12:51:45 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,10 @@ int			nm_acv_handle(t_env const e[1], t_bininfo bi[1])
 		ft_dprintf(2, "60BYTES: %$M.60r \n", ai->hdr);
 		if (nm_acv_read_header(bi, ai))
 			return (0);
-		ft_dprintf(2, "(%.*r) (%u)\n"
-				   , ai->filename.len, ai->filename.str
-				   , ai->filesize);
+		if (PRINT_DEBUG)
+			ft_dprintf(2, "(%.*r) (%u)\n"
+				, ai->filename.len, ai->filename.str
+				, ai->filesize);
 		if (sub_binary(e, bi, ai))
 			return (1);
 		ai->hdr = ai->hdr + ai->filesize + 60;
