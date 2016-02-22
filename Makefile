@@ -3,10 +3,10 @@
 # Git submodule to init
 MODULES			:= libft
 # Makefiles to call
-DEPS			:= ft_nm  #  ft_otool
+DEPS			:= ft_nm ft_otool
 DEPS_LINKS		:= $(addsuffix .dylink,$(DEPS))
 
-LIBFT_LINKS		:= ft_nm/libft
+LIBFT_LINKS		:= ft_nm/libft ft_otool/libft
 
 # tmp
 MODULE_RULES	:= $(addsuffix /.git,$(MODULES))
