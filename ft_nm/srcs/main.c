@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 02:19:24 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/22 12:50:35 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/22 13:41:42 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ int			main(int ac, char *av[])
 
 	if (nm_env_make(ac, (char const *const *)av, e))
 		return (1);
-	ft_dprintf(2, "flags: %I#.*b\n", ARG_NUM_OPTIONS, e->opt);
+	if (PRINT_DEBUG)
+		ft_dprintf(2, "flags: %I#.*b\n", ARG_NUM_OPTIONS, e->opt);
 	if (scroll_paths(e))
 		return (1);
 	return (0);

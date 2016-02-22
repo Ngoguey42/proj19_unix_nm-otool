@@ -2,8 +2,9 @@ O_FILES :=	o/srcs/acv_handle.o o/srcs/acv_read_header.o o/srcs/bin_handle.o \
 			o/srcs/bin_readmagic.o o/srcs/env_make.o o/srcs/fat_handle.o \
 			o/srcs/file_make.o o/srcs/file_processpath.o o/srcs/file_release.o \
 			o/srcs/main.o o/srcs/obj_buildindices.o o/srcs/obj_handle.o \
-			o/srcs/obj_printsym.o o/srcs/obj_symlist_build.o \
-			o/srcs/obj_symlist_insert.o
+			o/srcs/obj_printsym.o o/srcs/obj_printsym_part1.o \
+			o/srcs/obj_printsym_part2.o o/srcs/obj_printsym_value.o \
+			o/srcs/obj_symlist_build.o o/srcs/obj_symlist_insert.o
 
 LIBS_DEPEND := libft/libft.a
 
@@ -85,6 +86,24 @@ o/srcs/obj_handle.o: srcs/obj_handle.c include/ft_nm.h \
 	libft/include/ft_typedefs.h libft/include/fterror.h libft/include/libft.h \
 	| o/srcs/
 o/srcs/obj_printsym.o: srcs/obj_printsym.c include/ft_nm.h \
+	libft/include/ft_ctype.h libft/include/ft_list.h \
+	libft/include/ft_macroes.h libft/include/ft_stdio.h \
+	libft/include/ft_stdlib.h libft/include/ft_string.h \
+	libft/include/ft_typedefs.h libft/include/fterror.h libft/include/libft.h \
+	| o/srcs/
+o/srcs/obj_printsym_part1.o: srcs/obj_printsym_part1.c include/ft_nm.h \
+	libft/include/ft_ctype.h libft/include/ft_list.h \
+	libft/include/ft_macroes.h libft/include/ft_stdio.h \
+	libft/include/ft_stdlib.h libft/include/ft_string.h \
+	libft/include/ft_typedefs.h libft/include/fterror.h libft/include/libft.h \
+	| o/srcs/
+o/srcs/obj_printsym_part2.o: srcs/obj_printsym_part2.c include/ft_nm.h \
+	libft/include/ft_ctype.h libft/include/ft_list.h \
+	libft/include/ft_macroes.h libft/include/ft_stdio.h \
+	libft/include/ft_stdlib.h libft/include/ft_string.h \
+	libft/include/ft_typedefs.h libft/include/fterror.h libft/include/libft.h \
+	| o/srcs/
+o/srcs/obj_printsym_value.o: srcs/obj_printsym_value.c include/ft_nm.h \
 	libft/include/ft_ctype.h libft/include/ft_list.h \
 	libft/include/ft_macroes.h libft/include/ft_stdio.h \
 	libft/include/ft_stdlib.h libft/include/ft_string.h \

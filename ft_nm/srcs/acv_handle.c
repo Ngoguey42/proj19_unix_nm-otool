@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/15 15:13:30 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/22 12:51:45 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/22 13:46:50 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,6 @@ int			nm_acv_handle(t_env const e[1], t_bininfo bi[1])
 	t_acvinfo	ai[1];
 
 	ai->hdr = bi->addr + 8;
-	T;
-	qprintf("begin%p end%p\n", ai->hdr, bi->addrend);
 	while (ai->hdr < bi->addrend)
 	{
 		ft_dprintf(2, "60BYTES: %$M.60r \n", ai->hdr);

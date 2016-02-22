@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 02:19:52 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/22 12:48:26 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/22 13:56:54 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include "ft_debug.h" //debug
 # include "fterror.h"
 
-# define PRINT_DEBUG true
+# define PRINT_DEBUG false
 
 # define ARG_OPTIONS "nprguUjm"
 # define ARG_NUM_OPTIONS (sizeof(ARG_OPTIONS) - 1)
@@ -82,6 +82,7 @@ enum			e_nm_bintype
 typedef struct load_command		t_lc;
 typedef struct symtab_command	t_sc;
 typedef struct fat_arch			t_fa;
+typedef struct dylib_command	t_dc;
 
 
 typedef struct s_env			t_env;
