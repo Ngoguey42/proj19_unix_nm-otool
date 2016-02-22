@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 02:19:52 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/22 17:22:10 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/22 18:45:48 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,9 @@
 # include "ft_vector.h"
 # include "fterror.h"
 
-# include "ft_debug.h" //debug
+/*
+**# include "ft_debug.h" //debug
+*/
 
 # define PRINT_DEBUG false
 

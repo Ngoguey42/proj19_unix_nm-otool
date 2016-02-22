@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/07 18:12:02 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/22 18:21:18 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/22 18:37:52 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ static void	print_header(t_env const e[1], t_bininfo const bi[1])
 		ft_printf("%! $0.*hr:\n",
 					bi->pathname.len, bi->pathname.str);
 	ft_putstr("(__TEXT,__text) section\n");
+	(void)e;
 	return ;
 }
 

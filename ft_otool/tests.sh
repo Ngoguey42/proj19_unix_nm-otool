@@ -24,14 +24,7 @@ launch(){
 	# echo ""
 }
 
-echo "============================================================MULT:============================================================"
-launch '../libft/libft.a' '1txt.a' '2obj.a' '0txt.a' '1obj.a' 'ppc'
-launch 'ppc' 'ppc'
-
-echo ''
 echo "============================================================FATS:============================================================"
-launch '/usr/bin/audiodevice'  #2arch no x86_64
-
 
 launch '/usr/lib/lazydylib1.o'
 launch '/Applications/iTunes.app/Contents/Frameworks/iAdCore.framework/iAdCore'
@@ -104,15 +97,14 @@ launch '/usr/lib/libsysmon.dylib'
 launch '/usr/lib/libsystemstats.dylib'
 launch '/usr/lib/ssh-keychain.dylib'
 
-# launch '/usr/lib/libnetsnmp.5.2.1.dylib'
-# launch '/usr/lib/libnetsnmp.5.dylib'
+launch '/usr/lib/libnetsnmp.5.2.1.dylib'
+launch '/usr/lib/libnetsnmp.5.dylib'
 launch '/usr/lib/libnetwork.dylib'
 launch '/usr/lib/libxcselect.dylib'
 
 echo ''
 #binaries:
 echo "============================================================OBJS:============================================================"
-launch './ppc'
 launch '/usr/share/rbx/gems/gems/rubysl-bigdecimal-2.0.2/ext/rubysl/bigdecimal/bigdecimal.o'
 launch '/usr/bin/iscsictl'
 launch /sbin/mount_acfs

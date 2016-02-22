@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/22 17:03:49 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/22 18:22:21 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/22 18:45:07 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,15 @@
 
 #include <mach-o/loader.h>
 
-#define SZ_SEC64 MEM_SIZEOF(struct section_64, sectname)
-#define SZ_SEC32 MEM_SIZEOF(struct section, sectname)
+static uint64_t	access(t_bininfo bi[1], uint64_t v)
+{
+	if (bi->arch)
+		return (ft_i64toh(v, bi->endian));
+	else
+		return (ft_i32toh(v, bi->endian));
+}
 
-#define SZ_SEG64 MEM_SIZEOF(struct section_64, segname)
-#define SZ_SEG32 MEM_SIZEOF(struct section, segname)
-
-static int	dump_text_section(
+static int		dump_text_section(
 	t_env const e[1], t_bininfo bi[1], void const *sect)
 {
 	void const	*ptr;
@@ -29,14 +31,10 @@ static int	dump_text_section(
 	int			i;
 
 	ptr = bi->addr + ft_i32toh(ACCESS_SEC(offset, sect, bi->arch), bi->endian);
-	if (bi->arch)
-		addr = ft_i64toh(ACCESS_SEC(addr, sect, bi->arch), bi->endian);
-	else
-		addr = ft_i32toh(ACCESS_SEC(addr, sect, bi->arch), bi->endian);
-	if (bi->arch)
-		size = ft_i64toh(ACCESS_SEC(size, sect, bi->arch), bi->endian);
-	else
-		size = ft_i32toh(ACCESS_SEC(size, sect, bi->arch), bi->endian);
+	addr = access(bi, ACCESS_SEC(addr, sect, bi->arch));
+	size = access(bi, ACCESS_SEC(size, sect, bi->arch));
+	if (!nm_bin_ckaddr(bi, ptr, size))
+		return (ERRORF("mmap overflow"));
 	while (size > 0)
 	{
 		ft_printf("%0*llx ", bi->arch ? 16 : 8, addr);
@@ -49,10 +47,12 @@ static int	dump_text_section(
 		ft_putchar('\n');
 		addr += 16;
 	}
+	(void)e;
 	return (0);
 }
 
-static bool	scroll_sections(t_env const e[1], t_bininfo bi[1], void const *sc)
+static bool		scroll_sections(
+	t_env const e[1], t_bininfo bi[1], void const *sc)
 {
 	size_t const	sec_size = SIZEOF_DYN(section, bi->arch);
 	uint32_t		nsects;
@@ -77,7 +77,7 @@ static bool	scroll_sections(t_env const e[1], t_bininfo bi[1], void const *sc)
 	return (false);
 }
 
-int			nm_obj_dump_datasect(t_env const e[1], t_bininfo bi[1])
+int				nm_obj_dump_datasect(t_env const e[1], t_bininfo bi[1])
 {
 	size_t const	mh_size = SIZEOF_DYN(mach_header, bi->arch);
 	uint32_t		ncmds;

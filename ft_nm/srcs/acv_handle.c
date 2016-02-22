@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/15 15:13:30 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/22 13:46:50 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/22 18:26:21 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ int			nm_acv_handle(t_env const e[1], t_bininfo bi[1])
 	ai->hdr = bi->addr + 8;
 	while (ai->hdr < bi->addrend)
 	{
-		ft_dprintf(2, "60BYTES: %$M.60r \n", ai->hdr);
+		if (PRINT_DEBUG)
+			ft_dprintf(2, "60BYTES: %$M.60r \n", ai->hdr);
 		if (nm_acv_read_header(bi, ai))
 			return (0);
 		if (PRINT_DEBUG)
