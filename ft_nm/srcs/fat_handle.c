@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/15 18:44:46 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/18 19:18:08 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/22 12:18:06 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 #include <mach-o/fat.h>
 #include <sys/sysctl.h>
+#include <stdlib.h>
 
 struct s_cpu_name const	cpu[] = {
 	(struct s_cpu_name){CPU_TYPE_I386, "i386"},
@@ -58,82 +59,55 @@ static int		sub_binary(
 	return (nm_bin_handle(e, bi));
 }
 
-/*
-** static int		closest_arch(t_bininfo const bi[1], t_fatinfo const fi[1])
-** {
-** 	unsigned int			close_i;
-** 	cpu_type_t				close_cpu;
-** 	struct fat_arch const	*hdr;
-** 	unsigned int			i;
-** *
-** 	close_i = 0;
-** 	close_cpu = (cpu_type_t)ft_i32toh(fi->hdr->cputype, bi->endian);
-** 	hdr = fi->hdr + 1;
-** 	i = 0;
-** 	while (++i < fi->nfat_arch)
-** 	{
-** 		if ((cpu_type_t)ft_i32toh(hdr->cputype, bi->endian) == fi->cpu)
-** 		{
-** 			if ((cpu_subtype_t)ft_i32toh(hdr->cpusubtype, bi->endian) ==
-** 				fi->subcpu)
-** 				return (i);
-** 			else if (close_cpu != fi->cpu)
-** 			{
-** 				close_i = i;
-** 				close_cpu = fi->cpu;
-** 			}
-** 		}
-** 		hdr++;
-** 	}
-** 	return (close_cpu == fi->cpu ? close_i : -1);
-** }
-*/
-
-static void		reorder_fat_arch(
-	t_bininfo const bi[1], struct fat_arch *a, size_t const nfat_arch)
+static int		get_arch_index(
+	t_bininfo const bi[1], t_fatinfo const fi[1],
+	cpu_type_t local_cpu, cpu_subtype_t local_subcpu)
 {
 	unsigned int			i;
 	enum e_nm_endian const	e = bi->endian;
+	struct fat_arch const	*best;
+	struct fat_arch			*cp;
 
+	cp = ft_memdup(fi->hdr, fi->nfat_arch * sizeof(struct fat_arch));
+	if (cp == NULL)
+		return (-1);
 	i = 0;
-	while (i++ < nfat_arch)
+	while (i < fi->nfat_arch)
 	{
-		ft_uint_reorder(&a->cputype, MEM_SIZEOF(t_fa, cputype), e);
-		ft_uint_reorder(&a->cpusubtype, MEM_SIZEOF(t_fa, cpusubtype), e);
-		ft_uint_reorder(&a->offset, MEM_SIZEOF(t_fa, offset), e);
-		ft_uint_reorder(&a->size, MEM_SIZEOF(t_fa, size), e);
-		ft_uint_reorder(&a->align, MEM_SIZEOF(t_fa, align), e);
-		a++;
+		ft_uint_reorder(&cp[i].cputype, MEM_SIZEOF(t_fa, cputype), e);
+		ft_uint_reorder(&cp[i].cpusubtype, MEM_SIZEOF(t_fa, cpusubtype), e);
+		ft_uint_reorder(&cp[i].offset, MEM_SIZEOF(t_fa, offset), e);
+		ft_uint_reorder(&cp[i].size, MEM_SIZEOF(t_fa, size), e);
+		ft_uint_reorder(&cp[i].align, MEM_SIZEOF(t_fa, align), e);
+		i++;
 	}
-	return ;
+	best = NXFindBestFatArch(local_cpu, local_subcpu, cp, fi->nfat_arch);
+	free(cp);
+	return ((best == NULL) ? -1 : best - cp);
 }
 
 static void		init_fatinfo(t_bininfo bi[1], t_fatinfo fi[1])
 {
-	NXArchInfo const		*local;
-	struct fat_arch const	*best;
-	struct fat_arch			*copy;
+	size_t				size[1];
+	size_t				tmp[1];
+	int					err;
+	NXArchInfo const	*local;
 
 	fi->nfat_arch =
 		ft_i32toh(((struct fat_header*)bi->addr)->nfat_arch, bi->endian);
 	fi->hdr = bi->addr + sizeof(struct fat_header);
+	*size = sizeof(*tmp);
+	err = sysctlbyname("hw.cpu64bit_capable", tmp, size, NULL, 0);
 	local = NXGetLocalArchInfo();
-	if (local == NULL)
+	if (err || local == NULL)
 	{
+		ERROR("Could not read local cpu info");
 		fi->arch_index = -1;
-		return ;
 	}
-	copy = ft_memdup(fi->hdr, fi->nfat_arch * sizeof(struct fat_arch));
-	if (copy == NULL)
-	{
-		fi->arch_index = -1;
-		return ;
-	}
-	reorder_fat_arch(bi, copy, fi->nfat_arch);
-	best = NXFindBestFatArch(local->cputype | CPU_ARCH_ABI64,
-								local->cpusubtype, copy, fi->nfat_arch);
-	fi->arch_index = best == NULL ? -1 : best - copy;
-	free(copy);
+	else
+		fi->arch_index = get_arch_index(
+			bi, fi, local->cputype | ((*tmp) ? CPU_ARCH_ABI64 : 0),
+			local->cpusubtype);
 	return ;
 }
 

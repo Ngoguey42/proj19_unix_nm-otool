@@ -3,12 +3,17 @@ launch(){
 	# ls -ld $1
 	# file $1
 
-	file $@ 2>/dev/null | head -n 1
-	./ft_nm -p $@ >mine 2>/dev/null
-	nm -p $@ >ref 2>/dev/null
-	# nm -mp $@ >ref 2>/dev/null
-	# diff ref mine
-	diff ref mine | head -n 30
+
+	ls $@ 2>/dev/null 1>/dev/null && (
+		file $@ 2>/dev/null | head -n 1
+		./ft_nm -p $@ >mine 2>/dev/null
+		nm -p $@ >ref 2>/dev/null
+		# nm -mp $@ >ref 2>/dev/null
+		# diff ref mine
+		diff ref mine | head -n 30
+	) || (
+		echo '\033[31mCould not find/read file' $@ '\033[0m'
+	)
 	# echo ""
 }
 
@@ -114,8 +119,8 @@ launch '/usr/lib/ssh-keychain.dylib'
 
 # launch '/usr/lib/libnetsnmp.5.2.1.dylib'
 # launch '/usr/lib/libnetsnmp.5.dylib'
-# launch '/usr/lib/libnetwork.dylib'
-# launch '/usr/lib/libxcselect.dylib'
+launch '/usr/lib/libnetwork.dylib'
+launch '/usr/lib/libxcselect.dylib'
 
 echo ''
 #binaries:
