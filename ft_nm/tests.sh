@@ -5,14 +5,16 @@ launch(){
 
 
 	ls $@ 2>/dev/null 1>/dev/null && (
-		file $@ 2>/dev/null | head -n 1
-		./ft_nm -p $@ >mine 2>/dev/null
-		nm -p $@ >ref 2>/dev/null
+		FILE=$(file $@ 2>/dev/null | head -n 1) || true
+		printf "\033[32m%150s\033[0m\n" "$FILE" || true
+		./ft_nm -pr $@ >mine 2>/dev/null || true
+		nm -pr $@ >ref 2>/dev/null || true
 		# nm -mp $@ >ref 2>/dev/null
 		# diff ref mine
-		diff ref mine | head -n 30
+		diff -q ref mine || true
+		# diff ref mine | head -n 15
 	) || (
-		echo '\033[31mCould not find/read file' $@ '\033[0m'
+		printf "\033[31m%150s\033[0m\n" "Could not find/read file $@"
 	)
 	# echo ""
 }
@@ -37,12 +39,12 @@ launch(){
 
 # launch '/Applications/CocoaDialog.app/Contents/MacOS/CocoaDialog'
 
-echo "=============MULT:============"
+echo "============================================================MULT:============================================================"
 launch '../libft/libft.a' '1txt.a' '2obj.a' '0txt.a' '1obj.a' 'ppc'
 launch 'ppc' 'ppc'
 
 echo ''
-echo "=============FATS:============"
+echo "============================================================FATS:============================================================"
 launch '/usr/bin/audiodevice'  #2arch no x86_64
 
 
@@ -66,7 +68,7 @@ launch '/usr/lib/libiconv.2.4.0.dylib'
 
 
 echo ''
-echo "=============ARCH:============"
+echo "============================================================ARCH:============================================================"
 launch '../libft/libft.a'
 launch '1txt.a'
 launch '2obj.a'
@@ -80,7 +82,7 @@ launch '/usr/lib//libATCommandStudio.a'
 
 
 echo ''
-echo "=============DYLB:============"
+echo "============================================================DYLB:============================================================"
 launch '/usr/lib/libATCommandStudioDynamic.dylib'
 launch '/usr/lib/libAccountPolicyTranslation.dylib'
 launch '/usr/lib/libBSDPClient.A.dylib'
@@ -124,7 +126,7 @@ launch '/usr/lib/libxcselect.dylib'
 
 echo ''
 #binaries:
-echo "=============OBJS:============"
+echo "============================================================OBJS:============================================================"
 launch './ppc'
 launch '/usr/share/rbx/gems/gems/rubysl-bigdecimal-2.0.2/ext/rubysl/bigdecimal/bigdecimal.o'
 launch '/usr/bin/iscsictl'

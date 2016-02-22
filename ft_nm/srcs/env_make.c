@@ -6,7 +6,7 @@
 /*   By: ngoguey <ngoguey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/07 14:53:13 by ngoguey           #+#    #+#             */
-/*   Updated: 2016/02/17 15:54:37 by ngoguey          ###   ########.fr       */
+/*   Updated: 2016/02/22 12:42:17 by ngoguey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 ** **
 ** -u enable -j (-u == -uj)
 ** -m disable -j (-m == -mj) (-mu == -muj)
+** -p disable -r
 */
 
 static char const *const g_default_file = "./a.out";
@@ -96,6 +97,8 @@ int			nm_env_make(int ac, char const *const *av, t_env e[1])
 		*opt |= opt_j_symonly;
 	if (*opt & opt_m_verbose)
 		*opt &= ~opt_j_symonly;
+	if (*opt & opt_p_nosort)
+		*opt &= ~opt_r_revsort;
 	*e = (t_env){*opt & ARG_FIELD, *paths, get_sym_insert_fn(*opt)};
 	return (0);
 }
