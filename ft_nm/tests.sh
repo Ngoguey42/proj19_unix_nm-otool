@@ -72,7 +72,7 @@ launch '1txt.a'
 launch '2obj.a'
 launch '0txt.a'
 launch '1obj.a'
-# launch '/usr/lib/libQMIParser.a'
+launch '/usr/lib/libQMIParser.a'
 launch '/nfs/zfs-student-4/users/ngoguey/.brew/Cellar/camlp4/4.02.3+6/lib/ocaml/camlp4/camlp4fulllib.a'
 launch '/nfs/zfs-student-4/users/ngoguey/.brew/Cellar/ocaml/4.02.3/lib/ocaml/libasmrun.a'
 
